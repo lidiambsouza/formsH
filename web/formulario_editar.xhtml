@@ -1,0 +1,1177 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+    #{formularioBean.setLogado(usuarioBean.logado)}
+    #{usuarioBean.verificaUsuLog()}
+    #{formularioBean.verificaPerfil(usuarioBean.usuarioLogado.perfil.id_perfil)}
+    #{formularioBean.setSolicitante(usuarioBean.usuarioLogado.id_usuario)}
+    #{formularioBean.selectAcao(2)}
+    #{formularioBean.transicaoConsultEditBusca(templateBean.formularioTemp)}
+    #{templateBean.setFormularioTemp(null)}
+
+
+
+    <p:fieldset id="fsMaster" legend="#{formularioBean.legend_fsMasterEdit}" style=" margin-left: 5%;margin-right: 5% ; margin-bottom: 5%"  >
+        <h:panelGrid id="pgMaisMaior" width="100%" rendered="#{formularioBean.entidade.id_formulario>0}" >
+            <h:panelGrid id="pgMaior" width="100%" rendered="#{formularioBean.renderePag1}">
+                <h:panelGrid width="100%" columns="3" columnClasses="alinharEsquerda,alinharDireita,alinharDireita" rendered="#{!formularioBean.inseri}" >
+                    <p:commandButton  value="Fechar" action="#{formularioBean.btNovaBusca()}" rendered="#{!formularioBean.inseri}" />
+                    <h:outputLabel value="Situação: #{formularioBean.entidade.status.status}" rendered="#{!formularioBean.inseri}"   styleClass="labelCabecalho"/>
+                    <p:commandLink id="btInformAutorizacao" value="Informar Autorização"  onclick="PF('dlgAutorizacao').show()" style="color: blue" rendered="#{formularioBean.rendereBtInformAutorizacao}" />
+                </h:panelGrid>
+
+                <h:panelGrid width="100%" style="text-align: right" rendered="false" >
+                    <!--<p:commandLink  value="PREENCHIMENTO RÁPIDO" action="{formularioBean.btPreenchiRapido()}" onstart="{formularioBean.limpDlgPreencherRapido()}" oncomplete="PF('dlgPreencherRapido').show()" update="@form:fsDlgPreencherRapido,@form:fsDlgBuscaNomePaci" style="color: blue" />-->
+                    <p:commandButton value="PREENCHIMENTO RÁPIDO" action="#{formularioBean.abrirDlgPreenchimentoRapido()}" process="@this" update="@none"  style="#{estilosBean.botao()}" >
+                        <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgPreenchimenoRapido}" process="@this" update="pgMaior"/>
+                    </p:commandButton>
+                </h:panelGrid>
+
+                <p:fieldset id="fsEstabelecimentoSolicitante">
+
+
+                    <h:panelGrid width="100%" style="text-align: center" >
+                        <h:outputLabel value="IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE (SOLICITANTE)"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" width="100%" style="align-content: center">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="1 - Nome do estabelecimento de saúde solicitante" />
+                            <h:outputLabel value=""/>
+                            <h:outputLabel value="#{formularioBean.entidade.estabelecimento_de_saude_solicitante.nome.toUpperCase()}" styleClass="labelDados"  />
+                            <p:commandLink rendered="false" value="Alterar"  onclick="PF('dlgEstabelecimentoSaude').show()" style="color: blue"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="2 - CNES" />
+                            <h:outputLabel value="#{formularioBean.entidade.estabelecimento_de_saude_solicitante.cnes}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+
+                </p:fieldset>
+                <p:fieldset id="fsPaciente">
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <h:outputLabel value="IDENTIFICAÇÃO DO PACIENTE"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%" columns="2">
+                        <h:panelGrid width="100%" >
+                            <p:commandButton value="BUSCAR PACIENTE" action="#{formularioBean.abrirDlgBuscaPaciente}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgabrirDlgBuscaPaciente}" process="@this" update="pgMaior"/>
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid width="100%" style="text-align: right">
+                            <p:commandButton value="LIMPAR"  action="#{formularioBean.btPacienteLimpar()}" update="fsPaciente" style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%" columns="5">
+                        <h:panelGrid >
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="3 - Nome do paciente" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.nome)}"/>
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.nome.isEmpty()}"  />
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.nome.isEmpty()}"  />
+                                <h:outputLabel value="#{formularioBean.entidade.paciente.nome.toUpperCase()}"  styleClass="labelDados"  />
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="4 - N° do prontuário" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.num_prontuario)}" />
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.num_prontuario.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.num_prontuario.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.num_prontuario}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="5 - Cartão nacional de saúde (CNS)" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.cns)}"/>
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.cns.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.cns.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.solicitante.mascaraCnsSolicitante(formularioBean.entidade.paciente.cns)}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="6 - Data de nascimento" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.data_nascimento_s)}" />
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.data_nascimento_s.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.data_nascimento_s.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.data_nascimento_s}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="7 - Sexo" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.sexo)}" />
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.sexo.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.sexo.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.sexo}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="8 - Raça/Cor" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.corPdf)}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.corPdf.isEmpty()}"  />
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.corPdf.isEmpty()}"  />
+                                <h:outputLabel value="#{formularioBean.entidade.paciente.corPdf}"  styleClass="labelDados"  />
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:outputLabel value="8.1 - Etnia" />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.etnia}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="9 - Nome da mãe" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.nome_mae)}"/>
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.nome_mae.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.nome_mae.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.nome_mae}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:outputLabel value="10 - Telefone de contato" />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.mascaraTelmae}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:outputLabel value="11 - Nome responsável" />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.nome_responsavel}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:panelGrid>
+                                <h:outputLabel value="12 - Telefone de contato" />
+                                <h:outputLabel value="#{formularioBean.entidade.paciente.telefone_responsavel}"  styleClass="labelDados"  />
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="13 - Endereço" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.endereco)}" />
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.endereco.trim().isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.endereco.trim().isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.endereco}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="14 - Município de residência" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.municipio)}" />
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.municipio.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.municipio.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.municipio}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="15 - Cód IBGE município" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.cod_ibge_municipio)}"/>
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.cod_ibge_municipio.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.cod_ibge_municipio.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.cod_ibge_municipio}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="16 - UF" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.uf)}"/>
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.uf.isEmpty()}"  />
+                            <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.uf.isEmpty()}"  />
+                            <h:outputLabel value="#{formularioBean.entidade.paciente.uf}"  styleClass="labelDados"  />
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="17 - CEP" style="color: #{formularioBean.corLabael(formularioBean.entidade.paciente.cep.trim())}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.paciente.cep.trim().isEmpty()}"/>
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.paciente.cep.trim().isEmpty()}"/>
+                                <h:outputLabel value="#{formularioBean.entidade.paciente.mascaraCep}"  styleClass="labelDados"  />
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+                </p:fieldset>
+                <p:fieldset id="fsProcedimentoSolicitado">
+
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <h:outputLabel value="PROCEDIMENTO SOLICITADO"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="alinharEsquerda,alinharDireita" width="100%">
+                        <p:commandButton value="#{formularioBean.valueBtAddProcedimento}" action="#{formularioBean.btAddProcedimento()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                            <p:ajax event="dialogReturn" listener="#{formularioBean.procedimentoSelecionado}" process="@this" update="fsProcedimentoSolicitado" />
+                        </p:commandButton>
+                        <p:commandButton value="LIMPAR"  action="#{formularioBean.btProcedimentoLimpar()}" update="fsProcedimentoSolicitado" style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" width="100%">
+                        <h:panelGrid >
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="18 - Código do procedimento principal" style="color: #{formularioBean.redblackcamp18}"/>
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.p1.codigo.isEmpty()}"  />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.p1.codigo.isEmpty()}"  />
+                                <h:outputLabel value="#{formularioBean.entidade.p1.mascaraCodigo}"  styleClass="labelDados" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid  >
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="19 - Nome do procedimento principal" style="max-width: 500px"/>
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.p1.nome.isEmpty()}" style="max-width: 5px" />
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.p1.nome.isEmpty()}" style="max-width: 5px" />
+                                <h:outputLabel value="#{formularioBean.entidade.p1.nome}"  styleClass="labelDados" style="max-width: 900px" /> 
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" width="100%" style="text-align: right">
+                            <h:panelGrid style="text-align: left">
+                                <h:outputLabel value="20 - Quantidade" style="width: 60px" />
+                                <p:spinner  value="#{formularioBean.entidade.p1.qtd}"  min="1" size="4" readonly="#{formularioBean.somenteLeituraPag2}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                    <p:ajax  process="@this" />
+                                </p:spinner>
+                                <p:outputLabel value="#{formularioBean.entidade.p1.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP1()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+                    <hr/>
+                    <h:panelGrid width="100%" style="text-align: center" rendered="#{!formularioBean.entidade.p2.codigo.isEmpty()}" >
+                        <h:outputLabel value="PROCEDIMENTOS SECUNDÁRIOS"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+                    <h:panelGrid  columns="3" width="100%">
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p2.codigo.isEmpty()}">
+                            <h:outputLabel value="21 - Código do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p2.mascaraCodigo}"  styleClass="labelDados" />
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p2.codigo.isEmpty()}">
+                            <h:outputLabel value="22 - Nome do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p2.nome}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" width="100%" style="text-align: right" rendered="#{!formularioBean.entidade.p2.codigo.isEmpty()}">
+                            <h:panelGrid style="text-align: left">
+                                <h:outputLabel value="23 - Quantidade" style="width: 60px" />
+                                <p:spinner  value="#{formularioBean.entidade.p2.qtd}"  min="1" size="4" readonly="#{formularioBean.somenteLeituraPag2}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                    <p:ajax  process="@this" />
+                                </p:spinner>
+                                <p:outputLabel value="#{formularioBean.entidade.p2.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP2()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{formularioBean.edita and formularioBean.entidade.status.id_status == 2}"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p3.codigo.isEmpty()}">
+                            <h:outputLabel value="24 - Código do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p3.mascaraCodigo}"  styleClass="labelDados" />
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p3.codigo.isEmpty()}" >
+                            <h:outputLabel value="25 - Nome do procedimento" />
+                            <h:outputLabel value="#{formularioBean.entidade.p3.nome}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" width="100%" style="text-align: right" rendered="#{!formularioBean.entidade.p3.codigo.isEmpty()}">
+                            <h:panelGrid style="text-align: left">
+                                <h:outputLabel value="26 - Quantidade" style="width: 60px" />
+                                <p:spinner  value="#{formularioBean.entidade.p3.qtd}"  min="1" size="4" readonly="#{formularioBean.somenteLeituraPag2}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                    <p:ajax  process="@this" />
+                                </p:spinner>
+                                <p:outputLabel value="#{formularioBean.entidade.p3.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-trash" title="Remover"  action="#{formularioBean.btLimparP3()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{formularioBean.edita and formularioBean.entidade.status.id_status == 2}"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p4.codigo.isEmpty()}">
+                            <h:outputLabel value="27 - Código do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p4.mascaraCodigo}"  styleClass="labelDados" />
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p4.codigo.isEmpty()}">
+                            <h:outputLabel value="28 - Nome do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p4.nome}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" width="100%" style="text-align: right" rendered="#{!formularioBean.entidade.p4.codigo.isEmpty()}" >
+                            <h:panelGrid style="text-align: left">
+                                <h:outputLabel value="29 - Quantidade" style="width: 60px" />
+                                <p:spinner  value="#{formularioBean.entidade.p4.qtd}"  min="1" size="4" readonly="#{formularioBean.somenteLeituraPag2}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                    <p:ajax  process="@this" />
+                                </p:spinner>
+                                <p:outputLabel value="#{formularioBean.entidade.p4.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP4()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{formularioBean.edita and formularioBean.entidade.status.id_status == 2}"/>
+                        </h:panelGrid>
+
+
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p5.codigo.isEmpty()}">
+                            <h:outputLabel value="30 - Código do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p5.mascaraCodigo}"  styleClass="labelDados" />
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p5.codigo.isEmpty()}">
+                            <h:outputLabel value="31 - Nome do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p5.nome}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" width="100%" style="text-align: right" rendered="#{!formularioBean.entidade.p5.codigo.isEmpty()}" >
+                            <h:panelGrid style="text-align: left">
+                                <h:outputLabel value="32 - Quantidade" style="width: 60px" />
+                                <p:spinner  value="#{formularioBean.entidade.p5.qtd}"  min="1" size="4" readonly="#{formularioBean.somenteLeituraPag2}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                    <p:ajax  process="@this" />
+                                </p:spinner>
+                                <p:outputLabel value="#{formularioBean.entidade.p5.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP5()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{formularioBean.edita and formularioBean.entidade.status.id_status == 2}"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p6.codigo.isEmpty()}">
+                            <h:outputLabel value="33 - Código do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p6.mascaraCodigo}"  styleClass="labelDados" />
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{!formularioBean.entidade.p6.codigo.isEmpty()}">
+                            <h:outputLabel value="34 - Nome do procedimento " />
+                            <h:outputLabel value="#{formularioBean.entidade.p6.nome}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" width="100%" style="text-align: right" rendered="#{!formularioBean.entidade.p6.codigo.isEmpty()}" >
+                            <h:panelGrid style="text-align: left">
+                                <h:outputLabel value="35 - Quantidade" style="width: 60px" />
+                                <p:spinner  value="#{formularioBean.entidade.p6.qtd}"  min="1" size="4" readonly="#{formularioBean.somenteLeituraPag2}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                    <p:ajax  process="@this" />
+                                </p:spinner>
+                                <p:outputLabel value="#{formularioBean.entidade.p6.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
+                            </h:panelGrid>
+                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP6()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{formularioBean.edita and formularioBean.entidade.status.id_status == 2}"/>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+                </p:fieldset>
+                <p:fieldset id="fsJustificativa">
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <h:outputLabel value="JUSTIFICATIVA DO(S) PROCEDIMENTO(S) SOLICITADO(S)"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" width="100%">
+                        <h:panelGrid  width="100%" style="text-align: left">
+                            <p:commandButton value="#{formularioBean.valueBtAddCid}" action="#{formularioBean.verificarLimiteCid()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgCid}" process="@this" update="fsJustificativa" />
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid  width="100%" style="text-align: right">
+                            <p:commandButton value="LIMPAR" action="#{formularioBean.btCidLimpar()}" process="@this" update="fsJustificativa"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" width="100%">
+                        <h:panelGrid >
+                            <h:panelGrid columns="2"> 
+                                <h:outputLabel value="36 - Descrição do diagnóstico" style="width: 60px; color: #{formularioBean.redblackcamp36}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.proc_justificativa.cid_principal.nome.isEmpty()}"  />
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.proc_justificativa.cid_principal.nome.isEmpty()}"  />
+                                <h:outputLabel value="#{formularioBean.entidade.proc_justificativa.cid_principal.nome}"  styleClass="labelDados" /> 
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid >
+                            <h:panelGrid columns="3">
+                                <h:outputLabel value="37 - CID10 principal" style="width: 60px" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.proc_justificativa.cid_principal.cid.isEmpty()}"  />
+                                <h:outputLabel value="" styleClass="labelAsterisco" rendered="#{!formularioBean.entidade.proc_justificativa.cid_principal.cid.isEmpty()}"  />
+                                <p:commandButton icon="ui-icon-trash" title="Remover"  action="#{formularioBean.btCidLimpar()}" update="fsJustificativa" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                                <h:outputLabel value="#{formularioBean.entidade.proc_justificativa.cid_principal.cid}"  styleClass="labelDados" /> 
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="38 - CID10 secundário" style="width: 60px" />
+                                <p:commandButton icon="ui-icon-trash" title="Remover"  action="#{formularioBean.btLimparCid2()}" update="fsJustificativa" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                                <h:outputLabel value=""  styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}" /> 
+                                <h:outputLabel value="#{formularioBean.entidade.proc_justificativa.cid_secundario.cid}"  styleClass="labelDados" /> 
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="39 - CID10 associadas" style="width: 60px" />
+                                <p:commandButton icon="ui-icon-trash" title="Remover"  action="#{formularioBean.btLimparCid3()}" update="fsJustificativa" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                                <h:outputLabel value=""  styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}" /> 
+                                <h:outputLabel value="#{formularioBean.entidade.proc_justificativa.cid_causas_assoc.cid}"  styleClass="labelDados" /> 
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid width="100%">
+                        <h:panelGrid id="pgObservacao" columns="2">
+                            <h:outputLabel id="olObs" value="40 - Observações" style="width: 60px; color: #{formularioBean.redblackcamp40}" />
+                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.proc_justificativa.observacoes.isEmpty()}" />   
+                        </h:panelGrid>
+                        <p:inputTextarea value="#{formularioBean.entidade.proc_justificativa.observacoes}" style="width: 100% ;height: 100px; text-transform: uppercase; color: black"  readonly="#{formularioBean.somenteLeituraPag2}">
+                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp40('black')}" update="pgObservacao,olObs" />
+                        </p:inputTextarea>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset id="fsSolicitacao">
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <h:outputLabel value="SOLICITAÇÃO"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" width="100%">
+                        <h:panelGrid>
+                            <h:outputLabel value="41 - Nome do profissional solicitante" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.solicitante.nome.toUpperCase()}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid id="pgcaDtForm">
+
+                            <h:outputLabel value="42 - Data da solicitação" style="width: 60px" />
+
+                            <p:calendar id="caDtForm" size="11" value="#{formularioBean.entidade.data}"  maxdate="#{formularioBean.gethJ()}" locale="pt" disabled="#{formularioBean.somenteLeituraPag2}" >
+                                <p:ajax event="dateSelect" update="pgcaDtForm" />
+                            </p:calendar> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+
+                            <h:outputLabel value="43 - Tipo de documento" style="width: 60px" />
+
+                            <h:outputLabel value="#{formularioBean.entidade.solicitante.tipo_doc_string}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="44 - Nº documento (CNS/CPF) do profissional solicitante" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.solicitante.nun_doc}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset id="fsAutorizacao" rendered="false">
+                    <!--                <p:fieldset id="fsAutorizacao" rendered="{!formularioBean.inseri}">-->
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <h:outputLabel value="AUTORIZAÇÃO"  styleClass="labelCabecalho"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="alinharEsquerda,alinharDireita" width="100%">
+                        <p:commandLink value="EDITAR"  onclick="PF('dlgAutorizacao').show()" style="color: blue" rendered="#{formularioBean.renderebtEditarFsAutorizacao}"/>
+                        <p:commandLink id="btInformAutorizacao2" value="Informar Autorização"  onclick="PF('dlgAutorizacao').show()" style="color: blue" rendered="#{formularioBean.rendereBtInformAutorizacao}" />
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" width="100%">
+                        <h:panelGrid>
+                            <h:outputLabel value="46 - Nome do profissional autorizador" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.autorizador.toUpperCase()}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGrid >
+                                <h:outputLabel value="47 - Código do orgão emissor" style="width: 60px" />
+                            </h:panelGrid>
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.cod_org_emissor}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="48 - Documento" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.tipo_doc_string}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="49 - Número do documento do profissional autorizador" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.num_doc}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="50 - Data da autorizacao" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.dataString}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="52 - Número da autorização" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.num_autorizacao}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:outputLabel value="53 - Período de validade da APAC" style="width: 60px" />
+                            <h:outputLabel value="#{formularioBean.entidade.autorizacao.periodo}"  styleClass="labelDados" /> 
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+
+
+            </h:panelGrid>
+
+            <h:panelGrid id="pgMaior2"  width="100%" rendered="#{!formularioBean.renderePag1}"   >
+
+                <h:panelGrid width="100%" style="text-align: center">
+                    <h:outputLabel value="1 - ONCOLOGIA"  styleClass="labelCabecalho" />
+                </h:panelGrid>
+
+
+
+                <p:fieldset id="fsIdPato" legend="IDENTIFICAÇÃO PATOLÓGICA DO CASO" >
+
+                    <h:panelGrid id="pg56LocTP" width="100%" columns="2" columnClasses="column80,column20" >
+                        <h:panelGrid width="100%">
+                            <h:panelGrid id="pgLoctp" columns="2">
+                                <h:outputLabel id="olLocTumorPri" value="56 - Localização do tumor primário"  style="color: #{formularioBean.redblackcamp56}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.local_tumor_primario.isEmpty()}"  />
+                            </h:panelGrid>
+                            <h:panelGrid width="100%" columns="2">
+                                <p:inputText value="#{formularioBean.entidade.pag2.local_tumor_primario}" maxlength="190" style="width: 100%" rendered="#{!formularioBean.somenteLeituraPag2}" onkeypress="if (event.keyCode === 13) {
+                                            ondblclick();
+                                            return false;
+                                        }">
+                                    <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp56('black')}" update="pgLoctp"/>            
+                                </p:inputText>
+                                <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                <h:outputLabel   value="#{formularioBean.entidade.pag2.local_tumor_primario}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid width="100%"  style="text-align: right">
+                            <h:outputLabel value="57-CID-10 Topografia" />
+                            <h:panelGrid id="pg57-cid" columns="2"  width="100%" style="text-align: right" columnClasses="column80,column20" >
+                                <h:outputLabel value="#{formularioBean.entidade.proc_justificativa.cid_principal.cid}" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid id="pg58" columns="2" width="100%" columnClasses="column20,column80"  >
+                        <h:panelGrid id="pg58Linfo" columns="2" >
+                            <h:outputLabel id="olLinfoReg" value="58 - Linfonodos regionais invadidos" />
+                            <p:selectOneRadio id="sor58" value="#{formularioBean.entidade.pag2.linfo_reg_invalido}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                <f:selectItem itemLabel="Sim" itemValue="0" />
+                                <f:selectItem itemLabel="Não" itemValue="1" />
+                                <f:selectItem itemLabel="Não avaliáveis" itemValue="2" />
+                                <p:ajax event="change" listener="#{formularioBean.setRedblackcamp58('black')}" update="pg58Linfo"/>
+                            </p:selectOneRadio>
+                            <h:outputLabel   value="" styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel   styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel   styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel   value="#{formularioBean.entidade.pag2.getLinfo_reg_invalidoString()}" styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pg59LocMeta" width="100%" >
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="59 - Localização de metástase(s)"  />
+
+                            </h:panelGrid>
+                            <p:inputText value="#{formularioBean.entidade.pag2.loc_meta}" maxlength="150" style="width: 75%" rendered="#{!formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel   value="#{formularioBean.entidade.pag2.loc_meta}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%" columns="4" columnClasses="column20,column50,column20,column10">
+
+                        <h:panelGrid id="pg60EstadUICC" width="100%">
+                            <h:panelGrid id="pgolEstadio" columns="2">
+                                <h:outputLabel id="olEstadio" value="60 - Estádio(UICC)" style="color: #{formularioBean.redblackcamp60}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.esta_uicc.isEmpty()}"  />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+
+                                <p:selectOneMenu id="sOMEstadio"   value="#{formularioBean.entidade.pag2.esta_uicc}" rendered="#{!(formularioBean.somenteLeituraPag2)}"  style="width: 150px"  >
+                                    <f:selectItem  itemValue="" itemLabel="Selecione"/>
+                                    <f:selectItem  itemValue="0" itemLabel="0" />
+                                    <f:selectItem  itemValue="I" itemLabel="I" />
+                                    <f:selectItem  itemValue="II" itemLabel="II"/>
+                                    <f:selectItem  itemValue="III" itemLabel="III"/>
+                                    <f:selectItem  itemValue="IV" itemLabel="IV"/>
+                                    <p:ajax event="change" listener="#{formularioBean.setRedblackcamp60('black')}" update="pgolEstadio"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                <h:outputLabel   value="#{formularioBean.entidade.pag2.esta_uicc}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pg61EstadOS" width="100%" >
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="61 - Estádio(outro sistema)"  />
+
+                            </h:panelGrid>
+                            <p:inputText value="#{formularioBean.entidade.pag2.esta_outros}" maxlength="80" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel   value="#{formularioBean.entidade.pag2.esta_outros}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pg62GrauHist" width="100%" >
+                            <h:panelGrid id="pgopl62GrauHist" columns="2">
+                                <h:outputLabel id="oplGrauHisto" value="62 - Grau histopatológico" style="color: #{formularioBean.redblackcamp62}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.grau_isto.isEmpty()}"  />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:selectOneMenu id="sOMGrauHist"   value="#{formularioBean.entidade.pag2.grau_isto}" rendered="#{!(formularioBean.somenteLeituraPag2)}" style="width: 150px"  >
+                                    <f:selectItem  itemValue="" itemLabel="Selecione"/>
+                                    <f:selectItem  itemValue="GX" itemLabel="GX" />
+                                    <f:selectItem  itemValue="G1" itemLabel="G1"/>
+                                    <f:selectItem  itemValue="G2" itemLabel="G2"/>
+                                    <f:selectItem  itemValue="G3" itemLabel="G3"/>
+                                    <f:selectItem  itemValue="G4" itemLabel="G4"/>
+                                    <p:ajax event="change" listener="#{formularioBean.setRedblackcamp62('black')}" update="pgopl62GrauHist"/>
+                                </p:selectOneMenu> 
+                                <h:outputLabel   value="#{formularioBean.entidade.pag2.grau_isto}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+                    <h:panelGrid id="pg63DiagCito" width="100%" columns="3" columnClasses="column60,column20,column20" >
+                        <h:panelGrid  width="100%" >
+                            <h:panelGrid id="opl63" columns="2">
+                                <h:outputLabel id="olDiagCitoHisto" value="63 - Diagnóstico Cito/Histopatológico" style="color: #{formularioBean.redblackcamp63}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.diag_cito_isto.isEmpty()}"  />
+                            </h:panelGrid>
+                            <h:panelGrid width="100%" columns="2">
+                                <p:inputText value="#{formularioBean.entidade.pag2.diag_cito_isto}" maxlength="150" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                    <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp63('black')}" update="opl63"/>
+                                </p:inputText>
+                                <h:outputLabel   value="#{formularioBean.entidade.pag2.diag_cito_isto}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid width="100%">
+                            <h:panelGrid id="pgDt64" columns="2">
+                                <p:outputLabel id="olData64" value="64 - Data" style="color: #{formularioBean.redblackcamp64}" />
+                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.data_64 == null}"  />
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <p:calendar value="#{formularioBean.entidade.pag2.data_64}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}" maxdate="#{formularioBean.gethJ()}" >
+                                    <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp64('black')}" update="pgDt64" />
+                                </p:calendar>
+                                <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.data_64) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:selectOneRadio id="sorQR" value="#{formularioBean.entidade.pag2.quimio_radio}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                <f:selectItem itemLabel="Quimioterapia" itemValue="false" />
+                                <f:selectItem itemLabel="Radioterapia" itemValue="true" />
+                                <p:ajax event="change" update="pgQuimioRadio" />
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>                                        
+
+                <h:panelGrid id="pgQuimioRadio" width="100%">
+                    <p:fieldset id="fsQuimioterapia" rendered="#{!formularioBean.rendereFsRadioterapiapag2}">
+
+                        <h:panelGrid width="100%" style="text-align: center">
+                            <h:outputLabel value="1.1 - QUIMIOTERAPIA"  styleClass="labelCabecalho" />
+                        </h:panelGrid>
+                        <p:fieldset id="fsTratAntQuimio" style="border: #fcfdfd;">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="65 - Tratamento(s) anterior(es)" style="width: 200px;font-size: 1.1em !important; "/>
+                                <p:selectOneRadio value="#{formularioBean.entidade.pag2.trate_anteriores_quimio}" rendered="#{!formularioBean.somenteLeituraPag2}" style="width: 30px;font-size: 1.1em !important;">
+                                    <f:selectItem itemValue="true" itemLabel="Sim"/>  
+                                    <f:selectItem itemValue="false" itemLabel="Não"/>  
+                                    <p:ajax event="change" oncomplete="#{formularioBean.sorChange65()}" update="fsTratAntQuimio"/>
+                                </p:selectOneRadio>  
+                                <h:outputLabel   value="#{formularioBean.entidade.pag2.oplTratAntQuimioString()}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            </h:panelGrid>
+                            <h:panelGrid id="pgQuimioterapia" width="100%" rendered="#{formularioBean.entidade.pag2.trate_anteriores_quimio}">
+
+                                <h:panelGrid columns="2" width="100%" columnClasses="column80,column20">
+                                    <h:panelGrid columns="2" width="100%" columnClasses="column10,column90" >
+                                        <h:outputLabel value="Tratamento(s) Anterior(es)"  />
+                                        <h:panelGrid id="pgDescricaoQuimio" columns="2" >
+                                            <h:outputLabel id="olDescTratAntQui" value="66 - Descrição" style="color: #{formularioBean.redblackcamp66}" />
+                                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.trate_ante1_quimio.isEmpty() and
+                                                                                                             formularioBean.entidade.pag2.trate_ante2_quimio.isEmpty() and
+                                                                                                             formularioBean.entidade.pag2.trate_ante3_quimio.isEmpty())}"  />
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                    <h:panelGrid id="pgDataTrataAntQuimio" columns="2">
+                                        <h:outputLabel id="olDtTratAntQui" value="67 - Data de Inicío" style="color: #{formularioBean.redblackcamp67}" />
+                                        <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.dt_trate_ante1_quimio == null and
+                                                                                                         formularioBean.entidade.pag2.dt_trate_ante2_quimio == null and
+                                                                                                         formularioBean.entidade.pag2.dt_trate_ante3_quimio == null}"  />
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="2" width="100%"  columnClasses="column10,column90" >
+                                        <h:outputLabel value="1°" />
+                                        <p:inputText value="#{formularioBean.entidade.pag2.trate_ante1_quimio}" maxlength="155" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp66('black')}" update="pgDescricaoQuimio"/>
+                                        </p:inputText>
+                                        <h:outputLabel   value="#{formularioBean.entidade.pag2.trate_ante1_quimio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                    </h:panelGrid>
+                                    <p:calendar value="#{formularioBean.entidade.pag2.dt_trate_ante1_quimio}" size="11" locale="pt" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp67('black')}" update="pgDataTrataAntQuimio" />
+                                    </p:calendar>
+                                    <h:outputLabel value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_trate_ante1_quimio)}" styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+                                    <h:panelGrid columns="2" width="100%"  columnClasses="column10,column90" >
+                                        <p:outputLabel value="2°" />
+                                        <p:inputText value="#{formularioBean.entidade.pag2.trate_ante2_quimio}" maxlength="155" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp66('black')}" update="pgDescricaoQuimio"/>
+                                        </p:inputText>
+                                        <h:outputLabel   value="#{formularioBean.entidade.pag2.trate_ante2_quimio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                    </h:panelGrid>
+                                    <p:calendar value="#{formularioBean.entidade.pag2.dt_trate_ante2_quimio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp67('black')}" update="pgDataTrataAntQuimio" />
+                                    </p:calendar>
+                                    <h:outputLabel value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_trate_ante2_quimio)}" styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+                                    <h:panelGrid columns="2" width="100%"  columnClasses="column10,column90">
+                                        <p:outputLabel value="3°" />
+                                        <p:inputText value="#{formularioBean.entidade.pag2.trate_ante3_quimio}" maxlength="155" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp66('black')}" update="pgDescricaoQuimio"/>
+                                        </p:inputText>
+                                        <h:outputLabel   value="#{formularioBean.entidade.pag2.trate_ante3_quimio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                    </h:panelGrid>
+                                    <p:calendar value="#{formularioBean.entidade.pag2.dt_trate_ante3_quimio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp67('black')}" update="pgDataTrataAntQuimio" />
+                                    </p:calendar>
+                                    <h:outputLabel value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_trate_ante3_quimio)}" styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <h:panelGrid id="pgQuimioTratSoli" width="100%" >
+                            <h:panelGrid width="100%" >
+
+                                <h:panelGrid width="100%" style="text-align: center" >
+                                    <h:outputLabel value="TRATAMENTO SOLICITADO - Planejamento terapêutico global" styleClass="labelDados" rendered="#{!formularioBean.entidade.pag2.continue_trate_radio}"/>
+                                </h:panelGrid>
+                                <h:panelGrid width="100%" id="pg68ContTrat"  columns="2" columnClasses="column20,column80" >
+
+                                    <h:panelGrid>
+                                        <h:outputLabel  value="68 - Continuidade de tratamento" />
+                                        <p:selectOneRadio id="sor68" value="#{formularioBean.entidade.pag2.continue_trate_quimio}" rendered="#{!formularioBean.somenteLeituraPag2}"  >
+                                            <f:selectItem itemLabel="Sim" itemValue="true" />
+                                            <f:selectItem itemLabel="Não" itemValue="false" />
+
+                                        </p:selectOneRadio>
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.oplContinue_trate_quimio()}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                    </h:panelGrid>
+
+                                    <h:panelGrid width="100%" columns="4" >
+                                        <h:panelGrid  >
+                                            <h:panelGrid id="pgDataIniTrataQuimio" columns="2" >
+                                                <h:outputLabel id="olDtIniTratQui" value="69 - Data de Inicío do Tratamento" style="color: #{formularioBean.redblackcamp69}"/>
+                                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.dt_ini_trata_quimio == null}"/>
+                                            </h:panelGrid>
+                                            <h:panelGrid width="100%" columns="2">
+                                                <p:calendar value="#{formularioBean.entidade.pag2.dt_ini_trata_quimio}" size="11" locale="pt" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                                    <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp69('black')}" update="pgDataIniTrataQuimio" />
+                                                </p:calendar>
+                                                <h:outputLabel value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_trata_quimio)}" styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid width="100%">
+                                            <h:panelGrid id="pgEsquemaQuimio" columns="2">
+                                                <h:outputLabel id="olEsquema" value="70 - ESQUEMA (Sigla ou abreviatura)" style="color: #{formularioBean.redblackcamp70}"/>
+                                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.esquema_sigla_quimio.isEmpty()}"  />
+                                            </h:panelGrid>
+                                            <h:panelGrid width="100%" columns="2">
+                                                <p:inputText value="#{formularioBean.entidade.pag2.esquema_sigla_quimio}" maxlength="18" style="width: 150px" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                                    <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp70('black')}" update="pgEsquemaQuimio"/>
+                                                </p:inputText>
+                                                <h:outputLabel value="#{formularioBean.entidade.pag2.esquema_sigla_quimio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                        <h:panelGrid width="100%">
+                                            <h:panelGrid id="pgNtotalMesesPlanejados" columns="2">
+                                                <h:outputLabel id="olNtotalMesesPlane"  value="71 - N° Total de meses planejados" style="color: #{formularioBean.redblackcamp71}" />
+                                                <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.qtd_mese_planejado_quimio == 0}"  />
+                                            </h:panelGrid>
+                                            <h:panelGrid width="100%" columns="2">
+                                                <p:spinner value="#{formularioBean.entidade.pag2.qtd_mese_planejado_quimio}" size="10" min="0"  rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                                    <p:ajax  process="@this" />
+                                                    <p:ajax  listener="#{formularioBean.setRedblackcamp71('black')}" update="pgNtotalMesesPlanejados"/>
+                                                </p:spinner>
+                                                <h:outputLabel value="#{formularioBean.entidade.pag2.qtd_mese_planejado_quimio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                        <h:panelGrid width="100%" rendered="false">
+                                            <h:panelGrid width="100%" rendered="false">
+                                                <h:outputLabel  value="72 - N° Total de meses autorizados" />
+                                                <p:spinner value="#{formularioBean.entidade.pag2.qtd_mese_autorizados_quimio}" size="10" min="0"  readonly="#{formularioBean.somenteLeituraPag2}">
+                                                    <p:ajax  process="@this" />
+                                                    <p:ajax  listener="#{formularioBean.setRedblackcamp71('black')}" update="olNtotalMesesPlane"/>
+                                                </p:spinner>
+                                            </h:panelGrid>
+                                            <p:spinner value="#{formularioBean.entidade.pag2.qtd_mese_autorizados_quimio}" size="10" min="0"  readonly="#{formularioBean.somenteLeituraPag2}" >
+                                                <p:ajax  process="@this" />
+                                            </p:spinner>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                    </p:fieldset>
+
+                    <p:fieldset id="fsRadioterapia" rendered="#{formularioBean.rendereFsRadioterapiapag2}">
+
+                        <h:panelGrid width="100%" style="text-align: center">
+                            <h:outputLabel value="1.2 - RADIOTERAPIA"  styleClass="labelCabecalho" />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="73 - Tratamento(s) anterior(es)" style="width: 200px;font-size: 1.1em !important; " />
+                            <p:selectOneRadio value="#{formularioBean.entidade.pag2.trate_ante_radio}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                <f:selectItem itemValue="true" itemLabel="Sim"/>  
+                                <f:selectItem itemValue="false" itemLabel="Não"/>  
+                                <p:ajax event="change" update="fsRadioterapia"/>
+                            </p:selectOneRadio>  
+                            <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                            <h:outputLabel value="#{formularioBean.entidade.pag2.oplTrate_ante_radio()}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                        </h:panelGrid>
+
+                        <h:panelGrid rendered="#{formularioBean.entidade.pag2.trate_ante_radio}" width="100%">
+
+                            <h:panelGrid columns="2" width="100%" columnClasses="column80,column20">
+                                <h:panelGrid columns="2" width="100%" columnClasses="column10,column90" >
+                                    <h:outputLabel value="Tratamento(s) anterior(es)"  />
+                                    <h:panelGrid id="pgolDescTratAntRadio" columns="2" >
+                                        <h:outputLabel id="olDescTratAntRadio" value="74 - Descrição" style="color: #{formularioBean.redblackcamp74}"/>
+                                        <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.trate_ante1_radio.isEmpty() and
+                                                                                                         formularioBean.entidade.pag2.trate_ante2_radio.isEmpty() and
+                                                                                                         formularioBean.entidade.pag2.trate_ante3_radio.isEmpty())}"  />
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid id="pgolDtIniTratAntRadio" columns="2">
+                                    <h:outputLabel id="olDtIniTratAntRadio" value="75 - Data de início" style="color: #{formularioBean.redblackcamp75}"/>
+                                    <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.dt_trate_ante1_radio == null}"/>
+                                                                                                  
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2" width="100%"  columnClasses="column10,column90" >
+                                    <h:outputLabel value="1°" />
+                                    <p:inputText value="#{formularioBean.entidade.pag2.trate_ante1_radio}" maxlength="130" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp74('black')}" update="pgolDescTratAntRadio"/>
+                                    </p:inputText>
+                                    <h:outputLabel value="#{formularioBean.entidade.pag2.trate_ante1_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                </h:panelGrid>
+                                <p:calendar value="#{formularioBean.entidade.pag2.dt_trate_ante1_radio}" size="11" locale="pt" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                    <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp75('black')}" update="pgolDtIniTratAntRadio" />
+                                </p:calendar>
+                                <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_trate_ante1_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+                                <h:panelGrid columns="2" width="100%"  columnClasses="column10,column90" >
+                                    <p:outputLabel value="2°" />
+                                    <p:inputText value="#{formularioBean.entidade.pag2.trate_ante2_radio}" maxlength="130" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp74('black')}" update="pgolDescTratAntRadio"/>
+                                    </p:inputText>
+                                    <h:outputLabel value="#{formularioBean.entidade.pag2.trate_ante2_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                </h:panelGrid>
+                                <p:calendar value="#{formularioBean.entidade.pag2.dt_trate_ante2_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                    <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp75('black')}" update="pgolDtIniTratAntRadio" />
+                                </p:calendar>
+                                <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_trate_ante2_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+                                <h:panelGrid columns="2" width="100%"  columnClasses="column10,column90">
+                                    <p:outputLabel value="3°" />
+                                    <p:inputText value="#{formularioBean.entidade.pag2.trate_ante3_radio}" maxlength="130" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp74('black')}" update="pgolDescTratAntRadio"/>
+                                    </p:inputText>
+                                    <h:outputLabel value="#{formularioBean.entidade.pag2.trate_ante3_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                </h:panelGrid>
+                                <p:calendar value="#{formularioBean.entidade.pag2.dt_trate_ante3_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                    <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp75('black')}" update="pgolDtIniTratAntRadio" />
+                                </p:calendar>
+                                <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_trate_ante3_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+
+                        <h:panelGrid id="pgRadioContTrat"  width="100%" >
+                            <h:panelGrid width="100%" style="text-align: center" >
+                                <h:outputLabel value="TRATAMENTO SOLICITADO - Planejamento terapêutico global" styleClass="labelDados" rendered="#{!formularioBean.entidade.pag2.continue_trate_quimio}"/>
+                            </h:panelGrid>
+                            <h:panelGrid  id="pg76ContTrat" width="100%" columns="3" >
+
+                                <h:panelGrid>
+                                    <h:outputLabel  value="76 - Continuidade de tratamento" />
+                                    <p:selectOneRadio id="sor76" value="#{formularioBean.entidade.pag2.continue_trate_radio}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                        <f:selectItem itemLabel="Sim" itemValue="true" />
+                                        <f:selectItem itemLabel="Não" itemValue="false" />
+                                        <!--                                        <p:ajax event="change" update="pg76ContTrat,pgTratamentoIrrad" />-->
+                                    </p:selectOneRadio>
+                                    <h:outputLabel value="#{formularioBean.entidade.pag2.oplContinue_trate_radio()}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                </h:panelGrid>
+
+
+                                <h:panelGrid >
+                                    <h:panelGrid id="pgolDtIniTrataRadio" columns="2">
+                                        <h:outputLabel id="olDtIniTrataRadio" value="77 - Data de inicío do tratamento" style="color: #{formularioBean.redblackcamp77}"/>
+                                        <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.dt_ini_trata_radio == null}"/>
+                                    </h:panelGrid>
+                                    <p:calendar value="#{formularioBean.entidade.pag2.dt_ini_trata_radio}" size="11" locale="pt" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                        <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp77('black')}" update="pgolDtIniTrataRadio"/>
+                                    </p:calendar>
+                                    <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                    <h:outputLabel  value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_trata_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                </h:panelGrid>
+
+                                <h:panelGrid id="pg78Finalidade"  >
+                                    <h:panelGrid id="pgFinalidadeRadio" columns="2" >
+
+                                        <h:outputLabel id="olFinalidadeRadio"  value="78 - Finalidade" style="color: #{formularioBean.redblackcamp78}"/>
+                                        <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.finalidade.isVazio()}" />
+                                    </h:panelGrid>
+                                    <h:panelGrid id="pg78Opcoes" >
+                                        <p:selectOneRadio id="sor78" value="#{formularioBean.entidade.pag2.finalidade.id}" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                            <f:selectItem itemLabel="RADICAL" itemValue="6" />
+                                            <f:selectItem itemLabel="ADJUVANTE" itemValue="1" />
+                                            <f:selectItem itemLabel="ANTIÁLGICA" itemValue="2" />
+                                            <f:selectItem itemLabel="PALIATIVA" itemValue="4" />
+                                            <f:selectItem itemLabel="PRÉVIA" itemValue="5" />
+                                            <f:selectItem itemLabel="ANTIHEMORRÁGICA" itemValue="3" />
+                                            <p:ajax event="change" listener="#{formularioBean.setRedblackcamp78('black')}" update="pgFinalidadeRadio"/>
+                                            <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                            <h:outputLabel value="#{formularioBean.entidade.pag2.otlFinalidadeString()}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        </p:selectOneRadio>
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.otlFinalidadeString()}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                    </h:panelGrid>
+                                </h:panelGrid>
+
+                            </h:panelGrid>
+
+
+                            <h:panelGrid id="pgTratamentoIrrad" width="100%" >
+                                <h:panelGrid  width="100%">
+
+                                    <h:panelGrid width="100%" style="text-align: center" >
+                                        <h:outputLabel value="Área irradiada" styleClass="labelDados" />
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="6" width="100%"  columnClasses="column10,column50,column10,column10,column10,column10">
+                                        <h:panelGrid id="pg79Cid" columns="2" >
+                                            <h:outputLabel value="79 - CID topográfico" style="color: #{formularioBean.redblackcamp79}"/>
+                                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.cid_topografico1_radio.isEmpty()and
+                                                                                                             formularioBean.entidade.pag2.cid_topografico2_radio.isEmpty()and
+                                                                                                             formularioBean.entidade.pag2.cid_topografico3_radio.isEmpty())}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid id="pg80Descricao" columns="2" >
+                                            <h:outputLabel id="olDescContTratRadio" value="80 - Descrição" style="color: #{formularioBean.redblackcamp80}"/>
+                                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.area_irradi_descricao1_radio.isEmpty() and
+                                                                                                             formularioBean.entidade.pag2.area_irradi_descricao2_radio.isEmpty()  and
+                                                                                                             formularioBean.entidade.pag2.area_irradi_descricao3_radio.isEmpty())}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid id="pg81NcampoInsercoes" columns="2">
+                                            <h:outputLabel id="olNcampo" value="81-N°campo/inserções" style="color: #{formularioBean.redblackcamp81};font-size: 11px"/>
+                                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.ncampo_incer1_radio.isEmpty() and
+                                                                                                             formularioBean.entidade.pag2.ncampo_incer2_radio.isEmpty() and
+                                                                                                             formularioBean.entidade.pag2.ncampo_incer3_radio.isEmpty())}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid id="pg82DataInicio" columns="2">
+                                            <h:outputLabel id="olDtIniAreaIrrad" value="82 - Data de início" style="color: #{formularioBean.redblackcamp82}"/>
+                                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.dt_ini_area_irrad1_radio == null and
+                                                                                                             formularioBean.entidade.pag2.dt_ini_area_irrad2_radio == null and
+                                                                                                             formularioBean.entidade.pag2.dt_ini_area_irrad3_radio == null )}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid id="pg83DataFim" columns="2">
+                                            <h:outputLabel id="olDtFimAreaIrrad" value="83 - Data de fim" style="color: #{formularioBean.redblackcamp83}"/>
+                                            <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{(formularioBean.entidade.pag2.dt_fim_area_irrad1_radio == null and
+                                                                                                             formularioBean.entidade.pag2.dt_fim_area_irrad2_radio == null and
+                                                                                                             formularioBean.entidade.pag2.dt_fim_area_irrad3_radio == null )}"/>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid id="pg79-cid-1" columns="2">
+                                            <p:commandButton id="btBuscarCid1RadioPag2" value="Buscar" action="#{formularioBean.abrirDlgBuscaCid()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                                <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgCidTopografico1}" process="@this" update="pg57-cid,pg79-cid-1,pg79-cid-2,pg79-cid-3, pg79Cid" />
+                                            </p:commandButton>
+                                            <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                            <h:outputLabel value="#{formularioBean.entidade.pag2.cid_topografico1_radio}" styleClass="labelDados"/>
+                                        </h:panelGrid>
+                                        <p:inputText id="itDesc1" value="#{formularioBean.entidade.pag2.area_irradi_descricao1_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp80('black')}" update="pg80Descricao"/>
+                                        </p:inputText>
+                                        <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.area_irradi_descricao1_radio}"  styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:inputText id="itNci1" value="#{formularioBean.entidade.pag2.ncampo_incer1_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp81('black')}" update="pg81NcampoInsercoes"/>
+                                        </p:inputText>
+                                        <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.ncampo_incer1_radio}"  styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:calendar id="cDtIni1" value="#{formularioBean.entidade.pag2.dt_ini_area_irrad1_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                            <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp82('black')}" update="pg82DataInicio" />
+                                        </p:calendar>
+                                        <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:outputLabel value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_area_irrad1_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:calendar id="cDtFim1" value="#{formularioBean.entidade.pag2.dt_fim_area_irrad1_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                            <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp83('black')}" update="pg83DataFim" />
+                                        </p:calendar>
+                                        <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:outputLabel value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_fim_area_irrad1_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:panelGrid width="100%" style="text-align: right">
+                                            <p:commandButton id="btLimparCid1RadioPag2" icon="ui-icon-trash" title="Remover"  action="#{formularioBean.limparCampo79(1)}" update="pg79-cid-1,itDesc1,itNci1,cDtIni1,cDtFim1" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                                            <!--<p:commandLink id="btLimparCid1RadioPag2" value="Limpar " action="{formularioBean.limparCampo79(1)}"  update="pg79a83" style="color: blue"  rendered="{!formularioBean.somenteLeituraPag2}"/>-->
+
+                                        </h:panelGrid>
+                                        <h:panelGrid id="pg79-cid-2" columns="2">
+                                            <p:commandButton id="btBuscarCid2RadioPag2" value="Buscar" action="#{formularioBean.abrirDlgBuscaCid()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                                <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgCidTopografico2}" process="@this" update="pg57-cid,pg79-cid-1,pg79-cid-2,pg79-cid-3,pg79Cid" />
+                                            </p:commandButton>
+                                            <h:outputLabel value="#{formularioBean.entidade.pag2.cid_topografico2_radio}" styleClass="labelDados"/>
+                                        </h:panelGrid>
+                                        <p:inputText id="itDesc2" value="#{formularioBean.entidade.pag2.area_irradi_descricao2_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp80('black')}" update="pg80Descricao"/>
+                                        </p:inputText>
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.area_irradi_descricao2_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:inputText id="itNci2" value="#{formularioBean.entidade.pag2.ncampo_incer2_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp81('black')}" update="pg81NcampoInsercoes"/>
+                                        </p:inputText>
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.ncampo_incer2_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:calendar id="cDtIni2" value="#{formularioBean.entidade.pag2.dt_ini_area_irrad2_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp82('black')}" update="pg82DataInicio" />
+                                        </p:calendar>
+                                        <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_area_irrad2_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:calendar id="cDtFim2" value="#{formularioBean.entidade.pag2.dt_fim_area_irrad2_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp83('black')}" update="pg83DataFim" />
+                                        </p:calendar>
+                                        <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_area_irrad2_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:panelGrid width="100%" style="text-align: right">
+                                            <p:commandButton id="btLimparCid2RadioPag2" icon="ui-icon-trash" title="Remover"  action="#{formularioBean.limparCampo79(2)}" update="pg79-cid-2,itDesc2,itNci2,cDtIni2,cDtFim2" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                                            <!--<p:commandLink id="btLimparCid2RadioPag2" value="Limpar " action="{formularioBean.limparCampo79(2)}"  update="pg79a83" style="color: blue"  rendered="{!formularioBean.somenteLeituraPag2}"/>-->
+
+                                        </h:panelGrid>
+                                        <h:panelGrid id="pg79-cid-3" columns="2">
+                                            <p:commandButton id="btBuscarCid3RadioPag2" value="Buscar" action="#{formularioBean.abrirDlgBuscaCid()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                                <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgCidTopografico3}" process="@this" update="pg57-cid,pg79-cid-1,pg79-cid-2,pg79-cid-3, pg79Cid" />
+                                            </p:commandButton>
+                                            <h:outputLabel value="#{formularioBean.entidade.pag2.cid_topografico3_radio}" styleClass="labelDados" />
+                                        </h:panelGrid>
+                                        <p:inputText id="itDesc3" value="#{formularioBean.entidade.pag2.area_irradi_descricao3_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp80('black')}" update="pg80Descricao"/>
+                                        </p:inputText>
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.area_irradi_descricao3_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:inputText id="itNci3" value="#{formularioBean.entidade.pag2.ncampo_incer3_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp81('black')}" update="pg81NcampoInsercoes"/>
+                                        </p:inputText>
+                                        <h:outputLabel value="#{formularioBean.entidade.pag2.ncampo_incer3_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:calendar id="cDtIni3" value="#{formularioBean.entidade.pag2.dt_ini_area_irrad3_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp82('black')}" update="pg82DataInicio" />
+                                        </p:calendar>
+                                        <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_area_irrad3_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <p:calendar id="cDtFim3" value="#{formularioBean.entidade.pag2.dt_fim_area_irrad3_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                            <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp83('black')}" update="pg83DataFim" />
+                                        </p:calendar>
+                                        <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_fim_area_irrad3_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:panelGrid width="100%" style="text-align: right">
+                                            <p:commandButton id="btLimparCid3RadioPag2" icon="ui-icon-trash" title="Remover"  action="#{formularioBean.limparCampo79(3)}" update="pg79-cid-3,itDesc3,itNci3,cDtIni3,cDtFim3" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                                            <!--<p:commandLink id="btLimparCid3RadioPag2" value="Limpar " action="{formularioBean.limparCampo79(3)}"  update="pg79a83" style="color: blue"  rendered="{!formularioBean.somenteLeituraPag2}"/>-->
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                    <!--</p:fieldset>-->
+                </h:panelGrid>
+
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <h:panelGrid id="pgBotoes" columns="6" onkeypress="if (event.keyCode === 13) {
+                            ondblclick();
+                            return false;
+                        }">
+                    <p:commandButton value="" onkeypress="if (event.keyCode === 13) {
+                                return false;
+                            }" process="@none" global="false" style="display:none;"/>
+                    <p:commandButton value="Novo" actionListener ="#{formularioBean.btFormLimpar()}" update="@form" rendered="#{formularioBean.inseri}" />
+                    <p:commandButton id="btSalvar" value="Salvar" action="#{formularioBean.btSalvar(usuarioBean.usuarioLogado)}" disabled="#{formularioBean.disableBtSalvar}" update="pgMaior,pgBotoes,pgMaior2" rendered="#{formularioBean.renderebtBtSalvar}" />
+                    <p:commandButton id="btSalvar2" value="Salvar Folha1"  onclick="PF('dlgConfirmeSalvarF1').show()"  rendered="#{formularioBean.renderebtBtSalvar2}" disabled="#{formularioBean.disableBtSalvar}" />
+                    <p:commandButton id="btSalvarAlteracao" value="Salvar" rendered="#{formularioBean.rendereBtSalvarAlteracao}" action = "#{formularioBean.btSalvarAlteracoes(usuarioBean.usuarioLogado)}" update="pgMaior,pgBotoes,pgMaior2" />
+                    <p:commandButton id="btSalvarAlteracao2" value="Salvar" rendered="#{!formularioBean.rendereBtSalvarAlteracao}" onclick="PF('dlgConfirmeEditF1').show()" disabled="#{formularioBean.disableBtSalvar}" />
+                    <p:commandButton id="btImprimir" value="Finalizar" onclick="PF('dlgConfirmeFinalizar').show()" rendered="#{formularioBean.renderebtImprimir}" disabled="#{formularioBean.entidade.status.id_status != 2}" />
+                    <p:commandButton id="btImprimir2" value="Imprimir" action="#{formularioBean.printFolha1()}" ajax="false" onclick="this.form.target = '_blank'" update="pgMaior,pgMaior2"  rendered="#{formularioBean.renderebtImprimir2}"  />
+                    <p:commandButton id="btPreencPag2" value="#{formularioBean.valueBtPreencPag2}"  action = "#{formularioBean.btPreencPag2()}" update="fsMaster" rendered="#{formularioBean.rendereBtPreencPag2}"  />
+                </h:panelGrid>
+            </f:facet>
+        </h:panelGrid>
+
+    </p:fieldset>
+
+    <p:dialog id="dlgBuscaform" widgetVar="dlgBuscaform"  header="BUSCAR FORMULÁRIO" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false">
+        <p:ajax event="close" listener="#{formularioBean.closeDlgBuscaform()}"  />
+        <p:fieldset id="fsDlgBuscaform">
+            <h:panelGrid columns="2">
+                <p:outputLabel for="itnFormDlgBuscaform" value="Informe o número do formulário:"/>
+                <p:inputText id="itnFormDlgBuscaform" value="#{vItDlgBuscaForm}" onkeypress="if (event.keyCode === 13) {
+                            ondblclick();
+                            return false;
+                        }">
+                    <p:ajax event="dblclick" oncomplete="PF('dlgBuscaform').hide()" update="fsMaster" listener="#{formularioBean.buscaForm(vItDlgBuscaForm)}" />
+                </p:inputText>
+                <f:facet name="footer">
+                    <p:commandButton id="btDlgBuscaform" value="Buscar" action="#{formularioBean.buscaForm(vItDlgBuscaForm)}" update="fsMaster,dlgAutorizacao" onclick="PF('dlgBuscaform').hide()" />
+                </f:facet>
+            </h:panelGrid>  
+        </p:fieldset>
+    </p:dialog>
+    <p:dialog id="dlgAutorizacao" widgetVar="dlgAutorizacao"  header="DADOS DA AUTORIZAÇÃO" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false" >
+        <p:ajax event="close" listener="#{formularioBean.closeDlgAutorizacao()}" update="fsDlgAutorizacao" />
+        <p:fieldset id="fsDlgAutorizacao" >
+            <h:panelGrid columns="2" >
+                <h:panelGrid  width="150px">
+                    <p:outputLabel value="43 - Nome do profissional autorizador:"/>
+                    <p:inputText value="#{formularioBean.autorizacao.autorizador}" style="width: 315px"   />
+                </h:panelGrid>  
+                <h:panelGrid  >
+                    <p:outputLabel value="44 - Código do orgão emissor:"/>
+                    <p:inputText value="#{formularioBean.autorizacao.cod_org_emissor}"  />
+                </h:panelGrid>  
+                <h:panelGrid  >
+                    <p:outputLabel value="46 - Nº documento(CNS/CPF) do profissional autorizador:"  />
+                    <p:inputText value="#{formularioBean.autorizacao.num_doc}" style="width: 315px"  />
+                </h:panelGrid>  
+                <h:panelGrid  >
+                    <p:outputLabel value="47 - Data da autorização:"/>
+                    <p:calendar size="11" value="#{formularioBean.autorizacao.data}" locale="pt" />
+                </h:panelGrid>  
+                <h:panelGrid  >
+                    <p:outputLabel value="50 - Periodo de validade da apac:"/>
+                    <h:panelGrid columns="3">
+                        <p:calendar value="#{formularioBean.autorizacao.data_val_ini}" locale="pt" />
+                        <p:outputLabel value=" a "/>
+                        <p:calendar value="#{formularioBean.autorizacao.data_val_fim}" locale="pt" />
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid  >
+                    <p:outputLabel value="49 - Nº da autorização (APAC):"  />
+                    <p:inputText value="#{formularioBean.autorizacao.num_autorizacao}"  >
+                        <p:ajax event="keyup"  update="btSalvarDlgAutorizacao" />
+                    </p:inputText>
+                </h:panelGrid>  
+                <f:facet name="footer">
+                    <h:panelGrid columns="3">
+                        <p:commandButton value="Cancelar" onclick="PF('dlgAutorizacao').hide()" />
+                        <p:commandButton id="btSalvarDlgAutorizacao" value="Salvar" action="#{formularioBean.btDlgAutorizacaoSalvar(usuarioBean.usuarioLogado)}"  update="fsMaster" onclick="PF('dlgAutorizacao').hide()" disabled="#{formularioBean.disableBtSalvarDlgAutorizacao}" />
+                        <h:outputLabel value="*Obs: campo Nº da autorização (APAC) é de preencimento obrigatório!" styleClass="labelCabecalho" />
+                    </h:panelGrid>
+                </f:facet>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>
+
+
+
+    <p:dialog id="dlgConfirmeSalvarF1" widgetVar="dlgConfirmeSalvarF1"  header="CONFIRMAR" modal="true" appendTo="@(body)" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false"  >
+        <p:ajax event="close" listener="#{formularioBean.closeDlgConfirmeSalvarF1()}" update="fsdlgConfirmeSalvarF1" />
+        <p:fieldset id="fsdlgConfirmeSalvarF1">
+            <h:panelGrid id="pgdlgConfirmeSalvarF1"  >
+                <h:outputLabel  value="Deseja salvar as alterações ?"/>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Sim" action="#{formularioBean.btSimdlgConfirmeSalvarF1()}"  update="pgMaior,pgBotoes" onclick="PF('dlgConfirmeSalvarF1').hide()" />
+                    <p:commandButton value="Não" onclick="PF('dlgConfirmeSalvarF1').hide()" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>
+    <p:dialog id="dlgConfirmeEditF1" widgetVar="dlgConfirmeEditF1"  header="CONFIRMAR" modal="true" appendTo="@(body)" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false"  >
+        <p:ajax event="close" listener="#{formularioBean.closeDlgConfirmeSalvarF1()}" />
+        <p:fieldset id="fsdlgConfirmeEditF1">
+            <h:panelGrid id="pgdlgConfirmeEditF1"  >
+                <h:outputLabel  value="#{formularioBean.dlgDlgConfirmeEditF1_legenda()}"/>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Sim" action="#{formularioBean.btSimdlgConfirmeEditF1()}"  update="pgMaior,pgBotoes" onclick="PF('dlgConfirmeEditF1').hide()" />
+                    <p:commandButton value="Não" onclick="PF('dlgConfirmeEditF1').hide()" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>
+    
+    <p:dialog id="dlgConfirmeFinalizar" widgetVar="dlgConfirmeFinalizar"  header="CONFIRMAR"  draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false"  >
+        <p:fieldset id="fsdlgConfirmeFinalizar">
+            <h:panelGrid id="pgdlgConfirmeFinalizar"  >
+                <h:outputLabel  value="Deseja realmente finalizar o formulário?"/>
+                <h:panelGrid columns="2" onclick="PF('dlgConfirmeFinalizar').hide()" >
+                    <p:commandButton value="Sim"  action="#{formularioBean.btImprimir(usuarioBean.usuarioLogado)}"  update="fsMaster" />
+                    <p:commandButton value="Não"  />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>
+    
+    <p:dialog widgetVar="dlgEstabelecimentoSaude"  width="500" height="60" header="ESTABELECIMENTO DE SAÚDE SOLICITANTE" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false" >
+        <p:fieldset>
+            <h:panelGrid columns="2">
+                <p:selectOneMenu  var="sOMestabelecimentoSaude" value="#{sOMestabelecimentoSaude}" onchange="PF('dlgEstabelecimentoSaude').hide()"  >
+                    <f:selectItems  value="#{formularioBean.estabelecimentos}"/>
+                    <p:ajax event="change" listener="#{formularioBean.selecionarEstabelecimentoSolicitante(sOMestabelecimentoSaude)}" update="fsEstabelecimentoSolicitante" />
+                </p:selectOneMenu>         
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>
+</ui:decorate>
+

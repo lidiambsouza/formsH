@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Formsus</title>
+        <style type="text/css">
+            .ui-widget{font-size:90% !important;}
+            .ui-layout-unit-content{background-image:url('resources/img/fundo.jpg');background-size: 100% 100%;}
+        </style>
+
+    </h:head>
+
+    <h:body>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="center" >
+
+                #{usuarioBean.verificaUsuLog()}
+
+                #{templateBean.renderizarMenu(usuarioBean.usuarioLogado.perfil.id_perfil)}
+                <h:form > 
+
+                    <h:panelGrid  columns="2"  width="100%" columnClasses="alinharEsquerda,alinharDireita"  rendered="#{usuarioBean.usuarioLogado.logado}" >
+                        <p:column colspan="2">
+                            <p:graphicImage url="resources/img/logohujbb.png" width="250px" height="80px" />
+                        </p:column>
+
+                        <h:panelGrid id="pgCompetencia" width="100%" style="text-align: right"  >
+                            <h:outputText  value="Usuário:  #{usuarioBean.usuarioLogado.login.toUpperCase()}" style="font-weight: bold" />
+                            <p:ajax event="click" listener="#{templateBean.setCompetencia(null)}" update="pgCompetencia"/>
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+                     <hr/>
+                    <!--growl exibe mensagens na tela-->
+                    <p:growl id="growl" sticky="true" showDetail="true" life="6000" autoUpdate="true"  />
+                    
+                    <p:menubar rendered="#{usuarioBean.usuarioLogado.logado}">
+                        <p:submenu label="Formulário" icon="ui-icon-document" rendered="#{usuarioBean.usuarioLogado.logado}">
+                            <p:menuitem value="Novo" icon="ui-icon-plus"  rendered="#{templateBean.rendere_formulario_novo}" action="#{templateBean.formulario_novo()}" />
+                            <p:menuitem value="Registrar autorização" icon="ui-icon-document" rendered="false" action="#{templateBean.formulario_registrarAutorizacao()}" />
+                            <p:menuitem value="Consultar Laudos" icon="ui-icon-search" url="consultaLaudo.jsf"  />
+                            
+                        </p:submenu>
+                        <p:submenu label="Procedimento" icon="ui-icon-document" rendered="#{templateBean.rendere_usuario}">
+                            <p:menuitem value="Buscar procedimento" icon="ui-icon-search" url="tela-sigtap.jsf" />
+                            <p:menuitem value="Carga SIGTAP" icon="ui-icon-plus" url="importar.jsf"/>
+                        </p:submenu>
+                        <p:submenu label="Usuário" icon="ui-icon-person" rendered="#{templateBean.rendere_usuario}">
+                            <p:menuitem value="Cadastrar" icon="ui-icon-plus" url="cadastrarusuario.jsf"  />
+                            <p:menuitem value="Buscar / Editar" icon="ui-icon-search" url="buscarUsuario.jsf" />                         
+                        </p:submenu>
+                        <p:menuitem value="Log" icon="ui-icon-clipboard" url="log.jsf" rendered="#{templateBean.rendere_log}" />                         
+                        <p:submenu label="Relatórios" icon="ui-icon-clipboard" rendered="#{templateBean.rendere_log}">
+                            <p:menuitem value="Relatórios quantitativos " icon="ui-icon-clipboard" url="relatorios.jsf" rendered="#{templateBean.rendere_log}" />                         
+                            <p:menuitem value="Consultar APACs emitidos por período" icon="ui-icon-search" url="emitidos.jsf" rendered="#{templateBean.rendere_log}" />                         
+                        </p:submenu>
+                        <p:menuitem value="Sair" icon="ui-icon-arrowreturnthick-1-e"  action="#{usuarioBean.sair()}"   disabled="#{!usuarioBean.usuarioLogado.logado}"/>
+                    </p:menubar>
+                    <br></br>
+                    <ui:insert ></ui:insert>
+
+                </h:form>
+                
+            </p:layoutUnit>
+            <p:layoutUnit position="south">
+                <h:form id="formErro">
+                    <p:fieldset>
+                        <p:commandLink value="log de erro" onclick="PF('dlgLogErr').show()" rendered="#{templateBean.rendere_log_erro}" update="logErro"/>
+                        <p:dialog id="dlgLogErr" widgetVar="dlgLogErr" width="700" height="400" header="LOG DE ERRO"  closable="true" closeOnEscape="false"  minimizable="false" >
+                            <h:panelGrid width="600px">
+                                <p:outputLabel value="Log" />
+                                <p:inputTextarea id="logErro" style="width: 100%" value="#{erroBean.msgErro}"  />
+                                <p:commandLink value="Limpar" action="#{erroBean.limparLog()}" update="logErro"/>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <h:panelGrid width="100%" style="text-align: center" columns="1">
+                            <p:outputLabel style="font-size: 11px !important ; font-weight: bold" >Hospital Universitário João de Barros Barreto
+                                Rua dos Mundurucus, 4487 - Guamá. CEP: 66073-000. CNPJ: 34.621.748/0004-76</p:outputLabel>
+                            <p:outputLabel style="font-size: 11px !important; font-weight: bold">Copyright © 2018 – Complexo Hospitalar da UFPA</p:outputLabel>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+
+    </h:body>
+
+    <script type="text/javascript">
+        PrimeFaces.locales['pt'] = {
+            closeText: 'Fechar',
+            prevText: 'Anterior',
+            nextText: 'Próximo',
+            currentText: 'Começo',
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+            weekHeader: 'Semana',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Só Horas',
+            timeText: 'Tempo',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+
+            ampm: false,
+            month: 'Mês',
+            week: 'Semana',
+            day: 'Dia',
+            allDayText: 'Todo Dia'
+        };
+
+    </script>
+
+    <style>
+
+        .alinharEsquerda{
+            text-align: left;
+
+        }
+        .alinharDireita{
+            text-align: right;
+
+        }
+        .labelCurto{
+            width: 20%
+        }
+        .labelCabecalho{
+            color: #2e6e9e;
+            font-weight: bold; 
+            font-size:15px ;
+        }
+        .labelNaoEncontrado{
+            color: red;
+            font-weight: bold; 
+            
+        }
+        .labelAsterisco{
+            font-size:15px ; 
+            color: red;
+            font-weight: bold; 
+        }
+        .labelDados{
+            font-weight: bold; 
+        }
+        .labelConfirmacao{
+            color: red;
+        }
+        .inputTxtLaguraPadrao{
+            width: 200px;
+        }
+        .inputTxtLaguraNome{
+            width: 350px;
+        }
+        .fsBusca{/*stilo do fildeset busca*/
+             background: #dedede;
+             height: 15px
+        }
+        
+        
+        .column10 {
+            width: 10%;
+        }
+        .column20 {
+            width: 20%;
+        }
+        .column25 {
+            width: 25%;
+        }
+        .column35 {
+            width: 35%;
+        }
+        .column45 {
+            width: 45%;
+        }
+        .column50 {
+            width: 50%;
+        }
+        .column55 {
+            width: 55%;
+        }
+        .column65 {
+            width: 65%;
+        }
+
+        .column80 {
+            width: 80%;
+        }
+
+        .column90 {
+            width: 90%;
+        }
+
+       
+    
+    </style>
+
+</html>
+

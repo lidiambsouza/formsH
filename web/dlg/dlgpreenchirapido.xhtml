@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <style type="text/css">
+            .ui-widget{font-size:80% !important;}
+        </style>
+    </h:head>
+    <h:body>
+        <h:form>
+            <!--growl exibe mensagens na tela-->
+           
+<!--            <p:growl id="growl" sticky="true" showDetail="true" life="6000" autoUpdate="true"  />-->
+            <p:fieldset id="fsDlgPreencherRapido" style="width: 96%">
+                <p:focus for="itNProntuarioPgDlgPreencherRapido" />
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="PREENCHIMENTO RÁPIDO"  style="#{estilosBean.labelCabechalho()}"/>
+                </h:panelGrid>
+                <p:messages id="msg"  showDetail="true"  autoUpdate="true"  />
+                <h:panelGrid id="pgDlgPreencherRapido" columns="2">
+                    <h:outputLabel value="Nome do paciente:"/>
+                    <h:panelGrid id="pgPaciDlgPreencherRapido" columns="2">
+                        <h:outputLabel value="#{dlgPreenchiRapidoBean.pacienteTemp.nome}"/>
+                        <h:outputLabel value="#{dlgPreenchiRapidoBean.txtBuscaNumPront}" style="#{estilosBean.labelNaoEncontrado()}" />    
+                    </h:panelGrid>
+
+                    <h:outputLabel value="Nº de prontuário / Nome do paciente:"/>
+                    <h:panelGrid>
+                        <p:inputText id="itNProntuarioPgDlgPreencherRapido"   value="#{dlgPreenchiRapidoBean.numProntuario}"  required="false" onkeypress="if (event.keyCode === 13) {
+                                    return false;
+                                }" >
+                            <p:ajax update="itNProntuarioPgDlgPreencherRapido" resetValues="true"/>
+                            <p:ajax event="keyup"  listener="#{dlgPreenchiRapidoBean.buscaParciente(dlgPreenchiRapidoBean.numProntuario)}" update="pgPaciDlgPreencherRapido,@form:pdButonDlgPreenchinRapido" />
+
+                        </p:inputText>
+                    </h:panelGrid>
+
+                    <h:outputLabel value="Buscar procedimento:"/>
+                    <h:panelGrid columns="3">
+                        <p:inputText id="itBuscarProcedimentoDlgPreencherRapido"  value="#{dlgPreenchiRapidoBean.buscaProcedimentoDlgPreencherRapido}" style="width: 200px" onfocus="this.value = '';" required="false"  >
+                            <p:ajax event="keyup" listener="#{dlgPreenchiRapidoBean.buscaProcedimento(dlgPreenchiRapidoBean.buscaProcedimentoDlgPreencherRapido)}" update="sOMProcedimentoDlgPreencherRapido,"  />
+                            <p:ajax update="itBuscarProcedimentoDlgPreencherRapido" resetValues="true"/>
+
+                        </p:inputText>
+                        <h:outputLabel  value="Quantidade:"/>
+                        <p:spinner id="iTQuantidadeDlgPreencherRapido"  value="#{dlgPreenchiRapidoBean.procedimento.qtd}" min="1" >
+                            <p:ajax process="@this" />
+                        </p:spinner>   
+                    </h:panelGrid>
+
+
+                    <h:outputLabel  value="Selecione o procedimento:"/>
+                    <h:panelGrid columns="2">
+                        <p:selectOneMenu id="sOMProcedimentoDlgPreencherRapido"   value="#{dlgPreenchiRapidoBean.vsOMProcedimentoDlgPreencherRapido}"  style="width: 550px"  >
+                            <f:selectItems  value="#{dlgPreenchiRapidoBean.procedimentos_susItem}"/>
+                            <p:ajax event="change"  listener="#{dlgPreenchiRapidoBean.selecionarProcedimento(dlgPreenchiRapidoBean.vsOMProcedimentoDlgPreencherRapido)}"  />
+
+                        </p:selectOneMenu> 
+                    </h:panelGrid>
+
+                    <h:outputLabel value="Cód ou nome do CID:"/>
+                    <h:panelGrid>
+                        <p:inputText id="itBuscarCidDlgPreencherRapido"  value="#{dlgPreenchiRapidoBean.cidPrincipalDlgPreencherRapido}" style="width: 200px" onfocus="this.value = '';" required="false"  >
+                            <p:ajax event="keyup" listener="#{dlgPreenchiRapidoBean.buscarCid(dlgPreenchiRapidoBean.cidPrincipalDlgPreencherRapido)}" update="sOMCidPrincipalDlgPreencherRapido"  />
+                            <p:ajax update="itBuscarCidDlgPreencherRapido" resetValues="true"/>
+                        </p:inputText>
+                    </h:panelGrid>
+
+                    <h:outputLabel  value="Selecione o CID:"/>
+
+                    <h:panelGrid>
+                        <p:selectOneMenu id="sOMCidPrincipalDlgPreencherRapido" value="#{dlgPreenchiRapidoBean.vsOMCidPrincipalDlgPreencherRapido}" style="width: 550px" >
+                            <f:selectItems  value="#{dlgPreenchiRapidoBean.cidItem}"/>
+                            <p:ajax event="change"  listener="#{dlgPreenchiRapidoBean.selecionarCid(dlgPreenchiRapidoBean.vsOMCidPrincipalDlgPreencherRapido)}"   />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>
+
+                    <h:panelGrid id="pdButonDlgPreenchinRapido" columns="2" >
+                        <p:commandButton value="Confirmar" action="#{dlgPreenchiRapidoBean.btConfirm()}" update="@form:fsDlgPreencherRapido" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:fieldset>
+
+
+        </h:form>
+
+    </h:body>
+    <style>
+        .labelCabecalho{
+            color: #2e6e9e;
+            font-weight: bold; 
+            font-size:15px ;
+        }
+
+    </style>
+
+</html>
+

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <style type="text/css">
+            .ui-widget{font-size:90% !important;}
+        </style>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:fieldset id="fsConsultaPaciente" style="width: 96%"  > 
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="PESQUISAR PACIENTE" style="#{estilosBean.labelCabechalho()}"/>
+                </h:panelGrid>
+                <p:fieldset>
+                    <p:focus for="busca"/>
+                    <h:panelGroup  style="margin-bottom:10px"  >
+                        <h:outputLabel for="busca" value="Buscar:" styleClass="labelDados"/>
+                        <p:inputText id="busca" value="#{vNumProntNomePaciente}" style="width: 60%" onkeydown="if (event.keyCode === 13) {
+                                    ondblclick();
+                                    return false;
+                                }">
+                            <p:ajax event="dblclick" listener="#{dlgBuscaPacienteBean.selecionarPacienteDlg(dlgBuscaPacienteBean.entidade)}" update="fsdtPacientes" />
+                            <p:ajax event="keyup" listener="#{dlgBuscaPacienteBean.btBuscarPacienteDlg(vNumProntNomePaciente)}" update="fsdtPacientes" />
+                        </p:inputText>
+                    </h:panelGroup>
+                </p:fieldset>
+                <p:messages id="msg"  showDetail="true"  autoUpdate="true"  />
+                <p:fieldset id="fsdtPacientes">
+                    <p:dataTable id="dt" var="paciente"  value="#{dlgBuscaPacienteBean.entidades}"  paginator="true" rows="4" emptyMessage="Nenhum registro encontrado!" selectionMode="single" selection="#{dlgBuscaPacienteBean.p}"  rowKey="#{paciente.nome}" >
+                        <p:ajax event="rowSelect" listener="#{dlgBuscaPacienteBean.rowSelectEvent}" />
+                        <p:column headerText="Número do Prontuário" width="80" style="text-align: center"  >
+                            <h:outputLabel value="#{paciente.num_prontuario}"   >
+                                <p:ajax event="click" listener="#{dlgBuscaPacienteBean.selecionarPacienteDlg(paciente)}"/>
+                            </h:outputLabel>
+                        </p:column>
+                        <p:column headerText="Nome do paciente"  >
+                            <h:outputLabel value="#{paciente.nome}"  >
+                                <p:ajax event="click" listener="#{dlgBuscaPacienteBean.selecionarPacienteDlg(paciente)}"/>
+                            </h:outputLabel>
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+            </p:fieldset>
+        </h:form>
+    </h:body>
+
+</html>
+

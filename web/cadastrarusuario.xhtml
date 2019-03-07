@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    #{solicitanteBean.verificaPerfil(usuarioBean.usuarioLogado.perfil.id_perfil)}
+
+    <p:fieldset id="fsCadastroUsuario" legend="Cadastro de usuário" style=" margin-left: 5%;margin-right: 5% ; margin-bottom: 5%"  >
+
+        <p:fieldset id="fsDadosPessoais">
+            <h:panelGrid  width="100%" style="text-align: center" >
+                <h:outputLabel value="DADOS PESSOAIS"  styleClass="labelCabecalho"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:panelGrid columns="2">
+                    <h:panelGrid>
+                        <h:outputLabel value="Login"/>
+                        <p:inputText value="#{solicitanteBean.solicitanteCad.usuario.login}" styleClass="inputTxtLaguraPadrao" >
+                            <p:ajax event="blur" listener="#{solicitanteBean.verificarLoginAdEbserh()}" update="fsDadosPessoais"/>
+                        </p:inputText> 
+                    </h:panelGrid>
+                    <!--<p:commandLink value="Verificar" action="{solicitanteBean.verificarLoginAdEbserh()}" style="color: blue" update="fsCadastroUsuario" />-->
+                </h:panelGrid>
+
+                <h:panelGrid>
+                    <h:outputLabel value="CPF" />
+                    <!--                    <p:inputMask mask="999.999.999-99" value="{solicitanteBean.solicitanteCad.cpf}" styleClass="inputTxtLaguraPadrao" >
+                                            <p:ajax event="blur" listener="{solicitanteBean.verificaCpf(solicitanteBean.solicitanteCad.cpf)}"  />
+                                        </p:inputMask> -->
+                    <p:inputText value="#{solicitanteBean.solicitanteCad.cpf}" styleClass="inputTxtLaguraPadrao" >
+                        <p:ajax event="blur" listener="#{solicitanteBean.verificaCpf(solicitanteBean.solicitanteCad.cpf)}"  />
+                    </p:inputText> 
+
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="Nome"/>
+                    <p:inputText value="#{solicitanteBean.solicitanteCad.usuario.nome}" styleClass="inputTxtLaguraNome" /> 
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="Senha"/>
+                    <p:password  value="#{solicitanteBean.solicitanteCad.usuario.senha}" styleClass="inputTxtLaguraPadrao" />
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="Situação"/>
+                    <p:selectOneMenu id="sOMSituacao" value="#{solicitanteBean.solicitanteCad.usuario.ativo}" style="width: 220px" disabled="true">
+                        <f:selectItems  value="#{solicitanteBean.situacao}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+            </h:panelGrid>            
+        </p:fieldset>
+
+
+        <p:fieldset id="fsCadastroSolicitante">           
+            <h:panelGrid  width="100%" style="text-align: center" >
+                <h:outputLabel value="DADOS INSTITUCIONAIS"  styleClass="labelCabecalho"/>
+            </h:panelGrid >
+
+            <h:panelGrid columns="2" >
+                <h:panelGrid>
+                    <h:outputLabel value="CNS"/>
+
+                    <p:inputMask mask="999.9999.9999.9999" value="#{solicitanteBean.solicitanteCad.cns}" styleClass="inputTxtLaguraPadrao" />
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="CBO"/>
+                    <p:selectOneMenu id="sOMCbo" value="#{solicitanteBean.solicitanteCad.usuario.cbo.cod}" filter="true" style="width: 350px" >
+                        <f:selectItems  value="#{solicitanteBean.cboItem}"/>
+                    </p:selectOneMenu> 
+                </h:panelGrid>
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" >
+                <h:panelGrid>
+                    <h:outputLabel value="Setor"/>
+                    <p:selectOneMenu id="sOMSetor" value="#{solicitanteBean.solicitanteCad.usuario.setor.id_setor}" filter="true" filterMatchMode="contains" style="width: 350px" >
+                        <f:selectItems  value="#{solicitanteBean.setorItem}"/>
+                    </p:selectOneMenu> 
+
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="Perfil"/>
+                    <p:selectOneMenu id="sOMPerfil" value="#{solicitanteBean.solicitanteCad.usuario.perfil.id_perfil}" style="width: 220px"  >
+                        <f:selectItems  value="#{solicitanteBean.perfis}"/>
+                    </p:selectOneMenu> 
+                </h:panelGrid>
+            </h:panelGrid>
+
+        </p:fieldset>
+
+        <h:panelGrid width="100%"  >
+            <p:commandButton value="Cadastrar" action="#{solicitanteBean.btCadastrar(usuarioBean.usuarioLogado)}" update="fsCadastroUsuario"/>
+        </h:panelGrid>
+
+        <h:panelGrid>
+            <p:commandButton id="btCargaSolicitantes" value="Carga de Solicitantes"  onclick="PF('dlgCargaSolicitante').show()" process="@this">
+                <p:ajax event="click" listener="#{dlgCargaSolicitanteBean.limpDlgCargaSolicitante()}" update="dtSolicitantes,itaCargaSolicitantes" />
+            </p:commandButton>
+        </h:panelGrid>
+
+
+    </p:fieldset> 
+
+    <p:dialog widgetVar="dlgCargaSolicitante" position="topo" width="700" height="500"  header="Carga de Usuários"    draggable="true" closable="true" closeOnEscape="false" resizable="false" minimizable="false">
+        <p:fieldset id="fsDataTable">
+            <h:panelGrid>
+                <p:dataTable id="dtSolicitantes" value="#{dlgCargaSolicitanteBean.solicitantes}" style="width: 640px" var="solicitante" rows="10" paginator="true" emptyMessage="Nenhum registro inserido!">
+                    <p:column headerText="Solicitantes" width="120" sortBy="#{solicitante.nome}">
+                        <h:outputText value="#{solicitante.nome}" styleClass="labelDados" />
+                    </p:column>
+                    <p:column headerText="Login" width="65">
+                        <h:outputLabel value="#{solicitante.usuario.login}" styleClass="labelDados"/>
+                    </p:column>
+                    <p:column headerText="Situação"  width="65" style="text-align: center">
+                        <h:outputText value="#{solicitante.usuario.senha}" styleClass="labelDados" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:fieldset>
+
+        <p:fieldset>
+            <h:panelGrid>
+                <h:outputLabel value="Inserir os usuários" styleClass="labelDados"/>
+                <p:inputTextarea id="itaCargaSolicitantes" value="#{dlgCargaSolicitanteBean.vitaDlgCarga}" style="font-size: 12px;width: 630px;height: 200px" /> 
+            </h:panelGrid>
+        </p:fieldset>
+
+        <p:commandButton value="Processar" action="#{dlgCargaSolicitanteBean.cargaSolicitante(dlgCargaSolicitanteBean.vitaDlgCarga)}" update="fsDataTable" />
+        <p:ajax event="close" listener="#{dlgCargaSolicitanteBean.limpDlgCargaSolicitante()}" update="dtSolicitantes,itaCargaSolicitantes" />
+    </p:dialog>
+
+</ui:decorate>
+

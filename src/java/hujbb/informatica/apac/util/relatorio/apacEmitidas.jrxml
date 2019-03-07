@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5aacf4b3-239c-4333-82ba-08d90904296f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.awt.Image"/>
+	<field name="n" class="java.lang.String"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="cartaoSus" class="java.lang.String"/>
+	<field name="nomeProcedimento" class="java.lang.String"/>
+	<field name="codigoProcedimento" class="java.lang.String"/>
+	<field name="periodo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="53">
+			<image>
+				<reportElement x="107" y="0" width="694" height="53" uuid="eb393c8c-94c1-4409-b4fb-5daaab81fe54"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<rectangle>
+				<reportElement x="710" y="14" width="91" height="13" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="dce8bbbc-e4e2-4daa-838b-677603fde413"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="443" y="14" width="271" height="13" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="63a31b9e-a32f-48ac-aa72-98fcb6104ba0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="320" y="14" width="124" height="13" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="67105570-ac9f-4e19-be5a-9018ee5ca1a4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="29" y="14" width="291" height="13" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="6da5822d-4e0b-4dad-af54-26c6c418b734"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="14" width="29" height="13" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="b245812d-6009-4961-9b9d-8231e21af54e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="13" width="29" height="14" uuid="bb50527b-9dea-4a76-9f0a-16a8b11fff29"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="29" y="13" width="291" height="14" uuid="4347831a-6938-4515-9a7f-958ce4c20a45"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="13" width="124" height="14" uuid="c0ecc1fc-0e60-4c25-9f50-14c92a8583fe"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cartão SUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="443" y="13" width="269" height="14" uuid="4eefa681-3621-40dd-bafa-cc5e164af02c"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Procedimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="710" y="13" width="91" height="14" uuid="addf9b2e-edf2-48be-b769-ae05ab7b790a"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód Proced]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="801" height="13" uuid="cf0b4e3f-efc6-42fa-986e-d01db46f43e0"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14">
+			<rectangle>
+				<reportElement x="710" y="1" width="91" height="13" forecolor="#CCCCCC" uuid="8c235a75-7cb0-48e4-bd95-dbe0b6b7d611"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="443" y="1" width="271" height="13" forecolor="#CCCCCC" uuid="8f354511-13df-4184-9758-9eb265bbdcd5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="320" y="1" width="124" height="13" forecolor="#CCCCCC" uuid="974886da-fae7-467e-ab2b-082f84fa843b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="29" y="1" width="291" height="13" forecolor="#CCCCCC" uuid="8804233f-d5da-4ac2-a423-564117fe3d0d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="1" width="29" height="13" forecolor="#CCCCCC" uuid="e8c69871-205d-4fe0-aea5-24d5c56968a5"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="1" width="29" height="13" uuid="d6462823-b750-45a6-a5bb-c425168e9649"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{n}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="29" y="1" width="291" height="13" uuid="f9b180d2-5b9d-43e7-b5fa-10c05d01fd7e"/>
+				<textFieldExpression><![CDATA["  "+$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="1" width="124" height="13" uuid="bf8ea38f-0dfa-408d-9d80-9e2bd1d361c5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cartaoSus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="443" y="1" width="269" height="13" uuid="101f0145-6c8e-4955-934a-9a9f6a786fa8"/>
+				<textFieldExpression><![CDATA["  "+$F{nomeProcedimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="710" y="1" width="91" height="13" uuid="11371854-1d8d-45d2-93dd-15f99cf946d3"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{codigoProcedimento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="15">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="2" width="761" height="13" backcolor="#E6E6E6" uuid="8edf60fd-82ca-4b24-a558-7f73900197f5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="761" y="2" width="40" height="13" backcolor="#E6E6E6" uuid="7b006850-3d45-4b87-b456-3061694d3db3"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="7" y="1" width="100" height="13" uuid="7a1afa9a-a7de-453b-9b41-df5e12640b88"/>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

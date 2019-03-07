@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Apac</title>
+        <style type="text/css">
+            .ui-widget{font-size:90% !important;}
+            .ui-layout-unit-content{background-image:url('resources/img/fundo.jpg');background-size: 100% 100%;}
+        </style>
+
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="center" >
+
+                #{usuarioBean.verificaUsuLog()}
+
+                
+                #{templateBean.renderizarMenu(usuarioBean.usuarioLogado.perfil.id_perfil)}
+                <h:form enctype="multipart/form-data"  > 
+
+                   <h:panelGrid  columns="2"  width="100%" columnClasses="alinharEsquerda,alinharDireita"  rendered="#{usuarioBean.usuarioLogado.logado}" >
+                        <p:column colspan="2">
+                            <p:graphicImage url="resources/img/logohujbb.png" width="250px" height="80px" />
+                        </p:column>
+
+                        <h:panelGrid width="100%" style="text-align: right" >
+                            <h:outputText  value="Usuário: #{usuarioBean.usuarioLogado.login.toUpperCase()}" style="font-weight: bold" />
+                            
+                        </h:panelGrid>
+
+
+                    </h:panelGrid>
+
+                    <hr/>
+                    <!--growl exibe mensagens na tela-->
+                    <p:growl id="growl" sticky="true" showDetail="true" life="6000" autoUpdate="true" />
+
+                     <p:menubar rendered="#{usuarioBean.usuarioLogado.logado}">
+                        <p:submenu label="Formulário" icon="ui-icon-document" rendered="#{usuarioBean.usuarioLogado.logado}">
+                            <p:menuitem value="Novo" icon="ui-icon-plus"  rendered="#{templateBean.rendere_formulario_novo}" action="#{templateBean.formulario_novo()}" url="formulario.jsf" />
+                            <p:menuitem value="Registrar autorização" icon="ui-icon-document" rendered="false" action="#{templateBean.formulario_registrarAutorizacao()}" />
+                            <p:menuitem value="Consultar Laudos" icon="ui-icon-search" url="consultaLaudo.jsf"  />
+                            
+                        </p:submenu>
+                        <p:submenu label="Procedimento" icon="ui-icon-document" rendered="#{templateBean.rendere_usuario}">
+                            <p:menuitem value="Buscar procedimento" icon="ui-icon-search" url="tela-sigtap.jsf" />
+                            <p:menuitem value="Carga SIGTAP" icon="ui-icon-plus" url="importar.jsf"/>
+                        </p:submenu>
+                        <p:submenu label="Usuário" icon="ui-icon-person" rendered="#{templateBean.rendere_usuario}">
+                            <p:menuitem value="Cadastrar" icon="ui-icon-plus" url="cadastrarusuario.jsf"  />
+                            <p:menuitem value="Buscar / Editar" icon="ui-icon-search" url="buscarUsuario.jsf" />                         
+                        </p:submenu>
+                        <p:menuitem value="Log" icon="ui-icon-clipboard" url="log.jsf" rendered="#{templateBean.rendere_log}" />                         
+                        <p:submenu label="Relatórios" icon="ui-icon-clipboard" rendered="#{templateBean.rendere_log}">
+                            <p:menuitem value="Relatórios quantitativos " icon="ui-icon-clipboard" url="relatorios.jsf" rendered="#{templateBean.rendere_log}" />                         
+                            <p:menuitem value="Consultar APACs emitidos por período" icon="ui-icon-search" url="emitidos.jsf" rendered="#{templateBean.rendere_log}" />                         
+                        </p:submenu>
+                        <p:menuitem value="Sair" icon="ui-icon-arrowreturnthick-1-e"  url="telalogin.jsf"   disabled="#{!usuarioBean.usuarioLogado.logado}"/>
+                    </p:menubar>
+                    <br></br>
+                    <p:fieldset legend="Importar arquivos"  >
+                        <h:panelGrid columns="2" width="70%" >
+                            <h:panelGrid >
+                                <p:fileUpload  mode="advanced" multiple="true" label="Selecione os arquivos" cancelLabel="Cancelar"  fileUploadListener="#{importarBean.doUpload}" value="#{importarBean.up}" update="pgBtProcessar" />
+
+                                <h:panelGrid  id="pgBtProcessar" columns="2" onclick="PF('dlgBarraProg').show(); PF('pbTotal').start()">
+                                    <p:commandButton value="Processar carga"   action="#{importarBean.btProcessarCarga()}" ajax="false"   />
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+
+                        <p:dialog widgetVar="dlgBarraProg" appendTo="@(body)"  width="400" height="40" header="Importando dados de SIGTAP aguarde!" draggable="false" closable="false" closeOnEscape="false" resizable="false" minimizable="false">
+                            <h:panelGrid id="pgPbTotal" width="100%" >
+                                <p:progressBar id="pbTotal"    widgetVar="pbTotal" ajax="true" value="#{importarBean.contBarraProTotal}" labelTemplate="{value}%"  >
+                                    <p:ajax event="complete" update="@form" />
+                                </p:progressBar>
+                            </h:panelGrid>
+                        </p:dialog>
+                    </p:fieldset>
+
+                </h:form>
+
+            </p:layoutUnit>
+            <p:layoutUnit position="south">
+                <h:form id="formErro">
+                    <p:fieldset>
+                        <p:commandLink value="log de erro" onclick="PF('dlgLogErr').show()" update="logErro"/>
+                        <p:dialog id="dlgLogErr" widgetVar="dlgLogErr" width="700" height="400" header="LOG DE ERRO"  closable="true" closeOnEscape="false"  minimizable="false" >
+                            <h:panelGrid width="600px">
+                                <p:outputLabel value="Log" />
+                                <p:inputTextarea id="logErro" style="width: 100%" value="#{erroBean.msgErro}"  />
+                                <p:commandLink value="Limpar" action="#{erroBean.limparLog()}" update="logErro"/>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <h:panelGrid width="100%" style="text-align: center" columns="1">
+                            <p:outputLabel style="font-size: 11px !important ; font-weight: bold" >Hospital Universitário João de Barros Barreto
+                                Rua dos Mundurucus, 4487 - Guamá. CEP: 66073-000. CNPJ: 34.621.748/0004-76</p:outputLabel>
+                            <p:outputLabel style="font-size: 11px !important; font-weight: bold">Copyright © 2018 – Complexo Hospitalar da UFPA</p:outputLabel>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:form>
+            </p:layoutUnit>
+                
+        </p:layout>
+
+    </h:body>
+
+</html>
+

@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5aacf4b3-239c-4333-82ba-08d90904296f">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="590"/>
+	<parameter name="logo" class="java.awt.Image"/>
+	<field name="formulario_id" class="java.lang.String"/>
+	<field name="local_tumor_primario" class="java.lang.String"/>
+	<field name="cid_topografia_onco" class="java.lang.String"/>
+	<field name="linfo_reg_invalidoStringSim" class="java.lang.String"/>
+	<field name="linfo_reg_invalidoStringNao" class="java.lang.String"/>
+	<field name="linfo_reg_invalidoNaoAvString" class="java.lang.String"/>
+	<field name="loc_meta" class="java.lang.String"/>
+	<field name="esta_uicc" class="java.lang.String"/>
+	<field name="esta_outros" class="java.lang.String"/>
+	<field name="grau_isto" class="java.lang.String"/>
+	<field name="diag_cito_isto" class="java.lang.String"/>
+	<field name="data_64String" class="java.lang.String"/>
+	<field name="trate_anteriores_quimioStringSim" class="java.lang.String"/>
+	<field name="trate_anteriores_quimioStringNao" class="java.lang.String"/>
+	<field name="trate_ante1_quimio" class="java.lang.String"/>
+	<field name="trate_ante2_quimio" class="java.lang.String"/>
+	<field name="trate_ante3_quimio" class="java.lang.String"/>
+	<field name="dt_trate_ante1_quimioString" class="java.lang.String"/>
+	<field name="dt_trate_ante2_quimioString" class="java.lang.String"/>
+	<field name="dt_trate_ante3_quimioString" class="java.lang.String"/>
+	<field name="continue_trate_quimioStringSim" class="java.lang.String"/>
+	<field name="continue_trate_quimioStringNao" class="java.lang.String"/>
+	<field name="dt_ini_trata_quimioString" class="java.lang.String"/>
+	<field name="esquema_sigla_quimio" class="java.lang.String"/>
+	<field name="qtd_mese_planejado_quimio" class="java.lang.String"/>
+	<field name="qtd_mese_autorizados_quimio" class="java.lang.String"/>
+	<field name="trate_ante_radioStringSim" class="java.lang.String"/>
+	<field name="trate_ante_radioStringNao" class="java.lang.String"/>
+	<field name="trate_ante1_radio" class="java.lang.String"/>
+	<field name="trate_ante2_radio" class="java.lang.String"/>
+	<field name="trate_ante3_radio" class="java.lang.String"/>
+	<field name="dt_trate_ante1_radioString" class="java.lang.String"/>
+	<field name="dt_trate_ante2_radioString" class="java.lang.String"/>
+	<field name="dt_trate_ante3_radioString" class="java.lang.String"/>
+	<field name="continue_trate_radioStringSim" class="java.lang.String"/>
+	<field name="continue_trate_radioStringNao" class="java.lang.String"/>
+	<field name="dt_ini_trata_radioString" class="java.lang.String"/>
+	<field name="finalidade.adjuvante" class="java.lang.String"/>
+	<field name="finalidade.antialgica" class="java.lang.String"/>
+	<field name="finalidade.antiHemorragica" class="java.lang.String"/>
+	<field name="finalidade.paliativa" class="java.lang.String"/>
+	<field name="finalidade.previa" class="java.lang.String"/>
+	<field name="finalidade.radical" class="java.lang.String"/>
+	<field name="cid_topografico1_radio" class="java.lang.String"/>
+	<field name="cid_topografico2_radio" class="java.lang.String"/>
+	<field name="cid_topografico3_radio" class="java.lang.String"/>
+	<field name="area_irradi_descricao1_radio" class="java.lang.String"/>
+	<field name="area_irradi_descricao2_radio" class="java.lang.String"/>
+	<field name="area_irradi_descricao3_radio" class="java.lang.String"/>
+	<field name="ncampo_incer1_radio" class="java.lang.String"/>
+	<field name="ncampo_incer2_radio" class="java.lang.String"/>
+	<field name="ncampo_incer3_radio" class="java.lang.String"/>
+	<field name="dt_ini_area_irrad1_radioString" class="java.lang.String"/>
+	<field name="dt_ini_area_irrad2_radioString" class="java.lang.String"/>
+	<field name="dt_ini_area_irrad3_radioString" class="java.lang.String"/>
+	<field name="dt_fim_area_irrad1_radioString" class="java.lang.String"/>
+	<field name="dt_fim_area_irrad2_radioString" class="java.lang.String"/>
+	<field name="dt_fim_area_irrad3_radioString" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="802" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="555" height="802" uuid="8978a469-a66f-4592-9e37-55194a40dc67"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="25" y="470" width="70" height="12" forecolor="#FFFFFF" uuid="76da737a-3980-4e85-9156-c9425df664db"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="24" y="454" width="70" height="12" forecolor="#FFFFFF" uuid="adf87a69-941b-473d-bf7c-9cb8b70d8b7e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="24" y="437" width="70" height="12" forecolor="#FFFFFF" uuid="e7511103-cf60-42c5-97f9-808ddb552bb9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="123" y="264" width="111" height="11" forecolor="#FFFFFF" uuid="52bbff19-2869-45f0-8095-f58af4d6a783"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="469" y="370" width="59" height="9" forecolor="#FFFFFF" uuid="b0fca736-c6f6-43af-b856-b3a8fb06bd96"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="477" y="71" width="49" height="12" forecolor="#FFFFFF" uuid="219502c5-2ee4-417e-87b2-901f21b5da8b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="459" y="131" width="57" height="10" forecolor="#FFFFFF" uuid="a43a2e03-b3d1-4f05-97bd-38800494d194"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="123" y="400" width="111" height="14" forecolor="#FFFFFF" uuid="4d460744-dbc7-43d3-ab05-6fea870c809b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="471" y="354" width="55" height="11" forecolor="#FFFFFF" uuid="64310f9a-a06f-45cc-aa3e-73f86ca820a0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="471" y="340" width="55" height="11" forecolor="#FFFFFF" uuid="5e8bc5bc-2709-4a49-875a-13addd53ba86"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="474" y="221" width="55" height="10" forecolor="#FFFFFF" uuid="60a6c10c-b5b7-4208-933a-13a013043a00"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="475" y="236" width="55" height="9" forecolor="#FFFFFF" uuid="94f5f094-e21d-4f8d-afa2-99058f0e287e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Opaque" x="473" y="208" width="55" height="9" forecolor="#FFFFFF" uuid="05b3b24c-41af-4351-a247-dd87cfb63be1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="479" y="470" width="49" height="11" forecolor="#FFFFFF" uuid="3534c4ea-5845-4634-9b0d-a05dbce1f59d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="426" y="473" width="49" height="9" forecolor="#FFFFFF" uuid="6e4bad81-c55c-423b-ba26-1ca27948202a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="480" y="455" width="49" height="11" forecolor="#FFFFFF" uuid="9500b5db-1360-45be-9e96-8d6c9210da3e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="426" y="457" width="49" height="11" forecolor="#FFFFFF" uuid="d748e581-93c1-4515-b3a5-09a6872e8c9b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="479" y="438" width="49" height="11" forecolor="#FFFFFF" uuid="c86dd279-8a06-4cd6-a047-99554b1a27c5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="426" y="438" width="49" height="11" forecolor="#FFFFFF" uuid="dc814589-0eee-456c-995a-a818c2d54d07"/>
+			</rectangle>
+			<textField>
+				<reportElement mode="Transparent" x="0" y="-11" width="130" height="11" backcolor="#FFFFFF" uuid="f1a12a13-4987-44c6-a729-8a0dd1935cad"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº:"+$F{formulario_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="72" width="443" height="12" forecolor="#666666" uuid="28c1af98-64be-4dfb-93de-c3e00656ade2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{local_tumor_primario}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="475" y="72" width="51" height="12" forecolor="#666666" uuid="d16c7c61-4850-409b-9655-6bc5d954769d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cid_topografia_onco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="96" width="12" height="9" forecolor="#666666" uuid="6176e873-dfe8-499f-9d60-824a8f0ff509"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{linfo_reg_invalidoStringSim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="124" y="96" width="12" height="9" forecolor="#666666" uuid="505c2795-4fe7-41c0-bbce-4a833f973c2e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{linfo_reg_invalidoStringNao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="195" y="92" width="22" height="12" forecolor="#666666" uuid="16db0d67-5a0d-426d-926c-a17b40fc9eab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{linfo_reg_invalidoNaoAvString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="93" width="289" height="14" forecolor="#666666" uuid="e79a6ab4-4251-4e0f-84c8-e206edc51a5c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loc_meta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="114" width="98" height="9" forecolor="#666666" uuid="ce7ca7a9-4a58-434c-99ff-c89bccdd6a29"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{esta_uicc}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="133" y="114" width="278" height="11" forecolor="#666666" uuid="65ea38d6-044c-4c4e-8629-91bcc5b97196"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{esta_outros}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="115" width="98" height="9" forecolor="#666666" uuid="7b46f2b8-1c0f-40f2-a610-787a27838156"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{grau_isto}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="130" width="423" height="11" forecolor="#666666" uuid="4b56e96f-9134-4af2-8935-971c556be143"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diag_cito_isto}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="130" width="57" height="11" forecolor="#666666" uuid="ba31dfda-68e5-4d4a-937a-f29675821757"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_64String}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="177" width="10" height="9" forecolor="#666666" uuid="1b12414b-3ed6-4cad-ad02-0f99df0cbb8d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_anteriores_quimioStringSim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="177" width="10" height="8" forecolor="#666666" uuid="1725d319-b9f0-4c75-a29c-ce48be13c5ca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_anteriores_quimioStringNao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="208" width="390" height="9" forecolor="#666666" uuid="8e1159ba-8a71-421e-af91-94608b1c5722"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante1_quimio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="218" width="391" height="17" forecolor="#666666" uuid="b2e032ef-1b5d-4a15-b12b-a261ef5ab966"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante2_quimio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="236" width="391" height="9" forecolor="#666666" uuid="b0e3241c-b195-45b2-a258-d2a2e7dc49c7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante3_quimio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="209" width="57" height="9" forecolor="#666666" uuid="7dfc11c3-bf0a-4da8-bd15-87d477c235d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_trate_ante1_quimioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="220" width="57" height="10" forecolor="#666666" uuid="3d2fc237-0231-47bf-b86b-6c87c70a4d95"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_trate_ante2_quimioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="235" width="57" height="10" forecolor="#666666" uuid="7aeea38d-8608-476f-95dc-bcabfd469e83"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_trate_ante3_quimioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="34" y="264" width="10" height="9" forecolor="#666666" uuid="07bc87f7-462b-4a34-9a3c-6e7f99d27404"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_anteriores_quimioStringNao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="264" width="10" height="9" forecolor="#666666" uuid="578ef417-13e2-4496-8c27-6863e219d5ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_anteriores_quimioStringSim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="401" width="111" height="15" forecolor="#666666" uuid="699ff5ce-abaf-4687-a4dc-d4bb6ed41ff8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_ini_trata_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="263" width="111" height="12" forecolor="#666666" uuid="e2c82988-789f-4b2b-a45a-66dac77d4c9d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_ini_trata_quimioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="236" y="263" width="94" height="12" forecolor="#666666" uuid="32f7eff3-a159-412e-b9eb-e29f53e24186"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{esquema_sigla_quimio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="334" y="263" width="94" height="12" forecolor="#666666" uuid="598aed55-96c1-4505-abd5-537a5f2af14b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd_mese_planejado_quimio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="263" width="94" height="12" forecolor="#666666" uuid="1e64fe6d-c51a-46c0-8142-a63bd1bf801e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd_mese_autorizados_quimio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="310" width="10" height="9" forecolor="#666666" uuid="79cd5161-6a8d-4ff4-bf23-57d29d30d2b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante_radioStringSim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="65" y="310" width="10" height="9" forecolor="#666666" uuid="57b80e27-a2e0-401d-81fe-6b21e479089b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante_radioStringNao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="342" width="385" height="9" forecolor="#666666" uuid="6feb4299-2704-44ab-9e3c-e424091a2c55"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante1_radio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="356" width="385" height="9" forecolor="#666666" uuid="0bbc93af-26ea-47c9-bab0-c790108079c1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante2_radio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="370" width="385" height="9" forecolor="#666666" uuid="4a702e03-4b25-478b-8a52-46e8bd364180"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trate_ante3_radio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="340" width="57" height="11" forecolor="#666666" uuid="ce131040-0736-47f5-9823-cc4b369af428"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_trate_ante1_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="354" width="57" height="11" forecolor="#666666" uuid="d84c4929-0e03-4a35-9e15-fd680404907b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_trate_ante2_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="368" width="57" height="11" forecolor="#666666" uuid="45751458-a791-4aaa-a19f-d63a3d97f6a6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_trate_ante3_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="38" y="399" width="10" height="9" forecolor="#666666" uuid="bfd0381c-449c-49e3-b932-429a8395ac6d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{continue_trate_radioStringNao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="84" y="399" width="10" height="9" forecolor="#666666" uuid="b9bd9b65-6e75-4937-b5fe-ccab22a0ffd1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{continue_trate_radioStringSim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="257" y="394" width="10" height="9" forecolor="#666666" uuid="6b4f6c2d-8cde-4d32-9227-aa573e0b4c29"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade.radical}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="257" y="406" width="10" height="9" forecolor="#666666" uuid="bec79c74-59e1-4e96-b2fa-08a91cb32527"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade.paliativa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="352" y="395" width="10" height="9" forecolor="#666666" uuid="4e545d86-7dd0-48a6-aa22-473aea287eca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade.adjuvante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="352" y="405" width="10" height="9" forecolor="#666666" uuid="4b00bf2e-634e-432d-a030-38c79706d028"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade.previa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="453" y="394" width="10" height="9" forecolor="#666666" uuid="fd414545-4b0e-4346-a1d3-c28fbe0a0c63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade.antialgica}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="453" y="405" width="10" height="9" forecolor="#666666" uuid="13653e09-2d4f-4f43-a52b-470503c0a131"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade.antiHemorragica}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="435" width="70" height="14" forecolor="#666666" uuid="d8f8d6e8-6930-4c89-8542-25e932ff1600"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cid_topografico1_radio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="452" width="70" height="14" forecolor="#666666" uuid="a0572462-1fca-4243-82a2-ec69b790c7f3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cid_topografico2_radio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="468" width="70" height="14" forecolor="#666666" uuid="fe134f68-e1f7-4dcc-b0dd-a9a7ec3f0dec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cid_topografico3_radio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="435" width="231" height="14" forecolor="#666666" uuid="900d06d4-6f46-468c-9f8b-ce854971a460"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{area_irradi_descricao1_radio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="452" width="231" height="14" forecolor="#666666" uuid="36236423-ee9f-426b-9e40-cbdf00adc497"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{area_irradi_descricao2_radio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="469" width="231" height="14" forecolor="#666666" uuid="9979aafa-34d8-4753-b37e-d83707416e15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{area_irradi_descricao3_radio}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="436" width="64" height="13" forecolor="#666666" uuid="3f587f37-2c99-4ffa-bbfe-b23aab2c97d1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ncampo_incer1_radio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="452" width="64" height="13" forecolor="#666666" uuid="5e9c248f-ae6f-4192-b3a9-7605f746cb2d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ncampo_incer2_radio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="470" width="64" height="13" forecolor="#666666" uuid="812d83bc-0f48-4bca-af7e-bef33491644e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ncampo_incer3_radio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="439" width="51" height="11" forecolor="#666666" uuid="51b792b5-9870-4b05-95c1-8d9d78b75c8b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_ini_area_irrad1_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="456" width="51" height="11" forecolor="#666666" uuid="f536d913-021e-4a08-ba8a-f368bfba3803"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_ini_area_irrad2_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="471" width="51" height="11" forecolor="#666666" uuid="c6890b6e-fda8-4f4b-916d-60f8c909159e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_ini_area_irrad3_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="478" y="439" width="51" height="11" forecolor="#666666" uuid="44056623-1a89-415c-8372-21292c2d4870"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_fim_area_irrad1_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="479" y="456" width="51" height="11" forecolor="#666666" uuid="88bd1d3c-efee-4a72-ba13-7952781f2ac4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_fim_area_irrad2_radioString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="479" y="471" width="51" height="11" forecolor="#666666" uuid="3f66d836-80aa-4863-a790-8948e551910b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_fim_area_irrad3_radioString}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

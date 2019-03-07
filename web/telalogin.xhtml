@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    #{usuarioBean.initTelaLogin()}
+    #{consultaLaudoBean.forms.clear()}
+    <h:head>
+
+        <style type="text/css">
+            .ui-widget{font-size:100% !important;}
+            .ui-layout-unit-content{background-image:url('resources/img/fundo.jpg');background-size: 100% 100%;}
+
+        </style>
+
+    </h:head>
+    <h:body >
+
+        <p:layout fullPage="true">
+            
+            <p:layoutUnit position="center">
+
+                <h:form>
+                    <!--growl exibe mensagens na tela-->
+                    <p:growl id="growl" sticky="true" showDetail="true" life="9000" autoUpdate="true" />
+                    <p:dialog header="Sistema APAC Barros Barreto" widgetVar="dlg"  resizable="false" visible="true" width="400px" closeOnEscape="false" closable="false" draggable="false" focus="usuario">
+                        <h:panelGrid columns="2" cellpadding="5" style="padding-left: 10%; padding-right: 10%">
+                            <f:facet name="header" >
+                                <h:graphicImage  url="resources/img/logo_ebserh.png" width="199px" height="60px" style="image-resolution: 1080px"/>
+                            </f:facet>
+                            <h:panelGrid columns="1" >
+                                <h:outputLabel for="usuario" value="Usuário:" />
+                                <p:inputText id="usuario" value="#{usuarioBean.usuarioLogado.login}" required="true" label="usuario" style="width: 260px"/>
+                                <h:outputLabel for="senha" value="Senha:" />
+                                <p:password id="senha" value="#{usuarioBean.usuarioLogado.senha}" required="true" label="senha" style="width: 260px" />
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <div style="display:flex;justify-content:center;align-items:center;" >
+                                    <p:commandButton value="Login" update="@form" action="#{usuarioBean.logar()}"/>
+                                </div>
+                            </f:facet> 
+                        </h:panelGrid>
+                        <h:outputLabel value="#{usuarioBean.labelLogin}" style="color: crimson"/>
+                        <h5 align="right" style="color: gray"> Versão 1.0</h5>
+                    </p:dialog>
+                    <!--<p:dialog header="Sistema APAC Barros Barreto" widgetVar="dlg" resizable="false" visible="true" closable="false" >
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <f:facet name="header">
+                                 <p:graphicImage url="resources/img/logo_sistema.pngx" width="420px" height="85px" />
+                            </f:facet> 
+                            <h:outputLabel for="usuario" value="Usuário:" />
+                            <p:inputText id="usuario" value="{usuarioBean.usuarioLogado.login}" required="true" label="usuario" style="width: 260px"/>
+
+                            <h:outputLabel for="senha" value="Senha:" />
+                            <p:password id="senha" value="{usuarioBean.usuarioLogado.senha}" required="true" label="senha" style="width: 260px" />
+                             <f:facet name="footer">
+                                <p:commandButton value="Login" update="@form" action="{usuarioBean.logar()}"/>
+                            </f:facet> 
+                        </h:panelGrid>
+                        <h:outputLabel value="#usuarioBean.labelLogin}" style="color: crimson" />
+                    </p:dialog>-->
+
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="south" style="background: #ffffff">
+               <h:form id="formErro">
+                    <p:fieldset>
+                        <p:commandLink value="log de erro" onclick="PF('dlgLogErr').show()" update="logErro" rendered="false"/>
+                        <p:dialog id="dlgLogErr" widgetVar="dlgLogErr" width="700" height="400" header="LOG DE ERRO"  closable="true" closeOnEscape="false"  minimizable="false" >
+                            <h:panelGrid width="600px">
+                                <p:outputLabel value="Log" />
+                                <p:inputTextarea id="logErro" style="width: 100%" value="#{erroBean.msgErro}"  />
+                                <p:commandLink value="Limpar" action="#{erroBean.limparLog()}" update="logErro"/>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <h:panelGrid width="100%" style="text-align: center" columns="1">
+                            <p:outputLabel style="font-size: 11px !important ; font-weight: bold" >Hospital Universitário João de Barros Barreto
+                                Rua dos Mundurucus, 4487 - Guamá. CEP: 66073-000. CNPJ: 34.621.748/0004-76</p:outputLabel>
+                            <p:outputLabel style="font-size: 11px !important; font-weight: bold">Copyright © 2018 – Complexo Hospitalar da UFPA</p:outputLabel>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:form>
+            </p:layoutUnit>
+                     
+            
+        </p:layout>
+
+    </h:body>
+
+
+</html>

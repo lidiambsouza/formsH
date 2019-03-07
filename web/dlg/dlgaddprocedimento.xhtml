@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <style type="text/css">
+            .ui-widget{font-size:90% !important;}
+        </style>
+    </h:head>
+    <h:body>
+        <!--growl exibe mensagens na tela-->
+        <p:growl id="growl" sticky="true" showDetail="true" life="6000" autoUpdate="true"  />
+        <h:form>
+            #{procedimento_susBean.setarListaAux()}
+            <p:fieldset id="fsConsultaProcedimento" style="width: 96%"  > 
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="PESQUISAR PROCEDIMENTO"  styleClass="labelCabecalho"/>
+                </h:panelGrid>
+                <p:fieldset>
+                    <p:focus for="busca"/>
+                    <h:panelGroup  style="margin-bottom:10px"  >
+                        <h:outputLabel for="busca" value="Buscar:" styleClass="labelDados"/>
+                        <p:inputText id="busca" value="#{procedimento_susBean.buscaCodProced}" style="width: 60%"  onkeydown="if (event.keyCode === 13) {
+                            ondblclick();
+                            return false;
+                        }">
+                                     
+                            <p:ajax event="dblclick" listener="#{procedimento_susBean.selecionarProcedimentoDlg(procedimento_susBean.entidade)}" update="fsdtProcedimentos" />
+                            <p:ajax event="keyup" listener="#{procedimento_susBean.btBuscarProcedimentoDlg(procedimento_susBean.buscaCodProced)}" update="fsdtProcedimentos" />
+                        </p:inputText>
+                    </h:panelGroup>
+                </p:fieldset>
+                <p:fieldset id="fsdtProcedimentos">
+                    <p:dataTable var="procedimento" value="#{procedimento_susBean.entidades}" paginator="true" rows="6" emptyMessage="Nenhum registro encontrado!" selectionMode="single" rowKey="#{procedimento.codigo}">
+                        <p:ajax event="rowSelect" listener="#{procedimento_susBean.rowSelectEventProced}" />
+                        <p:column headerText="Código" width="80" style="text-align: center" >
+                            <h:outputLabel value="#{procedimento.codigo}"  >
+                                <p:ajax event="click" listener="#{procedimento_susBean.selecionarProcedimentoDlg(procedimento)}" />
+                            </h:outputLabel>
+                        </p:column>
+                        <p:column headerText="Procedimentos">
+                            <h:outputLabel value="#{procedimento.nome}" >
+                                <p:ajax event="click" listener="#{procedimento_susBean.selecionarProcedimentoDlg(procedimento)}" />
+                            </h:outputLabel>
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+            </p:fieldset>
+
+            <p:dialog id="dialo-sigtap"  widgetVar="dialo-sigtap" header="Procedimento" width="70%" height="600px" closable="true" closeOnEscape="false" resizable="false" minimizable="false">
+                <p:fieldset  id="fsDlgProcedimento">
+                    <h:panelGrid id="pgDlgProcedimento" columns="3" >
+                        <h:outputLabel  value="Procedimento:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.codigo } - #{procedimento_susBean.entidade.nome }" style="color: darkred" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Grupo:" styleClass="labelDados"/> 
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.grupoProced().id} - #{procedimento_susBean.entidade.grupoProced().nome}" styleClass="labelDados"/> 
+                        <br/>
+
+                        <h:outputLabel  value="Sub-Grupo:" styleClass="labelDados"/> 
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.subGrupoProced().id} - #{procedimento_susBean.entidade.subGrupoProced().nome}" styleClass="labelDados"/> 
+                        <br/>
+
+                        <h:outputLabel  value="Forma-Organização:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.formaOrganizaProced().id} - #{procedimento_susBean.entidade.formaOrganizaProced().nome}" styleClass="labelDados"/> 
+                        <br/>
+
+                        <h:outputLabel  value="Modalidade de Atendimento:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.tb_modalidade.nome}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Complexidade:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.proced_tp_compexidade.complexidade}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Financiamento:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.proced_financiamento.nome}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Sub-tipo de Financiamento:" styleClass="labelDados"/>
+                        <h:outputLabel  value="" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Instrumento de Resgistro:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.registro().nome}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Sexo:" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.tp_sexo.sexo}" styleClass="labelDados"/>
+                        <br/>
+                        <h:outputLabel  value="Média de Permanência:" styleClass="labelDados"/>
+                        <h:outputLabel  value="" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Tempo de Permanência:" styleClass="labelDados"/>
+                        <h:outputLabel  value="" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Quantidade Máxima" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.qtdString(procedimento_susBean.entidade.qtd_max)}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Idade Minima" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.qtdIdadeString(procedimento_susBean.entidade.idade_min)}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Idade Máxima" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.qtdIdadeString(procedimento_susBean.entidade.idade_max)}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Pontos" styleClass="labelDados"/>
+                        <h:outputLabel  value="#{procedimento_susBean.entidade.qtdString(procedimento_susBean.entidade.qtd_pontos)}" styleClass="labelDados"/>
+                        <br/>
+
+                        <h:outputLabel  value="Atributos Complementares" styleClass="labelDados"/>
+                        <h:outputLabel  value="" styleClass="labelDados"/>
+                        <br/>
+                    </h:panelGrid>
+
+                    <p:fieldset>
+
+                        <h:panelGrid  columns="5" width="100%">
+
+                            <h:panelGrid >
+                                <h:outputLabel  value="Serviço AmbulatorialR$:" styleClass="labelDados"/>
+                                <h:outputLabel  value="#{procedimento_susBean.entidade.valor_ambulatorial}" styleClass="labelDados">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputLabel>
+
+                                <br/>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <h:outputLabel  value="Total Ambulatorial R$:" styleClass="labelDados"/>
+                                <h:outputLabel  value="#{procedimento_susBean.entidade.valor_ambulatorial}" styleClass="labelDados">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputLabel>
+                                <br/>
+                            </h:panelGrid>
+
+                            <h:panelGrid >
+                                <h:outputLabel  value="Serviço hospitalar R$:" styleClass="labelDados"/>
+                                <h:outputLabel  value="#{procedimento_susBean.entidade.valor_hospitalar}" styleClass="labelDados">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputLabel>
+                                <br/>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <h:outputLabel  value="Serviço profissional R$:" styleClass="labelDados"/>
+                                <h:outputLabel  value="#{procedimento_susBean.entidade.valor_proficional}" styleClass="labelDados">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputLabel>
+                                <br/>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <h:outputLabel  value="Total hospitalar R$:" styleClass="labelDados"/>
+                                <h:outputLabel  value="#{(procedimento_susBean.entidade.valor_hospitalar+procedimento_susBean.entidade.valor_proficional)}" styleClass="labelDados">
+                                    <f:convertNumber groupingUsed="true" minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputLabel>
+                                <br/>
+                            </h:panelGrid>
+
+
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                </p:fieldset>
+
+                <p:fieldset id="fsDlgProcedimento2">
+                    <p:tabView >
+                        <p:tab title="Descrição">
+                            <p:fieldset>
+                                <h:outputText  value="#{procedimento_susBean.entidade.descricao()}" styleClass="labelDados" />
+                            </p:fieldset>
+                        </p:tab>
+                        <p:tab title="CID" >
+                            <h:panelGrid width="100%">
+                                <p:dataTable var="cidProced" value="#{procedimento_susBean.entidade.cids()}" paginator="true" rows="4" emptyMessage="Nenhum registro encontrado!">
+                                    <p:column headerText="CID 10" width="40" style="text-align: center" >
+                                        <h:outputLabel value="#{cidProced.cid}" styleClass="labelDados"/>
+                                    </p:column>
+                                    <p:column headerText="Descriçao"  style="text-align: center" >
+                                        <h:outputText value="#{cidProced.nome}"  />
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="CBO">
+                            <h:panelGrid width="100%">
+                                <p:dataTable var="cidProced" value="#{procedimento_susBean.entidade.cids()}" paginator="true" rows="4" emptyMessage="Nenhum registro encontrado!">
+                                    <p:column headerText="CID 10" width="40" style="text-align: center" >
+                                        <h:outputLabel value="#{cidProced.cid}" styleClass="labelDados"/>
+                                    </p:column>
+                                    <p:column headerText="Descriçao"  style="text-align: center" >
+                                        <h:outputText value="#{cidProced.nome}"  />
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:tabView>
+                </p:fieldset>
+            </p:dialog>
+        </h:form>
+
+    </h:body>
+    <style>
+        .labelCabecalho{
+            color: #2e6e9e;
+            font-weight: bold; 
+            font-size:15px ;
+        }
+
+    </style>
+
+</html>
+

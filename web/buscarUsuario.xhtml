@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    #{solicitanteBean.verificaPerfil(usuarioBean.usuarioLogado.perfil.id_perfil)}
+
+    <p:fieldset id="fsBuscaUsuario" legend="Busca de usuário" style="height: 100%">
+        <p:fieldset>
+            <h:panelGrid width="100%" style="text-align: center" >
+                <h:outputLabel value="CRITÉRIOS DE SELEÇÃO"  styleClass="labelCabecalho"/><!-- LIDIA-->
+            </h:panelGrid>
+
+            <h:panelGrid columns="2"  width="100%" styleClass="column50,column50">
+                <h:panelGrid columns="2">
+                    <h:panelGrid  width="100%">
+                        <h:outputLabel value="Informe o nome do usuário" />
+                        <h:panelGrid columns="2">
+                            <p:inputText style="width: 400px" value="#{itBusca}"> </p:inputText> 
+                            <p:commandButton value="Buscar" action="#{solicitanteBean.btBuscar(itBusca)}"  update="fsBuscaUsuario"/>
+                        </h:panelGrid>   
+                    </h:panelGrid>
+
+                    <h:panelGrid id="pgsituacao" style="margin-left: 20px">  
+                        <h:outputLabel id="situacao" value="Situação" />
+                        <p:selectOneMenu id="situacaoUsuario"  value="#{solicitanteBean.vsituacaoUsuario}"  style="width: 100px" >
+                            <f:selectItems  value="#{solicitanteBean.situacaoBusca}"/>
+                            <p:ajax event="change" listener="#{solicitanteBean.btBuscar(itBusca)}" update="fsBuscaUsuario"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid> 
+
+                </h:panelGrid>
+
+                <h:panelGrid>
+                    <p:commandButton id="cadastra" value="Cadastrar Usuário" icon="ui-icon-plus"  action="cadastrarusuario.jsf" ajax="false"   /> 
+                </h:panelGrid>
+
+            </h:panelGrid>   
+
+
+        </p:fieldset>
+
+        <p:fieldset id="fsTabelaUsuario"> <!-- LIDIA-->
+            <h:panelGrid width="100%" style="text-align: center" >
+                <h:outputLabel value="USUÁRIOS"  styleClass="labelCabecalho"/>
+            </h:panelGrid>
+            <p:dataTable id="dtUsuarios" value="#{solicitanteBean.entidades}" var="solicitante" rows="10" paginator="true" emptyMessage="Nenhum registro encontrado!">
+                <p:column width="70" style="text-align: center">
+                    <p:commandButton title="Visualizar" icon="ui-icon-document" onclick="PF('dlgViewUsuario').show()" action="#{solicitanteBean.btVusualisar(solicitante)}" update="@form:pgViewEditUsuario" style="margin-right: 5px" />
+                    <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{solicitanteBean.btVusualisar(solicitante)}" update="@form:pgDlgEditUsuario" onclick="PF('dlgEditUsuario').show()" style="margin-right: 5px"/>
+                    <p:commandButton title="#{solicitanteBean.titleButtonDataTableUsuarios(solicitante)}" icon="#{solicitanteBean.iconButtonDataTableUsuarios(solicitante)}" action="#{solicitanteBean.btSimDlgConfirmDesativar(solicitante)}" oncomplete="PF('dlgConfirmDesativar').show()" update="dtUsuarios,@form:pgdlgConfirmDesativar,@form:pgViewEditUsuarioDlgConfirmDesativar"/>
+                </p:column>
+
+                <p:column headerText="Nome" width="600" sortBy="#{solicitante.nome}">
+                    <h:outputText value="#{solicitante.nome}" styleClass="labelDados" />
+                </p:column>
+
+                <p:column headerText="Login" width="120" >
+                    <h:outputText value="#{solicitante.usuario.login}" styleClass="labelDados" />
+                </p:column>
+
+                <p:column headerText="Perfil" width="100" >
+                    <h:outputText value="#{solicitante.usuario.perfil.perfil}" styleClass="labelDados" />
+                </p:column>
+
+                <p:column headerText="Situação"  width="70">
+                    <!--LIDIA-->
+                    <h:outputText value="#{solicitante.usuario.ativoString}" styleClass="labelDados" />
+                </p:column>
+            </p:dataTable>
+        </p:fieldset>
+
+
+
+    </p:fieldset>
+    <p:dialog widgetVar="dlgEditUsuario"  header="Editar dados" dynamic="true" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false" focus="itNomeUsuarioDlgEditUsuario" >
+        <p:ajax event="close" listener="#{solicitanteBean.buscaAtivos()}" update="pgsituacao,@form:fsTabelaUsuario"/>           
+        <h:panelGrid id="pgDlgEditUsuario">
+
+            <p:fieldset>
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="DADOS PESSOAIS"  styleClass="labelCabecalho"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="Nome"/>
+                    <p:inputText id="itNomeUsuarioDlgEditUsuario" value="#{solicitanteBean.entidade.nome}" style="width: 650px">
+                    </p:inputText>
+                </h:panelGrid>
+
+                <h:panelGrid  columns="3" width="100%">
+
+                    <h:panelGrid>
+                        <h:outputLabel value="CPF"/>
+                        <p:inputText value="#{solicitanteBean.entidade.cpf}">
+                            <p:ajax event="blur" listener="#{solicitanteBean.verificaCpfEdit(solicitanteBean.entidade.cpf)}"  />
+                        </p:inputText> 
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Situação"/>
+                        <p:selectOneMenu id="sOMSituacao" value="#{solicitanteBean.entidade.usuario.ativo}" style="width: 220px" >
+                            <f:selectItems  value="#{solicitanteBean.situacao}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Login"/>
+                        <p:inputText value="#{solicitanteBean.entidade.usuario.login}" disabled="true"> </p:inputText>
+                    </h:panelGrid>
+
+                </h:panelGrid>            
+            </p:fieldset>
+
+
+            <p:fieldset >           
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="DADOS INSTITUCIONAIS"  styleClass="labelCabecalho"/>
+                </h:panelGrid >
+
+                <h:panelGrid width="100%">
+                    <h:outputLabel value="Setor"/>
+                    <p:selectOneMenu id="sOMSetor" value="#{solicitanteBean.entidade.usuario.setor.id_setor}" filter="true" style="width: 100%" >
+                        <f:selectItems  value="#{solicitanteBean.setorItem}"/>
+                    </p:selectOneMenu> 
+                </h:panelGrid>
+
+                <h:panelGrid width="100%">
+                    <h:outputLabel value="CBO"/>
+                    <p:selectOneMenu id="sOMCbo" value="#{solicitanteBean.entidade.usuario.cbo.cod}" filter="true" style="width: 100%" >
+                        <f:selectItems  value="#{solicitanteBean.cboItem}"/>
+                    </p:selectOneMenu> 
+                </h:panelGrid>
+
+
+                <h:panelGrid width="100%" columns="2">
+                    <h:panelGrid width="100%">
+                        <h:outputLabel value="CNS"/>
+<!--                        <p:inputText value="{solicitanteBean.entidade.cns}"   />-->
+                        <p:inputMask mask="999.9999.9999.9999" value="#{solicitanteBean.entidade.cns}"  />
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%">
+                        <h:outputLabel value="Perfil"/>
+                        <p:selectOneMenu id="sOMPerfil" value="#{solicitanteBean.entidade.usuario.perfil.id_perfil}"   >
+                            <f:selectItems  value="#{solicitanteBean.perfis}"/>
+                        </p:selectOneMenu> 
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Cancelar" onclick="PF('dlgEditUsuario').hide()" ></p:commandButton>
+                        <p:commandButton value="Salvar" action="#{solicitanteBean.btAtualizar(usuarioBean.usuarioLogado)}" onclick="PF('dlgEditUsuario').hide()" update="fsBuscaUsuario,pgsituacao,@form:fsTabelaUsuario"  />
+                    </f:facet>
+                </h:panelGrid>
+
+            </p:fieldset>
+        </h:panelGrid>
+    </p:dialog>
+
+    <p:dialog id="dlgViewUsuario" widgetVar="dlgViewUsuario"  width="900"  dynamic="true" draggable="false" closable="true" closeOnEscape="false" resizable="false" minimizable="false" >
+        <h:panelGrid id="pgViewEditUsuario" width="100%">
+            <p:fieldset id="fsDadosUsuario" >
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="DADOS DO USUÁRIO"  styleClass="labelCabecalho"/>
+                </h:panelGrid>
+                <h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Nome" />
+                        <p:fieldset style="width: 800px; background: #dedede; height: 15px">
+                            <h:outputText id="nome" value="#{solicitanteBean.entidade.nome}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Setor"/>
+                        <p:fieldset style="width: 800px; background: #dedede; height: 15px">
+                            <h:outputText value="#{solicitanteBean.entidade.usuario.setor.nome}" style="font-size: 12px" styleClass="labelDados"  />
+                        </p:fieldset>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputLabel value="CBO" style="width: 100px"/>
+                        <p:fieldset style="width: 800px; background: #dedede; height: 15px">
+                            <h:outputText  value="#{solicitanteBean.entidade.usuario.cbo.nome}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+                <h:panelGrid  columns="3" width="80%">
+                    <h:panelGrid>
+                        <h:outputLabel value="Login"/>
+                        <p:fieldset style="width: 200px; background: #dedede; height: 15px">
+                            <h:outputText value="#{solicitanteBean.entidade.usuario.login}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid>
+                        <h:outputLabel value="CPF"/>
+                        <p:fieldset style="width: 200px; background: #dedede; height: 15px">
+                            <h:outputText value="#{solicitanteBean.entidade.cpf}" style="font-size: 12px" styleClass="labelDados" /> 
+                        </p:fieldset>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid>
+                        <h:outputLabel value="CNS"/>
+                        <p:fieldset style="width: 200px; background: #dedede; height: 15px">
+                            <h:outputText value="#{solicitanteBean.entidade.cns}" style="font-size: 12px" styleClass="labelDados" /> 
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Perfil"/>
+                        <p:fieldset style="width: 200px; background: #dedede; height: 15px">
+                            <h:outputText  value="#{solicitanteBean.entidade.usuario.perfil.perfil}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Situação"/>
+                        <p:fieldset style="width: 200px; background: #dedede; height: 15px">
+                            <h:outputText  value="#{solicitanteBean.entidade.usuario.ativoString}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid rendered="#{solicitanteBean.entidade.usuario.ativo ==0}"> 
+                        <h:outputLabel value="Motivo"/>
+                        <p:fieldset style="width: 200px; background: #dedede; height: 30px">
+                            <h:outputText value="#{solicitanteBean.entidade.usuario.ativ_desativ_usuario().motivo.motivo} #{solicitanteBean.ativ_desativ_usuario.obs}" style="font-size: 12px" styleClass="labelDados" /> 
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+
+            </p:fieldset>
+        </h:panelGrid>
+    </p:dialog>
+
+    <p:dialog  widgetVar="dlgConfirmDesativar"   header=" Desativação de usuário" dynamic="true" draggable="true" closable="true" closeOnEscape="false" resizable="false" minimizable="false" position="center center"  >
+       <h:panelGrid id="pgViewEditUsuarioDlgConfirmDesativar" width="100%">
+            <p:fieldset id="fsDadosUsuarioDlgConfirmDesativar" >
+                <h:panelGrid width="100%" style="text-align: center" >
+                    <h:outputLabel value="DADOS DO USUÁRIO"  styleClass="labelCabecalho"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" style="width: 100%; ">
+
+                    <h:panelGrid style="width: 100%; ">
+                        <h:outputLabel value="Nome" />
+                        <p:fieldset styleClass="fsBusca">
+                            <h:outputText id="optNomeDlgConfirmDesativar" value="#{solicitanteBean.solicitanteEdit.nome}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid style="width: 100%; ">
+                        <h:outputLabel value="Setor"/>
+                        <p:fieldset   styleClass="fsBusca">
+                            <h:outputText value="#{solicitanteBean.solicitanteEdit.usuario.setor.nome}" style="font-size: 12px" styleClass="labelDados"  />
+                        </p:fieldset>
+                    </h:panelGrid>
+                    <h:panelGrid style="width: 100%; ">
+                        <h:outputLabel value="CBO" style="width: 100px"/>
+                        <p:fieldset   styleClass="fsBusca">
+                            <h:outputText  value="#{solicitanteBean.solicitanteEdit.usuario.cbo.nome}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid width="100%">
+                        <h:outputLabel value="Login"/>
+                        <p:fieldset  styleClass="fsBusca">
+                            <h:outputText value="#{solicitanteBean.solicitanteEdit.usuario.login}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid width="100%">
+                        <h:outputLabel value="CPF"/>
+                        <p:fieldset  styleClass="fsBusca">
+                            <h:outputText value="#{solicitanteBean.solicitanteEdit.cpf}" style="font-size: 12px" styleClass="labelDados" /> 
+                        </p:fieldset>
+                    </h:panelGrid>
+
+
+                    <h:panelGrid width="100%">
+                        <h:outputLabel value="CNS"/>
+                        <p:fieldset   styleClass="fsBusca">
+                            <h:outputText value="#{solicitanteBean.solicitanteEdit.cns}" style="font-size: 12px" styleClass="labelDados" /> 
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid >
+                        <h:outputLabel value="Perfil"/>
+                        <p:fieldset style="width: 200px; "  styleClass="fsBusca">
+                            <h:outputText  value="#{solicitanteBean.solicitanteEdit.usuario.perfil.perfil}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <h:outputLabel value="Situação"/>
+                        <p:fieldset style="width: 200px; "  styleClass="fsBusca">
+                            <h:outputText  value="#{solicitanteBean.solicitanteEdit.usuario.ativoString}" style="font-size: 12px" styleClass="labelDados" />
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                </h:panelGrid>
+
+            </p:fieldset>
+        </h:panelGrid>
+        <p:fieldset>
+            <h:panelGrid width="100%" id="pgdlgConfirmDesativar">
+                <h:panelGrid width="100%"><!--pedro-->
+                    
+                    <h:outputLabel value="#{solicitanteBean.msgdlgConfirmDesativar}" styleClass="labelDados"/>
+                    <p:selectOneMenu  id="sOMmotivo" value="#{solicitanteBean.ativ_desativ_usuario.motivo.id}"  style="width: 90%" >
+                        <f:selectItems  value="#{solicitanteBean.motivoAD_item}"/>
+                        <p:ajax event="change" update="pgBotoesDlgConfirmDesativar"/>
+                    </p:selectOneMenu> 
+                </h:panelGrid>
+
+
+                <h:outputLabel value="Observação" for="iTObs" styleClass="labelDados"/>
+                <p:inputTextarea id="iTObs" value="#{solicitanteBean.ativ_desativ_usuario.obs}" style="font-size: 12px;width: 90%;height: 150px"  /> <!-- pedro-->
+                <h:panelGrid id="pgBotoesDlgConfirmDesativar" columns="2">
+                    <p:commandButton value="Cancelar" onclick="PF('dlgConfirmDesativar').hide()" />
+                    <p:commandButton value="Confirmar"  action="#{solicitanteBean.btDelConfirSimdlgDesativar(solicitanteBean.solicitanteEdit ,usuarioBean.usuarioLogado)}" onclick="PF('dlgConfirmDesativar').hide()" update="@form:fsBuscaUsuario,pgdlgConfirmDesativar" rendered="#{solicitanteBean.ativ_desativ_usuario.motivo.id > 0}"/>
+                    <p:commandButton value="Confirmar"  action="#{solicitanteBean.btDelConfirSimdlgDesativar(solicitanteBean.solicitanteEdit ,usuarioBean.usuarioLogado)}"   rendered="#{1 > solicitanteBean.ativ_desativ_usuario.motivo.id }" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>    
+
+</ui:decorate>
+
+
+

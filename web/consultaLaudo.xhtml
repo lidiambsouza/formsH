@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    #{consultaLaudoBean.setLogado(usuarioBean.logado)}
+    #{consultaLaudoBean.verificaPerfil(usuarioBean.usuarioLogado.perfil.id_perfil)}
+    #{consultaLaudoBean.buscarApac()}
+
+    <p:fieldset id="fsMaster" legend="CONSULTAR APACS EMITIDAS – SOLICITANTE">
+        <p:fieldset >
+            <h:panelGrid width="100%" style="text-align: center" >
+                <h:outputLabel value="CRITÉRIOS DE SELEÇÃO"  styleClass="labelCabecalho"/>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" width="100%" >
+
+                <h:panelGrid  width="100%" style="text-align: center" >
+                    <h:panelGrid  width="50%" columns="2" style="text-align: center" >
+                        <h:panelGrid   >
+                            <h:outputLabel value="Período de Emissão"  styleClass="labelDados"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgPeriodoTodos" columns="2" rendered="false" >
+                            <h:outputLabel value="Todos:"  styleClass="labelDados"/>
+                            <h:selectBooleanCheckbox  value="#{consultaLaudoBean.selectBooleanCheckBox_periodo}"  >
+                                <p:ajax update="dtIni,dtFim,pgTabelaApac" listener="#{consultaLaudoBean.buscarApac()}" />
+                            </h:selectBooleanCheckbox>
+                            <p:selectOneRadio value="true" rendered="true" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2">
+                        <h:panelGrid columns="5">
+                            <h:outputLabel value="De"  styleClass="labelDados"/>
+                            <p:calendar size="11" id="dtIni" value="#{consultaLaudoBean.dtIni}" navigator="true" readonlyInput="true" locale="pt" >
+                                <p:ajax event="dateSelect"  update="dtFim,pgTabelaApac,pgPeriodoTodos" />
+                            </p:calendar>
+                            <h:outputLabel value="a"  styleClass="labelDados"/>
+                            <p:calendar size="11" id="dtFim" value="#{consultaLaudoBean.dtFim}" navigator="true" readonlyInput="true" locale="pt" >
+                                <p:ajax event="dateSelect" update="dtIni,pgTabelaApac,pgPeriodoTodos" />
+                            </p:calendar>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid id="pgBuscaSolicitante">
+                    <h:outputText  value="Solicitante" styleClass="labelDados" />
+                    <p:autoComplete  size="60" id="dd"   value="#{consultaLaudoBean.solicitante}" completeMethod="#{consultaLaudoBean.nomeSolicitantes}" >
+                    </p:autoComplete>
+                </h:panelGrid>
+
+                <h:panelGrid>
+                    <h:outputLabel value="Situação"  styleClass="labelDados"/>
+                    <p:selectOneMenu  var="somStatusApac" value="#{consultaLaudoBean.filtroSituacao}" style="width: 118px"  >
+                        <f:selectItems  value="#{consultaLaudoBean.status_item}"/>
+                    </p:selectOneMenu>  
+                </h:panelGrid>
+
+                <h:panelGrid>
+                    <h:outputText value="  Nº Prontuário" style="padding-left: 10px" styleClass="labelDados" />
+                    <h:panelGrid style="padding-left: 10%">
+                        <p:inputText  style="width: 150px"  value="#{consultaLaudoBean.numProntuario}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid>
+                    <h:outputText value="Paciente"  styleClass="labelDados" />
+                    <p:autoComplete  size="60" id="de" value="#{consultaLaudoBean.paciente}" completeMethod="#{consultaLaudoBean.nomePacientes}"/>
+                    <!--                    <p:inputText  style="width: 500px"/>-->
+                </h:panelGrid>
+
+                <h:panelGrid width="100%">
+                    <h:outputText value="Cartão SUS"  styleClass="labelDados" />
+                    <p:inputText  style="width: 110px" maxlength="15" value="#{consultaLaudoBean.cartSus}"/>
+                </h:panelGrid>
+
+            </h:panelGrid>
+            <br/>
+            <h:panelGrid>
+                <p:commandButton value="Buscar" action="#{consultaLaudoBean.buscarApac()}" update="fsTabelaApac" />
+            </h:panelGrid>
+
+        </p:fieldset>
+        <p:fieldset id="fsTabelaApac">
+            <h:panelGrid id="pgTabelaApac">
+                <p:ajax event="click" update="pgTabelaApac"/>
+                <p:dataTable id="dtApac" var="formulario" value="#{consultaLaudoBean.forms}" rowIndexVar="index"   paginator="true" rows="22" emptyMessage="Nenhum registro encontrado!" >
+                    <f:facet name="header">
+                        <h:outputText value="#{consultaLaudoBean.tituloTabela}" />
+                    </f:facet>
+                    <p:column id="dtBotoes" width="75" >
+                        <p:commandButton  title="Visualizar" icon="ui-icon-document"  action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_buscar()}" />
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_editar()}" disabled="#{consultaLaudoBean.bloqueioEdicao(formulario)}" />
+                        <p:commandButton title="Imprimir"  icon="ui-icon-print" disabled="#{consultaLaudoBean.bloqueioImpressao(formulario)}" action="#{consultaLaudoBean.btImprimirForm(formulario)}" ajax="false"  onclick="this.form.target = '_blank'"/>
+                    </p:column>
+
+                    <p:column  headerText="Nº Laudo" width="60" sortBy="#{formulario.id_formulario}">
+                        <h:outputText value="#{formulario.mascaraId}" />
+                    </p:column>
+
+                    <p:column  headerText="Nº do Prontuário" width="60" sortBy="#{formulario.paciente.num_prontuario}">
+                        <h:outputText value="#{formulario.paciente.num_prontuario}" />
+                    </p:column>
+
+                    <p:column headerText="Paciente" sortBy="#{formulario.paciente.nome}">
+                        <h:outputText value="#{formulario.paciente.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Cartão SUS" width="130" >
+                        <h:outputText value="#{formularioBean.entidade.solicitante.mascaraCnsSolicitante(formulario.paciente.cns)}"/>
+                    </p:column>
+
+                    <p:column headerText="Solicitante" sortBy="#{formulario.solicitante.nome}" >
+                        <h:outputText value="#{formulario.solicitante.nome}" />    
+                    </p:column>
+
+                    <p:column headerText="Procedimento" width="380" sortBy="#{formulario.p1.nome}">
+                        <h:outputText value="#{consultaLaudoBean.mascaraCodProdedimento(formulario.p1.codigo)} #{formulario.p1.nome}"/>    
+                    </p:column>
+
+                    <p:column headerText="Data de Emissão" style="text-align: center" width="80" sortBy="#{formulario.dataStringBanco()}" >
+                        <h:outputText id="oplDtEmissao" value="#{formulario.dataString}"/>    
+                    </p:column>
+                    <p:column headerText="Situação" style="text-align: center" width="55" sortBy="#{formulario.status.status.replace('STATUS:','') }">
+                        <h:outputText id="optStatus" value="#{formulario.status.status.replace('STATUS:','') }"  />    
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:fieldset>
+</ui:decorate>
+

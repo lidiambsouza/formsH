@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    #{emitidosBean.setLogado(usuarioBean.logado)}
+    
+    <p:fieldset id="fsMaster">
+        <p:fieldset >
+            <h:panelGrid width="100%" style="text-align: center" >
+                <h:outputLabel value="BUSCAR APACs EMITIDAS"  styleClass="labelCabecalho"/>
+            </h:panelGrid>
+            <h:panelGrid  columns="2" width="100%" >
+
+                <h:panelGrid  width="100%" style="text-align: center" >
+                    <h:panelGrid  width="50%" columns="2" style="text-align: center" >
+                        <h:panelGrid width="100%" style="text-align: center" >
+                            <h:outputLabel value="SELECIONE O PERÍODO"  styleClass="labelDados"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgPeriodoTodos" columns="2" rendered="false" >
+                            <h:outputLabel value="Todos:"  styleClass="labelDados"/>
+                            <h:selectBooleanCheckbox  value="#{emitidosBean.selectBooleanCheckBox_periodo}"  >
+                                <p:ajax update="dtIni,dtFim,pgTabelaApac" listener="#{emitidosBean.buscarApac()}" />
+                            </h:selectBooleanCheckbox>
+                            <p:selectOneRadio value="true" rendered="true" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2">
+                        <h:panelGrid columns="5">
+                            <h:outputLabel value="De"  styleClass="labelDados"/>
+                            <p:calendar id="dtIni" value="#{emitidosBean.dtIni}" locale="pt" >
+                                <p:ajax event="dateSelect"  update="dtFim,pgTabelaApac,pgPeriodoTodos" />
+                            </p:calendar>
+                            <h:outputLabel value="a"  styleClass="labelDados"/>
+                            <p:calendar id="dtFim" value="#{emitidosBean.dtFim}" locale="pt" >
+                                <p:ajax event="dateSelect" update="dtIni,pgTabelaApac,pgPeriodoTodos" />
+                            </p:calendar>
+                            <p:commandButton value="Buscar" action="#{emitidosBean.buscarApac()}" update="fsTabelaApac"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Filtrar por situação:"  styleClass="labelDados"/>
+                    <p:selectOneMenu  var="somStatusApac" value="#{emitidosBean.filtroSituacao}" >
+                        <f:selectItems  value="#{emitidosBean.status_item}"/>
+                        <p:ajax event="change" listener="#{emitidosBean.buscarApac()}" update="fsTabelaApac" />
+                    </p:selectOneMenu>  
+                </h:panelGrid>
+
+            </h:panelGrid>
+
+        </p:fieldset>
+        <p:fieldset id="fsTabelaApac">
+            <h:outputLabel value="Nenhum registro! Efetue uma busca selecionando o período ou a situação!" rendered="#{emitidosBean.entidades.size()==0}" /> 
+            <h:panelGrid width="100%">
+                <h:panelGrid columns="2" columnClasses="alinharEsquerda,alinharDireita" >
+                    <h:panelGrid columns="2"  >
+                        <p:commandButton id="btImprimir" value="Imprimir"  action="#{emitidosBean.btImprimir()}" ajax="false" onclick="this.form.target = '_blank'" rendered="#{emitidosBean.entidades.size()>0}"/>
+                        <p:commandButton id="btAtualizar" value="Atualizar Tabela"  action="#{emitidosBean.buscarApac()}" rendered="#{emitidosBean.entidades.size()>0}" update="fsTabelaApac"/>
+                    </h:panelGrid>
+                    <p:commandButton id="btEnviarSus" title="Registra o envio ,dos selecionados, p/ o SUS " value="Enviar P/ SUS"  action="#{emitidosBean.btEnviarSus()}" rendered="#{emitidosBean.rendereBtEnviarSus}" update="fsTabelaApac"/>
+
+                </h:panelGrid>
+
+                <p:fieldset rendered="#{emitidosBean.rendereDadosDaAutorizacao}">
+
+                    <h:panelGrid width="100%" columns="5" >
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="Nome do autorizador:" styleClass="labelDados"/>
+                            <p:inputText value="#{emitidosBean.nomeAutorizador}" style="width: 200px"   />
+                        </h:panelGrid>  
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="Orgão emissor(Cód):" styleClass="labelDados" />
+                            <p:inputText value="#{emitidosBean.codOrgEmissor}"/>
+                        </h:panelGrid>  
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="Documento do autorizador(N°):" styleClass="labelDados" />
+                            <p:inputText value="#{emitidosBean.docAutorizador}" style="width: 115px"   />
+                        </h:panelGrid>  
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="Data da autorização:" styleClass="labelDados" />
+                            <p:calendar value="#{emitidosBean.dtAutorizacao}" size="10" locale="pt" />
+                        </h:panelGrid>  
+                        <h:panelGrid  columns="2" >
+                            <h:outputLabel value="Validade:" styleClass="labelDados" />
+                            <h:panelGrid columns="3">
+                                <p:calendar value="#{emitidosBean.dtIniValidade}" size="10" locale="pt"  />
+                                <h:outputLabel value=" a " styleClass="labelDados" />
+                                <p:calendar value="#{emitidosBean.dtFimValidade}" size="10" locale="pt" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+            </h:panelGrid>
+            <h:panelGrid id="pgTabelaApac">
+                <p:dataTable id="dtApac" var="formulario" value="#{emitidosBean.entidades}" rowIndexVar="index" rendered="#{emitidosBean.entidades.size()>0}" paginator="true" rows="22"  >
+                    <f:facet name="header">
+                        <h:outputText value="#{emitidosBean.tituloTabela}" />
+                    </f:facet>
+
+                    <p:column headerText="N°" width="16" style="text-align: center">
+                        <h:outputText value="#{index+1}"/>
+                    </p:column>
+
+                    <p:column headerText="Nome" width="25%">
+                        <h:outputText value="#{formulario.paciente.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Cartão SUS" style="text-align: center">
+                        <h:outputText value="#{formulario.paciente.cns}"/>
+                    </p:column>
+
+                    <p:column headerText="Procedimento" width="25%">
+                        <h:outputText value="#{formulario.p1.nome}"/>    
+                    </p:column>
+
+                    <p:column headerText="Código" style="text-align: center">
+                        <h:outputText value="#{emitidosBean.mascaraCodProdedimento(formulario.p1.codigo) }"/>    
+                    </p:column>
+
+                    <p:column headerText="N° da autorização" style="text-align: center" width="100" >
+                        <h:outputText id="optNumAutorizacao" value="#{formulario.autorizacao.num_autorizacao }" rendered="#{!(emitidosBean.renderBtAutrizar(formulario.status.id_status) )}" />    
+                        <p:inputText value="#{formulario.autorizacao.num_autorizacao }" size="12" rendered="#{(emitidosBean.renderBtAutrizar(formulario.status.id_status) )}" >
+                            <p:ajax event="keyup" update="optNumAutorizacao"/>
+                        </p:inputText>    
+                    </p:column>
+                    <p:column headerText="Status" style="text-align: center" width="70">
+                        <h:outputText id="optStatus" value="#{formulario.status.status.replace('STATUS:','') }"  />    
+                    </p:column>
+                    <p:column headerText="" style="text-align: center" width="70" >
+                        <p:commandButton value="Autorizar" action="#{emitidosBean.btSalvar(formulario)}" update="@form:pgTabelaApac" rendered="#{(emitidosBean.renderBtAutrizar(formulario.status.id_status) )}" />  
+                        <p:selectBooleanCheckbox value="#{formulario.chekBoxEnviar}" rendered="#{emitidosBean.rendereChekBoxEnviar(formulario.status.id_status) }" /> 
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </h:panelGrid>
+        </p:fieldset>
+    </p:fieldset>
+</ui:decorate>
+

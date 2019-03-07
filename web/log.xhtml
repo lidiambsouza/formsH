@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui">
+    
+    #{auditoriaBean.verificaPerfil(usuarioBean.usuarioLogado.perfil.id_perfil)}
+    #{auditoriaBean.buscar("WHERE 1 ")}
+    
+
+    <p:fieldset legend="LOG">
+        <h:panelGrid width="100%" style="text-align: center" >
+            <h:outputLabel value="REGISTROS DE ATIVIDADES"  styleClass="labelCabecalho"/>
+        </h:panelGrid>
+        <p:dataTable id="dtUsuarios" value="#{auditoriaBean.entidades}" var="auditoria"  rows="20" paginator="true" >
+            <p:column headerText="Data">
+                <h:outputText value="#{auditoria.dataString}"></h:outputText>
+            </p:column>
+            <p:column headerText="Usuário" >
+                <h:outputText value="#{auditoria.usuario.login}"></h:outputText>
+            </p:column>
+            <p:column headerText="Ação" >
+                <h:outputText value="#{auditoria.log_procedimento.descricao}"></h:outputText>
+            </p:column>
+            <p:column headerText="Afetado" >
+                <h:outputText value="#{auditoria.afetado}"></h:outputText>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:fieldset>
+
+
+</ui:decorate>
+

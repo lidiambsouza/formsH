@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://xmlns.jcp.org/jsf/html"
+             xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+             template="template.xhtml"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
+    #{relatorioBean.setLogado(usuarioBean.logado)}
+    <p:fieldset id="fsMaster">
+        <h:panelGrid columns="2" width="100%" >
+            <h:panelGrid columns="2">
+                <h3>Relatório por:</h3>
+                <p:selectOneMenu  value="#{relatorioBean.valueSomTipoRel}" onkeydown="itBuscar.value ='';" onkeyup="itBuscar.value ='';">
+                    <f:selectItem itemLabel="SELECIONE" itemValue="-1"/>
+                    <f:selectItem itemLabel="CID 10" itemValue="0"/>
+                    <f:selectItem itemLabel="SETOR" itemValue="1"/>
+                    <f:selectItem itemLabel="SOLICITANTE" itemValue="2"/>
+                    <f:selectItem itemLabel="PROCEDIMENTO" itemValue="3"/>
+                    <p:ajax event="change" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsMaster"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+
+            <h:panelGrid>
+                <h:outputLabel value="Filtrar busca" style="font-weight: bold"/>
+                <p:inputText id="itBuscar"  value="#{vITBusca}" style="width: 400px" onfocus="this.value = '';" required="false">
+                    <p:ajax event="keyup" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsQuantitativo"  />
+                    <p:ajax update="itBuscar" resetValues="true"/>
+                </p:inputText>
+            </h:panelGrid>
+                        
+        </h:panelGrid>
+
+        <p:fieldset id="fsQuantitativo" rendered="#{relatorioBean.valueSomTipoRel > -1}" >
+            <p:dataTable id="dt" var="r" value="#{relatorioBean.rel}">
+                <f:facet name="header">
+                    <h:outputText value="#{relatorioBean.legendaDataTable}" />
+                </f:facet>
+
+                <p:column headerText="#{relatorioBean.legendaColuna0}">
+                    <h:outputText value="#{r.descricao}"/>
+                </p:column>
+
+                <p:column headerText="Autorizado">
+                    <h:outputText value="#{r.autorizado}"/>
+                </p:column>
+
+                <p:column headerText="Não autorizado">
+                    <h:outputText value="#{r.naoAutorizado}"/>    
+                </p:column>
+
+                <p:column headerText="Total">
+                    <h:outputText value="#{r.total}"/>    
+                </p:column>
+
+            </p:dataTable>
+        </p:fieldset>
+
+    </p:fieldset>
+
+</ui:decorate>
+
