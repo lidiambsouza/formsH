@@ -42,12 +42,7 @@ public class Procedimento_susBean extends CrudBean<Procedimento_sus, Procediment
     @PostConstruct
     public void init() {
         procedimentos = new ArrayList<>();
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema e) {
-            F.setMsgErro(e.toString() + " - ProcedimentoSusBean init()");
-        }
-
+       
     }
 
     public void initTelaSigtap() throws ErroSistema {
@@ -212,39 +207,48 @@ public class Procedimento_susBean extends CrudBean<Procedimento_sus, Procediment
         }
 
         buscar(condicao);
-        FabricaDeConexoes.fecharConecxao();
+        ////FabricaDeConexoes.fecharConecxao();
     }
 
     public void btBuscarProcedimentoDlg(String busca) throws ErroSistema {
+       
+
         setEntidade(null);
+
         getEntidades().clear();
+
         if (busca.length() > 1) {
+
             String condicao = "";
 
             if (!busca.isEmpty()) {
+
                 condicao += "((procedimento_sus.`nome` LIKE '%" + busca + "%') OR ";
                 condicao += "(procedimento_sus.`codigo` LIKE '" + busca + "%')) ";
                 condicao += "AND (procedimento_sus.`dt_competencia` =" + F.getCompetencia().getCompetencia() + " )  GROUP BY procedimento_sus.`codigo` ORDER BY procedimento_sus.`nome`";
             } else {
+
                 condicao += " (procedimento_sus.`dt_competencia` =" + F.getCompetencia().getCompetencia() + ") GROUP BY procedimento_sus.`codigo` ORDER BY procedimento_sus.`nome`";
             }
 
             buscar(condicao);
-            if(getEntidades()!= null){
-                if(getEntidades().size()>0){
+            if (getEntidades() != null) {
+
+                if (getEntidades().size() > 0) {
+
                     setEntidade(getEntidades().get(0));
                 }
             }
         }
-        FabricaDeConexoes.fecharConecxao();
     }
 
-    public void rowSelectEventProced(SelectEvent e) {
+    public void rowSelectEventProced(SelectEvent e) throws ErroSistema {
 
         selecionarProcedimentoDlg((Procedimento_sus) e.getObject());
     }
 
-    public void selecionarProcedimentoDlg(Procedimento_sus entidade) {
+    public void selecionarProcedimentoDlg(Procedimento_sus entidade) throws ErroSistema {
+       
         if (entidade != null) {
             if (!entidade.equals(new Procedimento_sus())) {
 
@@ -264,10 +268,10 @@ public class Procedimento_susBean extends CrudBean<Procedimento_sus, Procediment
     }
 
     //tela dlg busca procedimento
-    ///verificar se o porcedimento solocitado ja foi solicitato anteriormente
+    ///verificar se o procedimento solicitado ja foi solicitato anteriormente
     public boolean verificaProcedimentoEscolhido(Procedimento_sus p) {
 
-        for (Procedimento_sus p2 : listaAux) {
+        for (Procedimento_sus p2 : getListaAux()) {
             if (p.equals(p2)) {
                 return true;
             }
@@ -275,6 +279,13 @@ public class Procedimento_susBean extends CrudBean<Procedimento_sus, Procediment
         return false;
     }
 
+    public List<Procedimento_sus> getListaAux(){
+        if(listaAux ==  null){
+            listaAux =  new ArrayList<>();
+        }
+        return listaAux;
+    }
+    
     //fim eventos telas sigtap
     @Override
     public Procedimento_susDAO getDao() {

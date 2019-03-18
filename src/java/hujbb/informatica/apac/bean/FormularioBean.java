@@ -145,7 +145,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     @PostConstruct
     private void init() {
-        
+
         //seta o staus do novo formulario como aberto
         this.IsPreenchimentoRapido = false;
         Status status = new Status();
@@ -188,11 +188,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         acao = -1;
         itQuantidadeDlgPreencherRapido_qtd = 1;
         itQuantidadeDlgAddProcedimento_qtd = 1;
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema ex) {
-            F.setMsgErro(ex.toString() + ":formularioBean:142");
-        }
+        
         pacienteTemp = new Paciente();
         renderMsgAddProcBlank = false;
 
@@ -220,7 +216,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         }
 
         getEntidade().setSolicitante(s);
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     //seleciona a acao de entre insere edita busca
@@ -275,17 +271,17 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     }
 
     public void closeDlgBuscarCidPag2() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
 
     }
 
     public void closeDlgConfirmeSalvarF1() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
 
     }
 
     public void closeDlgConfirmeEditF1() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
 
     }
 
@@ -434,7 +430,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                 F.setMsgErro(getEntidade().getStatus().getId_status().toString());
                 break;
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void btFormLimpar() throws ErroSistema {
@@ -460,7 +456,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         somProcedDlgPreencRapido = "";
 
         FabricaDeConexoes.fecharConecxaoAghuBarros();
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
 
     }
 
@@ -611,13 +607,13 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
             //verifica  se os campos da oncologia estão preenchidos
             if (verificarCamposOnco()) {
-                
+
                 if (rendereFsRadioterapiapag2) {
                     r = verificarCamposRadio();
-                    
+
                 } else {
                     r = verificarCamposQuimio();
-                    
+
                 }
 
             } else {
@@ -625,11 +621,15 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             }
 
         }
-         return r;
+        return r;
     }
 
     private boolean verificarCamposOnco() {
-       
+
+        if ((getEntidade().getData().after(new Date()))) {
+            F.mensagem("", "A data da solicitação não deve ser posterior a data de hoje!", FacesMessage.SEVERITY_WARN);
+            return false;
+        }
 
         if (getEntidade().getPag2().getLocal_tumor_primario().isEmpty()) {
             setRedblackcamp56("red");
@@ -1062,7 +1062,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     public void closeDlgBuscaProntuario() throws ErroSistema {
         pacienteTemp = new Paciente();
         txtBuscaNumPront = "";
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
         FabricaDeConexoes.fecharConecxaoAghuBarros();
     }
 
@@ -1072,17 +1072,17 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         somVarPaciente = "";
         pacienteTemp = new Paciente();
         pacientesAghuBarros.clear();
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void closeDlgAddProcedimento() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void closeDlgSelecionarCidPrincipal() throws ErroSistema {
         cidTemp = new Cid();
         cids.clear();
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void closeDlgPreencherRapido() throws ErroSistema {
@@ -1091,34 +1091,34 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         limpDlgPreencherRapido();
         setIsPreenchimentoRapido(false);
         FabricaDeConexoes.fecharConecxaoAghuBarros();
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void closeDlgBuscaform() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void closeDlgAutorizacao() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
 //fim close dlg
     //auxiliares
     //tela formulario jsf
-     public boolean bloqueioImpressao() { 
-         Formulario f =  getEntidade();
-         
+    public boolean bloqueioImpressao() {
+        Formulario f = getEntidade();
+
         //((id do usuario logado != id  do usuario do solicitante da apac) ou se o status do formulario != 3(emitido) ou !(perfil 2 solicitante ou 4 oncologico)  e nao perfil 3 adm)
         return (((getLogado().getId_usuario() != f.getSolicitante().getUsuario().getId_usuario()) || (f.getStatus().getId_status() != 3) || !(getLogado().getPerfil().getId_perfil() == 2 || getLogado().getPerfil().getId_perfil() == 4)) && (getLogado().getPerfil().getId_perfil() != 3));
     }
 //tela formulario jsf
+
     public boolean bloqueioEdicao(Formulario f) {
         // ((dono da apac == usuario logado) e status = 2(salvo)  e (perfil 2 solicitante ou 4 oncologico) )        
         return !(((getLogado().getId_usuario() == f.getSolicitante().getUsuario().getId_usuario()) && (f.getStatus().getId_status() == 2) && (getLogado().getPerfil().getId_perfil() == 2 || getLogado().getPerfil().getId_perfil() == 4)) || (getLogado().getPerfil().getId_perfil() == 3));
 
     }
 
-    
     //limpar campos 79 80 81 82 82
     public void limparCampo79(int flag) {
         switch (flag) {
@@ -1311,6 +1311,9 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         getEntidade().setP6(new Procedimento_sus());
         procedimentosTemp = new Procedimento_sus();
 
+        getEntidade().getProc_justificativa().setCid_principal(new Cid());
+        getEntidade().getProc_justificativa().setCid_secundario(new Cid());
+        getEntidade().getProc_justificativa().setCid_causas_assoc(new Cid());
     }
 
     public void btCidLimpar() {
@@ -1370,7 +1373,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
             cidTemp = new Cid();
             cids.clear();
-            FabricaDeConexoes.fecharConecxao();
+            //FabricaDeConexoes.fecharConecxao();
 
             //  request.addCallbackParam("FA", tempT);
         }
@@ -1458,7 +1461,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         }
         itQuantidadeDlgAddProcedimento_qtd = 1;
         itQuantidadeDlgPreencherRapido_qtd = 1;
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     //formulario.jsf e formulario_editar.jsf
@@ -1519,7 +1522,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
         }
 
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     private void btImprimirF2(Usuario logado) throws ErroSistema {
@@ -1529,7 +1532,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             F.mensagem("Formulario N° " + getEntidade().getMascaraId() + " finalizado com sucesso!", "", FacesMessage.SEVERITY_INFO);
         }
         // printFolha1e2();
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void printFolha1() {
@@ -1562,6 +1565,9 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     public void btLimparP1() {
         getEntidade().setP1(new Procedimento_sus());
+        getEntidade().getProc_justificativa().setCid_principal(new Cid());
+        getEntidade().getProc_justificativa().setCid_secundario(new Cid());
+        getEntidade().getProc_justificativa().setCid_causas_assoc(new Cid());
     }
 
     public void btLimparP2() {
@@ -1729,7 +1735,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             pacienteTemp = p;
 
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     //limpa os ddos do paciente do formulario
@@ -1796,7 +1802,9 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     }
 
+    //data de hoje mais 120 dias
     public Date gethJ() {
+        hJ = F.somarDiasData(hJ, 120);
         return hJ;
     }
 
@@ -1923,7 +1931,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                 cidTemp = c.get(0);
             }
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void buscaCids(String cid) throws ErroSistema {
@@ -1967,14 +1975,14 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             if (procHasFormaList != null) {
                 List<Procedimento_sus> procedimentos = new ArrayList<>();
                 for (Formulario_has_procedimento_sus procHasFormaList1 : procHasFormaList) {
-                    Procedimento_sus ps = new Procedimento_susDAO().buscaId(procHasFormaList1.getProcedimento_sus().getCodigo() + "");
+                    Procedimento_sus ps = new Procedimento_susDAO().buscaIdComp(procHasFormaList1.getProcedimento_sus().getCodigo() + "", procHasFormaList1.getProcedimento_sus().getDt_competencia());
                     ps.setQtd(procHasFormaList1.getQuantidade());
                     procedimentos.add(ps);
                 }
                 getEntidade().addProcedimento(procedimentos);
             }
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void btSalvarAlteracoes(Usuario usuario) throws ErroSistema {
@@ -2018,7 +2026,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                 }//IF7
             }//if4
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void btDlgAutorizacaoSalvar(Usuario usuario) throws ErroSistema {
@@ -2034,7 +2042,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             log(usuario, 6);
 
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public String dataEdit(Date d) {
@@ -2830,19 +2838,26 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     //FIM DLG BUSCAR PACIENTE
     //dlg add cid
     public void verificarLimiteCid() {
-       
-        if (getEntidade().getProc_justificativa().getCid_principal().equals(new Cid())
-                || getEntidade().getProc_justificativa().getCid_secundario().equals(new Cid())
-                || getEntidade().getProc_justificativa().getCid_causas_assoc().equals(new Cid())) {//if 1
-            abrirDlgBuscaCid();
-        } else {// else if 1
-            F.mensagem("", "Limite de cids atingido!", FacesMessage.SEVERITY_WARN);
-        }
-    }
+//        if (getEntidade().getP1()) {
+
+            if (getEntidade().getProc_justificativa().getCid_principal().equals(new Cid())
+                    || getEntidade().getProc_justificativa().getCid_secundario().equals(new Cid())
+                    || getEntidade().getProc_justificativa().getCid_causas_assoc().equals(new Cid())) {//if 1
+                
+                abrirDlgBuscaCid();
+
+            } else {// else if 1
+                F.mensagem("", "Limite de cids atingido!", FacesMessage.SEVERITY_WARN);
+            }
+        } 
+//else {
+//            F.mensagem("", "Primeiramente insira o procedimento principal!", FacesMessage.SEVERITY_WARN);
+//        }
+//    }
 
     public void abrirDlgBuscaCid() {
 
-        //se qual quer cid algum vago
+        //se qualquer cid algum vago
         List<Cid> l = new ArrayList<>();
         if (!getEntidade().getProc_justificativa().getCid_principal().equals(new Cid())) {
             l.add(getEntidade().getProc_justificativa().getCid_principal());
@@ -2853,8 +2868,9 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         if (!getEntidade().getProc_justificativa().getCid_causas_assoc().equals(new Cid())) {
             l.add(getEntidade().getProc_justificativa().getCid_causas_assoc());
         }
+        DlgBuscaCidBean.procedimentoStatic = getEntidade().getP1();
         DlgBuscaCidBean.listaCidStatica = l;
-        F.abrirDlgPreenchimentoRapido("dlg/dlgBuscaCid", 800, 340, true);
+        F.abrirDlgPreenchimentoRapido("dlg/dlgBuscaCid", 800, 360, true);
 
     }
 

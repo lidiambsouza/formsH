@@ -78,7 +78,7 @@ public class DlgCargaSolicitanteBean implements Serializable {
             }
 
         } // fim for1
-FabricaDeConexoes.fecharConecxao();
+//FabricaDeConexoes.fecharConecxao();
     }
 
     public void limpDlgCargaSolicitante() {

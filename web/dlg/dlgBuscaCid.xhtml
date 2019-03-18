@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <style type="text/css">
             .ui-widget{font-size:90% !important;}
@@ -12,7 +13,7 @@
         <!--growl exibe mensagens na tela-->
         <p:growl id="growl" sticky="true" showDetail="true" life="6000" autoUpdate="true"  />
         <h:form>
-            #{dlgBuscaCidBean.setarListaCidAux()}
+
             <p:fieldset id="fsConsultaCid" style="width: 96%"  > 
                 <h:panelGrid width="100%" style="text-align: center" >
                     <h:outputLabel value="PESQUISAR CID" style="#{estilosBean.labelCabechalho()}"/>
@@ -21,24 +22,33 @@
                     <p:focus for="itBusca"/>
                     <h:panelGroup  style="margin-bottom:10px"  >
                         <h:outputLabel for="itBusca" value="Buscar:" styleClass="labelDados"/>
-                        <p:inputText id="itBusca" value="#{vitBusca}" style="width: 60%" onkeydown="if (event.keyCode === 13) {
+                        <p:inputText id="itBusca" value="#{dlgBuscaCidBean.filtro}"  style="width:150px" placeholder="Busca" onkeypress="if (event.keyCode === 13) {
                                     ondblclick();
                                     return false;
                                 }">
-                            <p:ajax event="dblclick" listener="#{dlgBuscaCidBean.selecionarCidDlg(dlgBuscaCidBean.entidade)}" update="fsdtCid" />
-                            <p:ajax event="keyup" listener="#{dlgBuscaCidBean.btBuscarCidDlg(vitBusca)}" update="fsdtCid" />
+                            <p:ajax event="keyup" listener="#{dlgBuscaCidBean.filtrar(dlgBuscaCidBean.filtro)}" update="fsdtCid"/>
+                            <p:ajax event="dblclick" listener="#{dlgBuscaCidBean.selecionarCidDlg(dlgBuscaCidBean.entidade)}"  />
                         </p:inputText>
                     </h:panelGroup>
                 </p:fieldset>
                 <p:fieldset id="fsdtCid">
-                    <p:dataTable var="cid" value="#{dlgBuscaCidBean.entidades}" paginator="true" rows="6" emptyMessage="Nenhum registro encontrado!" selectionMode="single" rowKey="#{cid.cid}">
+                    <p:dataTable var="cid" value="#{dlgBuscaCidBean.entidades}" paginator="true" rows="6" emptyMessage="Nenhum registro encontrado!" selectionMode="single" rowKey="#{cid.cid}"   >
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Buscar:" />
+
+                            </p:outputPanel>
+                        </f:facet>
+
                         <p:ajax event="rowSelect" listener="#{dlgBuscaCidBean.rowSelectEventCid}" />
-                        <p:column headerText="Código" width="80" style="text-align: center" >
+
+                        <p:column headerText="Código" width="80" style="text-align: center"  >
                             <h:outputLabel value="#{cid.cid}"  >
                                 <p:ajax event="click" listener="#{dlgBuscaCidBean.selecionarCidDlg(cid)}" />
                             </h:outputLabel>
                         </p:column>
-                        <p:column headerText="Cid 10">
+
+                        <p:column headerText="Cid 10" >
                             <h:outputLabel value="#{cid.nome}" >
                                 <p:ajax event="click" listener="#{dlgBuscaCidBean.selecionarCidDlg(cid)}" />
                             </h:outputLabel>

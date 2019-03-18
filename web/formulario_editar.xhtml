@@ -192,9 +192,9 @@
                     </h:panelGrid>
                     <h:panelGrid columns="2" columnClasses="alinharEsquerda,alinharDireita" width="100%">
                         <p:commandButton value="#{formularioBean.valueBtAddProcedimento}" action="#{formularioBean.btAddProcedimento()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
-                            <p:ajax event="dialogReturn" listener="#{formularioBean.procedimentoSelecionado}" process="@this" update="fsProcedimentoSolicitado" />
+                            <p:ajax event="dialogReturn" listener="#{formularioBean.procedimentoSelecionado}" process="@this" update="fsProcedimentoSolicitado,pgbtAddCid" />
                         </p:commandButton>
-                        <p:commandButton value="LIMPAR"  action="#{formularioBean.btProcedimentoLimpar()}" update="fsProcedimentoSolicitado" style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}" />
+                        <p:commandButton value="LIMPAR"  action="#{formularioBean.btProcedimentoLimpar()}" update="fsProcedimentoSolicitado,fsJustificativa" style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}" />
                     </h:panelGrid>
                     <h:panelGrid columns="3" width="100%">
                         <h:panelGrid >
@@ -221,7 +221,7 @@
                                 </p:spinner>
                                 <p:outputLabel value="#{formularioBean.entidade.p1.qtd}" styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}"/>
                             </h:panelGrid>
-                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP1()}" update="fsProcedimentoSolicitado" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
+                            <p:commandButton icon="ui-icon-trash" title="Remover" action="#{formularioBean.btLimparP1()}" update="fsProcedimentoSolicitado,fsJustificativa" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
                         </h:panelGrid>
 
                     </h:panelGrid>
@@ -334,8 +334,8 @@
                         <h:outputLabel value="JUSTIFICATIVA DO(S) PROCEDIMENTO(S) SOLICITADO(S)"  styleClass="labelCabecalho"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2" width="100%">
-                        <h:panelGrid  width="100%" style="text-align: left">
-                            <p:commandButton value="#{formularioBean.valueBtAddCid}" action="#{formularioBean.verificarLimiteCid()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}">
+                        <h:panelGrid id="pgbtAddCid" width="100%" style="text-align: left">
+                            <p:commandButton value="#{formularioBean.valueBtAddCid}" action="#{formularioBean.verificarLimiteCid()}" process="@this" update="@none"  style="#{estilosBean.botao()}" rendered="#{!formularioBean.somenteLeituraPag2}" disabled="#{formularioBean.entidade.p1.codigo.isEmpty()}">
                                 <p:ajax event="dialogReturn" listener="#{formularioBean.retornoDlgCid}" process="@this" update="fsJustificativa" />
                             </p:commandButton>
                         </h:panelGrid>
@@ -736,7 +736,7 @@
                                             </h:panelGrid>
                                             <h:panelGrid width="100%" columns="2">
                                                 <p:inputText value="#{formularioBean.entidade.pag2.esquema_sigla_quimio}" maxlength="18" style="width: 150px" rendered="#{!formularioBean.somenteLeituraPag2}">
-                                                    <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp70('black')}" update="pgEsquemaQuimio"/>
+                                                    <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp70('black')}" update="pgEsquemaQuimio,pgbtAddCid"/>
                                                 </p:inputText>
                                                 <h:outputLabel value="#{formularioBean.entidade.pag2.esquema_sigla_quimio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                                             </h:panelGrid>

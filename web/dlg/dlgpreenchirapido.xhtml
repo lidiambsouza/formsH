@@ -41,7 +41,7 @@
                     <h:outputLabel value="Buscar procedimento:"/>
                     <h:panelGrid columns="3">
                         <p:inputText id="itBuscarProcedimentoDlgPreencherRapido"  value="#{dlgPreenchiRapidoBean.buscaProcedimentoDlgPreencherRapido}" style="width: 200px" onfocus="this.value = '';" required="false"  >
-                            <p:ajax event="keyup" listener="#{dlgPreenchiRapidoBean.buscaProcedimento(dlgPreenchiRapidoBean.buscaProcedimentoDlgPreencherRapido)}" update="sOMProcedimentoDlgPreencherRapido,"  />
+                            <p:ajax event="keyup" listener="#{dlgPreenchiRapidoBean.buscaProcedimento(dlgPreenchiRapidoBean.buscaProcedimentoDlgPreencherRapido)}" update="sOMProcedimentoDlgPreencherRapido,sOMCidPrincipalDlgPreencherRapido"  />
                             <p:ajax update="itBuscarProcedimentoDlgPreencherRapido" resetValues="true"/>
 
                         </p:inputText>

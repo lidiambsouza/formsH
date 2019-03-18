@@ -1,6 +1,8 @@
 package hujbb.informatica.apac.dao;
 
+import hujbb.informatica.apac.entidades.Cid;
 import hujbb.informatica.apac.entidades.Cid_has_procedimento_sus;
+import hujbb.informatica.apac.entidades.Tp_sexo;
 import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.FabricaDeConexoes;
 import hujbb.informatica.apac.util.execao.ErroSistema;
@@ -70,9 +72,44 @@ public class Cid_has_procedimento_susDAO implements CrudDAO<Cid_has_procedimento
             return entidades;
 
         } catch (SQLException e) {
-            throw new ErroSistema("Erro ao buscar dados do Cid_has_procedimento_sus", e);
+            F.setMsgErro("Erro ao buscar dados do Cid_has_procedimento_sus:" + e);
+           
+            System.out.println("teste git");
+            return null;
         }
+    }
 
+    public List<Cid> buscarCids(String condicao) throws ErroSistema {
+        condicao = F.tratarCondicaoSQL(condicao);
+        try {
+            Connection conexao = FabricaDeConexoes.getConexao();
+            String sql = "SELECT\n"
+                    + "     cid.`cid` AS cid_cid,\n"
+                    + "     cid.`nome` AS cid_nome,\n"
+                    + "     cid.`tp_sexo_id` AS cid_tp_sexo_id\n"
+                    + "FROM\n"
+                    + "     `cid` cid INNER JOIN `cid_has_procedimento_sus` cid_has_procedimento_sus ON cid.`cid` = cid_has_procedimento_sus.`cid_cid`  " + condicao;
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            List<Cid> cids = new ArrayList<>();
+
+            while (rs.next()) {
+                Cid cid = new Cid(
+                        rs.getString("cid_cid"),
+                        rs.getString("cid_nome"),
+                        new Tp_sexo()
+                );
+                cid.getTp_sexo().setId(rs.getString("cid_tp_sexo_id"));
+                
+                cids.add(cid);
+            }
+
+            return cids;
+
+        } catch (SQLException e) {
+            F.setMsgErro("cid_has_procedimentoDAO:busca cid:" + e);
+            return null;
+        }
     }
 
     @Override

@@ -22,19 +22,19 @@ public class FabricaDeConexoes {
 
     private static Connection conexao;
 
-//    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t2";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
+//    private static final String URL_CONEXAO = "jdbc:mysql://localhost/db_formsus_t";
+//    private static final String USUARIO = "root";
+//    private static final String SENHA = "";
     
-    private static final String URL_CONEXAO = "jdbc:mysql://haley.hujbb.br/db_formsus_p";
-    private static final String USUARIO = "formsus";
-    private static final String SENHA = "$fs2018&*";
+//    private static final String URL_CONEXAO = "jdbc:mysql://haley.hujbb.br/db_formsus_t";
+//    private static final String USUARIO = "formsus";
+//    private static final String SENHA = "$fs2018&*";
     
     
 
-//    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t2";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
+    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t";
+    private static final String USUARIO = "gestaoti";
+    private static final String SENHA = "@hu@2018";
     
     
 //    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t3";
@@ -56,6 +56,7 @@ public class FabricaDeConexoes {
 //    private static final String SENHA_AGHU_BARROS = "aghuintegracao";
 
     public static Connection getConexao() throws ErroSistema {
+       
         if (conexao == null) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -67,9 +68,19 @@ public class FabricaDeConexoes {
 
             } catch (SQLException ex) {
                 F.mensagem("", "Não foi possivel conectar ao banco de dados !", FacesMessage.SEVERITY_ERROR);
+               
                 throw new ErroSistema("Não foi possivel conectar ao banco de dados", ex);
             }
-
+        }else {//if1
+            try {
+                if(conexao.isClosed()){
+                    fecharConecxao();
+                    conexao =  getConexao();
+                }
+            } catch (SQLException ex) {
+                F.setMsgErro(ex.toString()+":fabrica de conexoes getConexao()");
+            }
+            
         }
         return conexao;
     }

@@ -5,6 +5,7 @@ import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import javax.faces.model.SelectItem;
 
@@ -70,7 +71,8 @@ public class Cid implements Serializable {
                
         return itens;
     }
-
+       
+    
     @Override
     public int hashCode() {
         int hash = 3;

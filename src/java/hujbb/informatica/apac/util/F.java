@@ -205,13 +205,7 @@ public class F {
             }
 
         }
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema ex) {
-            F.setMsgErro(ex.toString() + ":templatebean:setCompetenci");
-        }
-
-        
+       
         return competencia;
     }
 
@@ -330,7 +324,8 @@ public class F {
         RequestContext.getCurrentInstance().openDialog(jsf, opcoes, null);
     }
     
-    public static void fecharDlg(Object o){
+    public static void fecharDlg(Object o) throws ErroSistema{
+        FabricaDeConexoes.fecharConecxao();
         RequestContext.getCurrentInstance().closeDialog(o);
     }
 }

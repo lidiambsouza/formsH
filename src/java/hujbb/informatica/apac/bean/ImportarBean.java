@@ -74,7 +74,7 @@ public class ImportarBean {
             }
 
             disable_btProcessarCarga = false;
-            FabricaDeConexoes.fecharConecxao();
+            //FabricaDeConexoes.fecharConecxao();
 
         } //if 1
     }
@@ -86,7 +86,7 @@ public class ImportarBean {
             new CargaSIGTAP(caminho);
         }
         
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public boolean isRendere_progBar() {

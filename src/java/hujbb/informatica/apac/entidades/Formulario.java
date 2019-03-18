@@ -310,7 +310,7 @@ public class Formulario implements Serializable, Comparable<Formulario> {
             if (procHasFormaList != null) {
                 List<Procedimento_sus> procedimentos = new ArrayList<>();
                 for (Formulario_has_procedimento_sus procHasFormaList1 : procHasFormaList) {
-                    Procedimento_sus ps = new Procedimento_susDAO().buscaId(procHasFormaList1.getProcedimento_sus().getCodigo() + "");
+                    Procedimento_sus ps = new Procedimento_susDAO().buscaIdComp(procHasFormaList1.getProcedimento_sus().getCodigo() + "",procHasFormaList1.getProcedimento_sus().getDt_competencia());
                     ps.setQtd(procHasFormaList1.getQuantidade());
                     procedimentos.add(ps);
                 }

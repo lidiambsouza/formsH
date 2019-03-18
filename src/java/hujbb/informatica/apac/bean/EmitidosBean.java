@@ -56,7 +56,7 @@ public class EmitidosBean extends FormularioBean {
         filtroSituacao = "";
         try {
             status_item = Status.item("");
-            FabricaDeConexoes.fecharConecxao();
+            //FabricaDeConexoes.fecharConecxao();
         } catch (ErroSistema e) {
         }
     }
@@ -75,7 +75,7 @@ public class EmitidosBean extends FormularioBean {
         }
         Collections.sort(aux);
         setEntidades(aux);
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 //botoes
 
@@ -88,7 +88,7 @@ public class EmitidosBean extends FormularioBean {
                 editar(getEntidades().get(i));
             }
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void btSalvar(Formulario f) throws ErroSistema {
@@ -115,7 +115,7 @@ public class EmitidosBean extends FormularioBean {
             }
         }
 
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     public void btImprimir() throws ErroSistema {

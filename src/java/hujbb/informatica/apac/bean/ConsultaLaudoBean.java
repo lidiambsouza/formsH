@@ -94,7 +94,7 @@ public class ConsultaLaudoBean implements Serializable {
             }
         }
 
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
         return solicitantes;
     }
 
@@ -112,7 +112,7 @@ public class ConsultaLaudoBean implements Serializable {
 
         }
 
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
         return pacientes;
     }
 
@@ -121,7 +121,7 @@ public class ConsultaLaudoBean implements Serializable {
         if (perfil == 3) {//3 administrador
             try {
                 status_item = Status.item("");
-                // FabricaDeConexoes.fecharConecxao();
+                // //FabricaDeConexoes.fecharConecxao();
             } catch (ErroSistema e) {
 
             }
@@ -131,7 +131,7 @@ public class ConsultaLaudoBean implements Serializable {
                 // verifica se perfil logado é solicitante ou solicitante oncologico
                 status_item = Status.item("id_status = 2 OR id_status = 3");
 
-                //FabricaDeConexoes.fecharConecxao();
+                ////FabricaDeConexoes.fecharConecxao();
             } catch (ErroSistema ex) {
                 Logger.getLogger(EmitidosBean.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -231,7 +231,7 @@ public class ConsultaLaudoBean implements Serializable {
             getForms().get(i).buscaProcedimentosForm();
         }
 
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
 //botoes

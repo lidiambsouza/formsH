@@ -80,11 +80,7 @@ public class SolicitanteBean extends CrudBean<Solicitante, SolicitanteDAO> {
         solicitanteCad = new Solicitante();
         ativ_desativ_usuario = new Ativ_desativ_usuario();
         vsituacaoUsuario = "1";
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema ex) {
-            F.setMsgErro(ex.toString() + "solicitanteBean:73");
-        }
+        
     }
     
     public void verificaPerfil(int perfil) {
@@ -132,7 +128,7 @@ public class SolicitanteBean extends CrudBean<Solicitante, SolicitanteDAO> {
             buscar("WHERE solicitante.`nome` LIKE '" + busca + "%' AND  `ativo` = " + vsituacaoUsuario + " ORDER BY solicitante.`nome`");
             
         }
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
     
     public void btAtualizar(Usuario logado) throws ErroSistema {
@@ -149,7 +145,7 @@ public class SolicitanteBean extends CrudBean<Solicitante, SolicitanteDAO> {
             }
         }
         buscaAtivos();
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
         
     }
     

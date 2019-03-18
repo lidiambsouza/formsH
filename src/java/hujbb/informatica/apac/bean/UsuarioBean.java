@@ -24,18 +24,10 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
 
     public void verificaUsuLog() {
         if (usuarioLogado == null || !usuarioLogado.isLogado()) {//nao ta logado
-            try {
-                FabricaDeConexoes.fecharConecxao();
-            } catch (ErroSistema ex) {
-                F.setMsgErro(ex.toString() + "usuariobean:26");
-            }
+           
             F.redirecionarPagina("telalogin.jsf");
         } else {
-            try {
-                FabricaDeConexoes.fecharConecxao();
-            } catch (ErroSistema ex) {
-                F.setMsgErro(ex.toString() + "usuariobean:31");
-            }
+            
             setLogado(usuarioLogado) ;
         }
 
@@ -45,11 +37,6 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
         usuarioLogado = new Usuario();
         labelLogin = "";
         F.setCompetencia(null);
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema ex) {
-            F.setMsgErro(ex.toString() + "usuariobean:Sair()");
-        }
         F.redirecionarPagina("telalogin.jsf");
 
     }
@@ -58,12 +45,7 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
         usuarioLogado = new Usuario();
         labelLogin = "";
         F.setCompetencia(null);
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema ex) {
-            F.setMsgErro(ex.toString() + "usuariobean:Sair()");
-        }
-
+       
     }
 
     //logar ad ebserh
@@ -90,12 +72,7 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
 
             labelLogin = "";
             buscar("WHERE login = '" + usuarioLogado.getLogin() + "'");
-            try {
-                FabricaDeConexoes.fecharConecxao();
-            } catch (ErroSistema ex) {
-                F.setMsgErro(ex.toString() + "usuariobean:51");
-            }
-
+       
             if (getEntidades().size() > 0) {//verifica se o usuario esta no banco local  if3
                 
                 u = getEntidades().get(0);
@@ -130,7 +107,7 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
 //        labelLogin = "";
 //        buscar("WHERE login = '" + usuarioLogado.getLogin() + "'");
 //        try {
-//            FabricaDeConexoes.fecharConecxao();
+//            //FabricaDeConexoes.fecharConecxao();
 //        } catch (ErroSistema ex) {
 //            F.setMsgErro(ex.toString() + "usuariobean:51");
 //        }
@@ -164,11 +141,6 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
     public void logarBDLocal() {
 
         buscar("WHERE login = '" + usuarioLogado.getLogin() + "'");
-        try {
-            FabricaDeConexoes.fecharConecxao();
-        } catch (ErroSistema ex) {
-            F.setMsgErro(ex.toString() + "usuariobean:82");
-        }
         Usuario u;
         if (getEntidades().size() > 0) {
             u = getEntidades().get(0);
@@ -203,7 +175,7 @@ public class UsuarioBean extends CrudBean<Usuario, UsuarioDAO> {
     }
 
     public void fecharConexao() throws ErroSistema {
-        FabricaDeConexoes.fecharConecxao();
+        //FabricaDeConexoes.fecharConecxao();
     }
 
     @Override

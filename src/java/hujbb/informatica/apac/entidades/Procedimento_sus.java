@@ -317,19 +317,7 @@ public class Procedimento_sus implements Serializable {
 
     //retorna todos os cids relacionados com esse procedimento
     public List<Cid> cids() throws ErroSistema {
-        Cid cid = new Cid();
-        CidDAO cidDAO = new CidDAO();
-        List<Cid> cids = new ArrayList<>();
-        List<Cid_has_procedimento_sus> cps = new Cid_has_procedimento_susDAO().buscar("procedimento_sus_codigo = '" + codigo + "'");
-        if (cps != null) {
-            for (Cid_has_procedimento_sus cp : cps) {
-                cid = cidDAO.buscaId(cp.getCod_cid());
-                if (cid != null) {
-                    cids.add(cid);
-                }
-            }
-        }
-        
+        List<Cid> cids = new Cid_has_procedimento_susDAO().buscarCids("cid_has_procedimento_sus.`procedimento_sus_codigo` = '" + codigo + "' AND cid_has_procedimento_sus.`dt_competencia` = " +getDt_competencia()+" ORDER BY cid.`nome`  ");
         return cids;
     }
 

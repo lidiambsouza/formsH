@@ -182,6 +182,15 @@ public class Procedimento_susDAO implements CrudDAO<Procedimento_sus>, Serializa
         }
         return c;
     }
+    
+    public Procedimento_sus buscaIdComp(String id,int competencia) throws ErroSistema {
+        Procedimento_sus c = null;
+        List<Procedimento_sus> l = buscar("WHERE procedimento_sus.`codigo` = '" + id+"' AND procedimento_sus.`dt_competencia` = '"+competencia+"' ");
+        if (l.size() > 0) {
+            c = l.get(0);
+        }
+        return c;
+    }
 
 //atualiza a modalidade do procedimento (usado pela carga)
     public void atualizarCarga(String codProcedimento, int dt_competencia, String codModalidade) throws ErroSistema {
@@ -199,5 +208,4 @@ public class Procedimento_susDAO implements CrudDAO<Procedimento_sus>, Serializa
             F.setMsgErro("Erro! Procedimento_susDAODAO 88!" + ex.toString());
         }
     }
-
 }

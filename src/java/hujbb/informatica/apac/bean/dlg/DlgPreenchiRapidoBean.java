@@ -77,18 +77,33 @@ public class DlgPreenchiRapidoBean implements Serializable {
             procedimentos_susItem = Procedimento_sus.item("WHERE (procedimento_sus.`nome` LIKE '%" + busca + "%' OR procedimento_sus.`codigo` LIKE '" + busca + "%') AND (procedimento_sus.`dt_competencia` = " + F.getCompetencia().getCompetencia() + ") GROUP BY procedimento_sus.`codigo` ORDER BY  procedimento_sus.`nome` LIMIT 100");
             if (!procedimentos_susItem.isEmpty()) {
                 selecionarProcedimento((String) procedimentos_susItem.get(0).getValue());
+                buscaCidItem(getProcedimento());
             }
         }
 
     }
-    //evento da selecao do procedimento no combo box
 
+    //buscar cids item relacionado com o procedimento
+    private void buscaCidItem(Procedimento_sus p) throws ErroSistema {System.out.println("aqui");
+        getCidItem().clear();
+        boolean aux = true;
+        for (Cid c : p.cids()) {
+            if (aux) {
+                cid = c;
+                aux = false;
+            }//fim if 1 
+
+            cidItem.add(new SelectItem(c.getCid(), c.getNome()));
+        }
+    }
+
+    //evento da selecao do procedimento no combo box
     public void selecionarProcedimento(String selecao) throws ErroSistema {
         try {
             int i = Integer.parseInt(selecao);
             procedimento = new Procedimento_sus();
             if (i != -1) {//if1
-                procedimento = procedimentoDAO.buscaId(selecao + "");
+                procedimento = procedimentoDAO.buscaIdComp(selecao + "", F.getCompetencia().getCompetencia());
             }//fim if 1
         } catch (NumberFormatException e) {
             F.setMsgErro("Formulariobean:selecionarProcedimento():" + e);
@@ -106,9 +121,8 @@ public class DlgPreenchiRapidoBean implements Serializable {
         }
     }
 
-    public void btConfirm() {
-        if (pacienteTemp.getData_obito() == null) 
-        {
+    public void btConfirm() throws ErroSistema {
+        if (pacienteTemp.getData_obito() == null) {
 
             if (pacienteTemp.equals(new Paciente()) && procedimento.equals(new Procedimento_sus()) && cid.equals(new Cid())) {
                 if (numProntuario.isEmpty() && buscaProcedimentoDlgPreencherRapido.isEmpty() && cidPrincipalDlgPreencherRapido.isEmpty()) {
@@ -125,9 +139,8 @@ public class DlgPreenchiRapidoBean implements Serializable {
                 l.add(cid);
                 F.fecharDlg(l);
             }
-        }
-        else{
-          F.mensagem("Paciente consta como morto!", "", FacesMessage.SEVERITY_ERROR);  
+        } else {
+            F.mensagem("Paciente consta como morto!", "", FacesMessage.SEVERITY_ERROR);
         }
 
     }
@@ -163,6 +176,9 @@ public class DlgPreenchiRapidoBean implements Serializable {
     }
 
     public Procedimento_sus getProcedimento() {
+        if(procedimento == null){
+            procedimento =  new Procedimento_sus();
+        }
         if (procedimento.getQtd() < 1) {
             procedimento.setQtd(1);
         }
@@ -182,6 +198,9 @@ public class DlgPreenchiRapidoBean implements Serializable {
     }
 
     public ArrayList<SelectItem> getCidItem() {
+        if (cidItem == null) {
+            cidItem = new ArrayList<>();
+        }
         return cidItem;
     }
 
