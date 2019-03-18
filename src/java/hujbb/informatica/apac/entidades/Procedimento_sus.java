@@ -316,7 +316,7 @@ public class Procedimento_sus implements Serializable {
     }
 
     //retorna todos os cids relacionados com esse procedimento
-    public List<Cid> cids() throws ErroSistema {
+    public List<Cid> cids() throws ErroSistema { System.out.println("teste git");
         List<Cid> cids = new Cid_has_procedimento_susDAO().buscarCids("cid_has_procedimento_sus.`procedimento_sus_codigo` = '" + codigo + "' AND cid_has_procedimento_sus.`dt_competencia` = " +getDt_competencia()+" ORDER BY cid.`nome`  ");
         return cids;
     }
