@@ -7,8 +7,6 @@ import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -45,7 +43,7 @@ public class DlgBuscaCidBean extends CidBean {
 
     }
 
-    public void btBuscarCidDlg() throws ErroSistema {
+    public void btBuscarCidDlg() throws ErroSistema { // busca os cids relacionados com o p1
         if (procedimentoAux != null) {
             setEntidade(null);
             getEntidades().clear();
@@ -108,25 +106,37 @@ public class DlgBuscaCidBean extends CidBean {
     }
 
 //auxiliaes
-    public void filtrar(String filtro) {
-        setEntidade(null);
-        filtro = filtro.trim();
-        if (filtro.isEmpty()) {//if 1
-            setEntidades(listaCidAux2);
+    public void filtrar(String filtro) throws ErroSistema {
+        filtro = filtro.trim().toUpperCase();
+        Procedimento_sus p = (procedimentoAux == null) ? new Procedimento_sus() : procedimentoAux;
+        if (p.cids().isEmpty() && !filtro.isEmpty()) { // se nao houver cids relacionados
+            buscar("(cid.`nome` LIKE '%" + filtro + "%') OR (cid.`cid` LIKE '%" + filtro + "%') ORDER BY cid.`nome` LIMIT 10");
+            if (getEntidades().isEmpty()) {
+                setEntidade(null);
+            } else {
+                setEntidade(getEntidades().get(0));
+            }
+        } else { //se houver cids relacionado
 
-        } else {//else if 1
-            setEntidades(new ArrayList<>());
-            for (Cid c : listaCidAux2) {
-                if (c.getCid().toUpperCase().contains(filtro.toUpperCase()) || c.getNome().toUpperCase().contains(filtro.toUpperCase())) {//if 2
-                    getEntidades().add(c);
-                }//fim if2
-            }//fim for
-
-        }//fim else if 1
-        if (getEntidades().isEmpty()) {
             setEntidade(null);
-        } else {
-            setEntidade(getEntidades().get(0));
+            filtro = filtro.trim();
+            if (filtro.isEmpty()) {//if 1
+                setEntidades(listaCidAux2);
+
+            } else {//else if 1
+                setEntidades(new ArrayList<>());
+                for (Cid c : listaCidAux2) {
+                    if (c.getCid().toUpperCase().contains(filtro.toUpperCase()) || c.getNome().toUpperCase().contains(filtro.toUpperCase())) {//if 2
+                        getEntidades().add(c);
+                    }//fim if2
+                }//fim for
+
+            }//fim else if 1
+            if (getEntidades().isEmpty()) {
+                setEntidade(null);
+            } else {
+                setEntidade(getEntidades().get(0));
+            }
         }
     }
 

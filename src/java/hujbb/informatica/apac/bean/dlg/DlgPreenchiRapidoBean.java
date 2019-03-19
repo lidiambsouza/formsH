@@ -84,7 +84,8 @@ public class DlgPreenchiRapidoBean implements Serializable {
     }
 
     //buscar cids item relacionado com o procedimento
-    private void buscaCidItem(Procedimento_sus p) throws ErroSistema {System.out.println("aqui");
+    private void buscaCidItem(Procedimento_sus p) throws ErroSistema {
+
         getCidItem().clear();
         boolean aux = true;
         for (Cid c : p.cids()) {
@@ -93,7 +94,7 @@ public class DlgPreenchiRapidoBean implements Serializable {
                 aux = false;
             }//fim if 1 
 
-            cidItem.add(new SelectItem(c.getCid(), c.getNome()));
+            cidItem.add(new SelectItem(c.getCid(), c.getCid() + " - " + c.getNome()));
         }
     }
 
@@ -112,13 +113,30 @@ public class DlgPreenchiRapidoBean implements Serializable {
     }
 
     public void buscarCid(String busca) throws ErroSistema {
+        getCidItem().clear();
         cid = new Cid();
-        if (!busca.isEmpty()) {
-            cidItem = Cid.item("WHERE (cid.`nome` LIKE '%" + busca + "%') OR (cid.`cid` LIKE '%" + busca + "%') ORDER BY cid.`nome` LIMIT 10");
-            if (!cidItem.isEmpty()) {
-                selecionarCid((String) cidItem.get(0).getValue());
-            }
-        }
+        busca = busca.trim().toUpperCase();
+        if (busca.isEmpty()) {//if 3
+            buscaCidItem(getProcedimento());//busca os cids relacionado com o procedimento principal
+        } else {//else if 3
+            if (getProcedimento().cids().isEmpty()) {//se nao tiver nenhum cid relacionado if 0
+
+                if (!busca.isEmpty()) {//if 1
+                    cidItem = Cid.item("WHERE (cid.`nome` LIKE '%" + busca + "%') OR (cid.`cid` LIKE '%" + busca + "%') ORDER BY cid.`nome` LIMIT 10");
+                    if (!cidItem.isEmpty()) {//if 2
+                        selecionarCid((String) cidItem.get(0).getValue());
+                    }//fim if 2
+                }//fim if1
+
+            } else {//else if 0
+
+                for (Cid c : getProcedimento().cids()) {
+                    if (c.getCid().toUpperCase().contains(busca) || c.getNome().toUpperCase().contains(busca)) {
+                        cidItem.add(new SelectItem(c.getCid(), c.getCid() + " - " + c.getNome()));
+                    }
+                }
+            }//fim else if0
+        }//else3
     }
 
     public void btConfirm() throws ErroSistema {
@@ -176,8 +194,8 @@ public class DlgPreenchiRapidoBean implements Serializable {
     }
 
     public Procedimento_sus getProcedimento() {
-        if(procedimento == null){
-            procedimento =  new Procedimento_sus();
+        if (procedimento == null) {
+            procedimento = new Procedimento_sus();
         }
         if (procedimento.getQtd() < 1) {
             procedimento.setQtd(1);

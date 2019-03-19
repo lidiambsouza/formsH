@@ -74,7 +74,7 @@ public class CidDAO implements CrudDAO<Cid> ,Serializable {
                     + "     tp_sexo.`sexo` AS tp_sexo_sexo\n"
                     + "FROM\n"
                     + "     `tp_sexo` tp_sexo INNER JOIN `cid` cid ON tp_sexo.`id` = cid.`tp_sexo_id` " + condicao;
-         //   System.out.println(sql);
+          //System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Cid> entidades = new ArrayList<>();

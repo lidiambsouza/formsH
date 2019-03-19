@@ -65,8 +65,8 @@ public abstract  class CrudBean <E ,D extends CrudDAO> implements  Serializable{
             entidades = getDao().buscar(condicao);
             
         } catch (ErroSistema ex) {
-            
-            F.mensagem("Erro!",ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            F.setMsgErro(ex.toString()+"CrudBean:buscar");
+            F.mensagem("Erro!",ex.toString(), FacesMessage.SEVERITY_ERROR);
         }
         
     }
