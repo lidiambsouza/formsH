@@ -2,11 +2,9 @@ package hujbb.informatica.apac.dao;
 
 import hujbb.informatica.apac.entidades.Proced_tp_compexidade;
 import hujbb.informatica.apac.entidades.Procedimento_sus;
-import hujbb.informatica.apac.entidades.Setor;
 import hujbb.informatica.apac.entidades.Tb_financiamento;
 import hujbb.informatica.apac.entidades.Tb_modalidade;
 import hujbb.informatica.apac.entidades.Tp_sexo;
-import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.FabricaDeConexoes;
 import hujbb.informatica.apac.util.execao.ErroSistema;

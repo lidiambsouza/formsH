@@ -15,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
@@ -116,27 +117,33 @@ public class DlgPreenchiRapidoBean implements Serializable {
         getCidItem().clear();
         cid = new Cid();
         busca = busca.trim().toUpperCase();
-        if (busca.isEmpty()) {//if 3
-            buscaCidItem(getProcedimento());//busca os cids relacionado com o procedimento principal
-        } else {//else if 3
-            if (getProcedimento().cids().isEmpty()) {//se nao tiver nenhum cid relacionado if 0
+        if (!procedimentos_susItem.isEmpty()) {
 
-                if (!busca.isEmpty()) {//if 1
-                    cidItem = Cid.item("WHERE (cid.`nome` LIKE '%" + busca + "%') OR (cid.`cid` LIKE '%" + busca + "%') ORDER BY cid.`nome` LIMIT 10");
-                    if (!cidItem.isEmpty()) {//if 2
-                        selecionarCid((String) cidItem.get(0).getValue());
-                    }//fim if 2
-                }//fim if1
+            if (busca.isEmpty()) {//if 3
+                buscaCidItem(getProcedimento());//busca os cids relacionado com o procedimento principal
+            } else {//else if 3
+                if (getProcedimento().cids().isEmpty()) {//se nao tiver nenhum cid relacionado if 0
 
-            } else {//else if 0
+                    if (!busca.isEmpty()) {//if 1
+                        cidItem = Cid.item("WHERE (cid.`nome` LIKE '%" + busca + "%') OR (cid.`cid` LIKE '%" + busca + "%') ORDER BY cid.`nome` LIMIT 10");
+                        if (!cidItem.isEmpty()) {//if 2
+                            selecionarCid((String) cidItem.get(0).getValue());
+                        }//fim if 2
+                    }//fim if1
 
-                for (Cid c : getProcedimento().cids()) {
-                    if (c.getCid().toUpperCase().contains(busca) || c.getNome().toUpperCase().contains(busca)) {
-                        cidItem.add(new SelectItem(c.getCid(), c.getCid() + " - " + c.getNome()));
+                } else {//else if 0
+
+                    for (Cid c : getProcedimento().cids()) {
+                        if (c.getCid().toUpperCase().contains(busca) || c.getNome().toUpperCase().contains(busca)) {
+                            cidItem.add(new SelectItem(c.getCid(), c.getCid() + " - " + c.getNome()));
+                        }
                     }
-                }
-            }//fim else if0
-        }//else3
+                }//fim else if0
+            }//else3
+        } else {
+            //F.fecharDlg(cid) == false;
+            F.mensagem("", "Primeiramente selecione o procedimento!", FacesMessage.SEVERITY_INFO);
+        }
     }
 
     public void btConfirm() throws ErroSistema {

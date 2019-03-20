@@ -18,6 +18,7 @@ import hujbb.informatica.apac.entidades.Formulario;
 import hujbb.informatica.apac.entidades.Formulario_f2;
 import hujbb.informatica.apac.entidades.Formulario_has_procedimento_sus;
 import hujbb.informatica.apac.entidades.Paciente;
+import hujbb.informatica.apac.entidades.Proc_justificativa;
 import hujbb.informatica.apac.entidades.Procedimento_sus;
 import hujbb.informatica.apac.entidades.Solicitante;
 import hujbb.informatica.apac.entidades.Status;
@@ -1439,6 +1440,9 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
                 if (getEntidade().getP1().getCodigo().equals("")) {
                     getEntidade().setP1(procedimentosTemp);
+                    String obs = getEntidade().getProc_justificativa().getObservacoes();//salva a obs em uma variavel axiliar
+                    getEntidade().setProc_justificativa(new Proc_justificativa());// zera a justificativa para garantir que o cid seja relacionado comprocedimento principal
+                    getEntidade().getProc_justificativa().setObservacoes(obs);// set a obs salva na
                     setRedblackcamp18("black");
                 } else if (getEntidade().getP2().getCodigo().equals("")) {
                     getEntidade().setP2(procedimentosTemp);
@@ -2784,7 +2788,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     //dlg preenchimento rapido
     public void abrirDlgPreenchimentoRapido() {
-        F.abrirDlgPreenchimentoRapido("dlg/dlgpreenchirapido", 800, 330, true);
+        F.abrirDlgPreenchimentoRapido("dlg/dlgpreenchirapido", 800, 335, true);
     }
 
     public void retornoDlgPreenchimenoRapido(SelectEvent event) {
