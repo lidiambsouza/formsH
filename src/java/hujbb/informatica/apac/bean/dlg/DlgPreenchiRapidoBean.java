@@ -15,7 +15,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
@@ -142,7 +141,7 @@ public class DlgPreenchiRapidoBean implements Serializable {
             }//else3
         } else {
             //F.fecharDlg(cid) == false;
-            F.mensagem("", "Primeiramente selecione o procedimento!", FacesMessage.SEVERITY_INFO);
+            F.mensagem("", "Selecione o procedimento primeiro!", FacesMessage.SEVERITY_INFO);
         }
     }
 
