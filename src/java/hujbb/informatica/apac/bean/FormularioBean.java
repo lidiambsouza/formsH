@@ -189,7 +189,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         acao = -1;
         itQuantidadeDlgPreencherRapido_qtd = 1;
         itQuantidadeDlgAddProcedimento_qtd = 1;
-        
+
         pacienteTemp = new Paciente();
         renderMsgAddProcBlank = false;
 
@@ -1440,9 +1440,9 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
                 if (getEntidade().getP1().getCodigo().equals("")) {
                     getEntidade().setP1(procedimentosTemp);
-                    String obs = getEntidade().getProc_justificativa().getObservacoes();//salva a obs em uma variavel axiliar
-                    getEntidade().setProc_justificativa(new Proc_justificativa());// zera a justificativa para garantir que o cid seja relacionado comprocedimento principal
-                    getEntidade().getProc_justificativa().setObservacoes(obs);// set a obs salva na
+                    getEntidade().getProc_justificativa().setCid_principal(new Cid());
+                    getEntidade().getProc_justificativa().setCid_secundario(new Cid());
+                    getEntidade().getProc_justificativa().setCid_causas_assoc(new Cid());
                     setRedblackcamp18("black");
                 } else if (getEntidade().getP2().getCodigo().equals("")) {
                     getEntidade().setP2(procedimentosTemp);
@@ -1808,7 +1808,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     //data de hoje mais 120 dias
     public Date gethJ() {
-        hJ = F.somarDiasData(hJ, 120);
+        hJ = F.somarDiasData(new Date(), 120);
         return hJ;
     }
 
@@ -2844,16 +2844,16 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     public void verificarLimiteCid() {
 //        if (getEntidade().getP1()) {
 
-            if (getEntidade().getProc_justificativa().getCid_principal().equals(new Cid())
-                    || getEntidade().getProc_justificativa().getCid_secundario().equals(new Cid())
-                    || getEntidade().getProc_justificativa().getCid_causas_assoc().equals(new Cid())) {//if 1
-                
-                abrirDlgBuscaCid();
+        if (getEntidade().getProc_justificativa().getCid_principal().equals(new Cid())
+                || getEntidade().getProc_justificativa().getCid_secundario().equals(new Cid())
+                || getEntidade().getProc_justificativa().getCid_causas_assoc().equals(new Cid())) {//if 1
 
-            } else {// else if 1
-                F.mensagem("", "Limite de cids atingido!", FacesMessage.SEVERITY_WARN);
-            }
-        } 
+            abrirDlgBuscaCid();
+
+        } else {// else if 1
+            F.mensagem("", "Limite de cids atingido!", FacesMessage.SEVERITY_WARN);
+        }
+    }
 //else {
 //            F.mensagem("", "Primeiramente insira o procedimento principal!", FacesMessage.SEVERITY_WARN);
 //        }

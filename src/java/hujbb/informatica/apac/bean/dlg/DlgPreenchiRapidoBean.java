@@ -87,6 +87,7 @@ public class DlgPreenchiRapidoBean implements Serializable {
     private void buscaCidItem(Procedimento_sus p) throws ErroSistema {
 
         getCidItem().clear();
+        cid =  new Cid();
         boolean aux = true;
         for (Cid c : p.cids()) {
             if (aux) {
