@@ -87,7 +87,7 @@ public class DlgPreenchiRapidoBean implements Serializable {
     private void buscaCidItem(Procedimento_sus p) throws ErroSistema {
 
         getCidItem().clear();
-        cid =  new Cid();
+        cid = new Cid();
         boolean aux = true;
         for (Cid c : p.cids()) {
             if (aux) {
@@ -106,11 +106,11 @@ public class DlgPreenchiRapidoBean implements Serializable {
             procedimento = new Procedimento_sus();
             if (i != -1) {//if1
                 procedimento = procedimentoDAO.buscaIdComp(selecao + "", F.getCompetencia().getCompetencia());
+                buscaCidItem(getProcedimento());
             }//fim if 1
         } catch (NumberFormatException e) {
             F.setMsgErro("Formulariobean:selecionarProcedimento():" + e);
         }
-
     }
 
     public void buscarCid(String busca) throws ErroSistema {
@@ -149,14 +149,8 @@ public class DlgPreenchiRapidoBean implements Serializable {
     public void btConfirm() throws ErroSistema {
         if (pacienteTemp.getData_obito() == null) {
 
-            if (pacienteTemp.equals(new Paciente()) && procedimento.equals(new Procedimento_sus()) && cid.equals(new Cid())) {
-                if (numProntuario.isEmpty() && buscaProcedimentoDlgPreencherRapido.isEmpty() && cidPrincipalDlgPreencherRapido.isEmpty()) {
-                    F.mensagem("", "Preencha o campo de busca!", FacesMessage.SEVERITY_WARN);
-                } else {
-                    F.mensagem("", "Nenhum registro encontrado!", FacesMessage.SEVERITY_WARN);
-
-                }
-
+            if (pacienteTemp.equals(new Paciente()) || procedimento.equals(new Procedimento_sus()) || cid.equals(new Cid())) {
+                F.mensagem("", "Preencha todos os campos do preenchimento rápido!", FacesMessage.SEVERITY_WARN);
             } else {
                 List<Object> l = new ArrayList<>();
                 l.add(pacienteTemp);
