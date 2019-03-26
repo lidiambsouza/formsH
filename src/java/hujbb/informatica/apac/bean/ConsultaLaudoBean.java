@@ -47,6 +47,8 @@ public class ConsultaLaudoBean implements Serializable {
     private ArrayList<SelectItem> status_item;
     private Date dtIni;
     private Date dtFim;
+    private Date dtIniSoli;
+    private Date dtFimSoli;
     private String tituloTabela;
     private String filtroSituacao;
     private String nomePaciente;
@@ -206,6 +208,20 @@ public class ConsultaLaudoBean implements Serializable {
             condicao += " AND (formulario.`data` between '" + F.dataStringBanco(dtIni) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
         }
 
+        //data solicitação
+        if (dtIniSoli != null && dtFimSoli != null) {
+            if (dtIniSoli.equals(dtFimSoli)) {
+
+                condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniSoli) + " 00:00:00' AND '" + F.dataStringBanco(dtIniSoli) + " 23:59:59') ";
+            } else {//datas diferentes
+                condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniSoli) + "' AND '" + F.dataStringBanco(dtFimSoli) + " 23:59:59') ";
+            }
+        } else if (dtIniSoli == null && dtFimSoli != null) {
+            condicao += " AND (formulario.`data_criacao` between '1900-01-01' AND '" + F.dataStringBanco(dtFimSoli) + " 23:59:59') ";
+        } else if (dtIniSoli != null && dtFimSoli == null) {
+            condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniSoli) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
+        }
+        
         //solicitente
         if (!(solicitante.isEmpty() || solicitante == null)) {
             condicao += " AND (solicitante.`nome` = '" + solicitante + "') ";
@@ -382,7 +398,7 @@ public class ConsultaLaudoBean implements Serializable {
 
     public void setSolicitante(String solicitante) {
         this.solicitante = solicitante;
-        
+
     }
 
     public String getPaciente() {
@@ -483,6 +499,38 @@ public class ConsultaLaudoBean implements Serializable {
 
     public void setForms(List<Formulario> forms) {
         this.forms = forms;
+    }
+
+    public Date getDtIniSoli() {
+        return dtIniSoli;
+    }
+
+    public void setDtIniSoli(Date dtIniSoli) {
+        selectBooleanCheckBox_periodo = false;
+        if (dtIniSoli != null && dtFimSoli != null) {
+            if (dtIniSoli.after(dtFimSoli)) {
+                dtFimSoli = dtIniSoli;
+            }
+        }
+        this.dtIniSoli = dtIniSoli;
+    }
+
+    public Date getDtFimSoli() {
+        return dtFimSoli;
+    }
+
+    public void getDtFimSoli(Date dtFimSoli) {
+        this.dtFimSoli = dtFimSoli;
+    }
+
+    public void setDtFimSoli(Date dtFimSoli) {
+        selectBooleanCheckBox_periodo = false;
+        if (dtFimSoli != null && dtIniSoli != null) {
+            if (dtFimSoli.before(dtIniSoli)) {
+                dtIniSoli = dtFimSoli;
+            }
+        }
+        this.dtFimSoli = dtFimSoli;
     }
 
     private FormularioDAO getFormDAO() {

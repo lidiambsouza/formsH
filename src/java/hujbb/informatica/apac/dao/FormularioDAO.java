@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 
@@ -38,32 +39,29 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
         entidade.setPaciente(new PacienteDAO().salvar(entidade.getPaciente()));
         entidade.setProc_justificativa(new Proc_justificativaDAO().salvar(entidade.getProc_justificativa()));
 
-        
-       //saber quantos formularios tem em um determinado ano
-       Tb_aux_id_formDAO tb_aux_id_formDAO = new Tb_aux_id_formDAO();
-       tb_aux_id_formDAO.salvar(new Tb_aux_id_form(0, F.anoDaData(entidade.getData())));
-       int i = tb_aux_id_formDAO.buscarCont("`ano` = "+F.anoDaData(entidade.getData()));
-       entidade.setId_formulario(Integer.parseInt(F.anoDaData(entidade.getData())+""+(i)));
-        
+        //saber quantos formularios tem em um determinado ano
+        Tb_aux_id_formDAO tb_aux_id_formDAO = new Tb_aux_id_formDAO();
+        tb_aux_id_formDAO.salvar(new Tb_aux_id_form(0, F.anoDaData(entidade.getData())));
+        int i = tb_aux_id_formDAO.buscarCont("`ano` = " + F.anoDaData(entidade.getData()));
+        entidade.setId_formulario(Integer.parseInt(F.anoDaData(entidade.getData()) + "" + (i)));
+
         try {
-            String sql = "INSERT INTO `formulario`( `id_formulario`, `data`, `autenticacao`,  `paciente_id_paciente`, `solicitante_id_solicitante`,`estabelecimento_de_saude_id_solicitante`,  `estabelecimento_de_saude_id_executante`, `proc_justificativa_id`, `status_id_status`, `autorizacao_id_autorizacao`) VALUES (?,?,?,?,?,?,-1,?,?,-1)";
-            
+            String sql = "INSERT INTO `formulario`( `id_formulario`, `data`, `data_criacao`, `autenticacao`,  `paciente_id_paciente`, `solicitante_id_solicitante`,`estabelecimento_de_saude_id_solicitante`,  `estabelecimento_de_saude_id_executante`, `proc_justificativa_id`, `status_id_status`, `autorizacao_id_autorizacao`) VALUES (?,?,?,?,?,?,?,-1,?,?,-1)";
+
             PreparedStatement ps = conexao.prepareStatement(sql);
-            
+
             //trata para incluir data e hora
-            
             ps.setInt(1, entidade.getId_formulario());
             ps.setTimestamp(2, new Timestamp(entidade.getData().getTime()));
-            ps.setString(3, entidade.getAutenticacao());
-            ps.setInt(4, entidade.getPaciente().getId_paciente());
-            ps.setInt(5, entidade.getSolicitante().getId_solicitante());
-            ps.setInt(6, entidade.getEstabelecimento_de_saude_solicitante().getId_estabelecimento_saude());
-            ps.setInt(7, entidade.getProc_justificativa().getId_proc_justificativa());
-            ps.setInt(8, entidade.getStatus().getId_status());
-            
-            ps.executeUpdate();
+            ps.setTimestamp(3, new Timestamp(new Date().getTime()));
+            ps.setString(4, entidade.getAutenticacao());
+            ps.setInt(5, entidade.getPaciente().getId_paciente());
+            ps.setInt(6, entidade.getSolicitante().getId_solicitante());
+            ps.setInt(7, entidade.getEstabelecimento_de_saude_solicitante().getId_estabelecimento_saude());
+            ps.setInt(8, entidade.getProc_justificativa().getId_proc_justificativa());
+            ps.setInt(9, entidade.getStatus().getId_status());
 
-            
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             new PacienteDAO().deletar(entidade.getPaciente());
@@ -79,7 +77,17 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
     public Formulario atualizar(Formulario entidade) throws ErroSistema {
         Connection conexao = FabricaDeConexoes.getConexao();
         try {
-            String sql = " UPDATE `formulario` SET `data`=?,`autenticacao`=?,`paciente_id_paciente`=?,`solicitante_id_solicitante`=?,`estabelecimento_de_saude_id_solicitante`=?,`estabelecimento_de_saude_id_executante`=?,`proc_justificativa_id`=?,`status_id_status`=?,`autorizacao_id_autorizacao`=? WHERE `id_formulario`=?";
+            String sql = " UPDATE `formulario` SET "
+                    + "`data`=?,"
+                    + "`autenticacao`=?,"
+                    + "`paciente_id_paciente`=?,"
+                    + "`solicitante_id_solicitante`=?,"
+                    + "`estabelecimento_de_saude_id_solicitante`=?,"
+                    + "`estabelecimento_de_saude_id_executante`=?,"
+                    + "`proc_justificativa_id`=?,"
+                    + "`status_id_status`=?,"
+                    + "`autorizacao_id_autorizacao`=? "
+                    + "WHERE `id_formulario`=?";
             PreparedStatement ps = conexao.prepareStatement(sql);
 
             ps.setDate(1, F.sqlDate(entidade.getData()));
@@ -106,7 +114,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
 
             //atualiza os cids
             new Proc_justificativaDAO().atualizar(entidade.getProc_justificativa());
-            
+
             //atualiza os prodedimentos
             atualizarProcedimentosForm(entidade);
 
@@ -125,7 +133,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
         if (fhpd.deletarTodosDoFomr(entidade.getId_formulario())) {//se for verdadeiro entao conseguiu excluir todos os procedimentos  if0
             fhpd.salvar(new Formulario_has_procedimento_sus(entidade, entidade.getP1(), entidade.getP1().getQtd(), 1));
             if (!entidade.getP2().getCodigo().isEmpty()) {//if2 
-                
+
                 fhpd.salvar(new Formulario_has_procedimento_sus(entidade, entidade.getP2(), entidade.getP2().getQtd(), 2));
             }//if2
             if (!entidade.getP3().getCodigo().isEmpty()) {//if3
@@ -164,6 +172,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
             String sql = "SELECT\n"
                     + "     formulario.`id_formulario` AS formulario_id_formulario,\n"
                     + "     formulario.`data` AS formulario_data,\n"
+                    + "     formulario.`data_criacao` AS formulario_data_criacao,\n"
                     + "     formulario.`autenticacao` AS formulario_autenticacao,\n"
                     + "     paciente.`id_paciente` AS paciente_id_paciente,\n"
                     + "     paciente.`num_prontuario` AS paciente_num_prontuario,\n"
@@ -267,6 +276,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                 Formulario entidade = new Formulario(
                         rs.getInt("formulario_id_formulario"),
                         rs.getDate("formulario_data"),
+                        rs.getDate("formulario_data_criacao"),
                         rs.getString("formulario_autenticacao"),
                         new Paciente(
                                 rs.getInt("paciente_id_paciente"),

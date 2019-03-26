@@ -4,7 +4,6 @@ import hujbb.informatica.apac.dao.Formulario_f2DAO;
 import hujbb.informatica.apac.dao.Formulario_has_procedimento_susDAO;
 import hujbb.informatica.apac.dao.Procedimento_susDAO;
 import hujbb.informatica.apac.util.F;
-import hujbb.informatica.apac.util.FabricaDeConexoes;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ public class Formulario implements Serializable, Comparable<Formulario> {
     //variaveis bd
     private Integer id_formulario = -1;
     private Date data = new Date();
+    private Date data_criacao = new Date();
     private String autenticacao = "";
     private Paciente paciente = new Paciente();
     private Solicitante solicitante = new Solicitante();
@@ -43,9 +43,10 @@ public class Formulario implements Serializable, Comparable<Formulario> {
     //controle tela emitidos jsf
     private boolean chekBoxEnviar;//
 
-    public Formulario(Integer id_formulario, Date data, String autenticacao, Paciente paciente, Solicitante solicitante, Estabelecimento_de_saude estabelecimento_de_saude_solicitante, Estabelecimento_de_saude estabelecimento_de_saude_executante, Proc_justificativa proc_justificativa, Status status, Autorizacao autorizacao) {
+    public Formulario(Integer id_formulario, Date data,Date data_criacao, String autenticacao, Paciente paciente, Solicitante solicitante, Estabelecimento_de_saude estabelecimento_de_saude_solicitante, Estabelecimento_de_saude estabelecimento_de_saude_executante, Proc_justificativa proc_justificativa, Status status, Autorizacao autorizacao) {
         this.id_formulario = id_formulario;
         this.data = data;
+        this.data_criacao = data_criacao;
         this.autenticacao = autenticacao;
         this.paciente = paciente;
         this.solicitante = solicitante;
@@ -227,6 +228,14 @@ public class Formulario implements Serializable, Comparable<Formulario> {
         }
         return dataString;
     }
+    public String getDataStringSoli() {
+        if (id_formulario == -1) {
+            dataString = "";
+        } else {
+            dataString = F.dataString(data_criacao);
+        }
+        return dataString;
+    }
 
     public void setDataString(String dataString) {
         this.dataString = dataString;
@@ -304,6 +313,14 @@ public class Formulario implements Serializable, Comparable<Formulario> {
         this.pag2 = pag2;
     }
 
+    public Date getData_criacao() {
+        return data_criacao;
+    }
+
+    public void setData_criacao(Date data_criacao) {
+        this.data_criacao = data_criacao;
+    }
+
     public void buscaProcedimentosForm() throws ErroSistema {
         if (this != null) {
             List<Formulario_has_procedimento_sus> procHasFormaList = new Formulario_has_procedimento_susDAO().buscar("WHERE `formulario_id_formulario` = " + this.getId_formulario());
@@ -322,6 +339,9 @@ public class Formulario implements Serializable, Comparable<Formulario> {
 
     public String dataStringBanco() {
         return F.dataStringBanco(data);
+    }
+    public String dataStringBancoSoli() {
+        return F.dataStringBanco(data_criacao);
     }
 
 //fim controle tela

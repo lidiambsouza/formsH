@@ -34,6 +34,7 @@ public class ConsultaLaudoDAO extends FormularioDAO {
             String sql = "SELECT\n"
                     + "     formulario.`id_formulario` AS formulario_id_formulario,\n"
                     + "     formulario.`data` AS formulario_data,\n"
+                    + "     formulario.`data_criacao` AS formulario_data_criacao,\n"
                     + "     paciente.`id_paciente` AS paciente_id_paciente,\n"
                     + "     paciente.`num_prontuario` AS paciente_num_prontuario,\n"
                     + "     paciente.`nome` AS paciente_nome,\n"
@@ -58,6 +59,7 @@ public class ConsultaLaudoDAO extends FormularioDAO {
                 Formulario entidade = new Formulario(
                         rs.getInt("formulario_id_formulario"),
                         rs.getDate("formulario_data"),
+                        rs.getDate("formulario_data_criacao"),
                         "",//formulario_autenticacao
                         new Paciente(
                                 rs.getInt("paciente_id_paciente"),
