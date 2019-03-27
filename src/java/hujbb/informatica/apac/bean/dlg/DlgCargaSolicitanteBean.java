@@ -33,10 +33,10 @@ public class DlgCargaSolicitanteBean implements Serializable {
         UsuarioDAO uDAO = new UsuarioDAO();
 
         Solicitante solicitanteAux;
-        carga =  carga.replace(",", ";");
+        carga = carga.replace(",", ";");
         String[] linhas = carga.split("#");
         for (String s : linhas) { //for 1
-            
+
             String[] dados = s.split(";");
             Solicitante solicitante = new Solicitante();
             solicitante.setNome(dados[0]);
@@ -46,6 +46,7 @@ public class DlgCargaSolicitanteBean implements Serializable {
             solicitante.setCns(dados[3].replace("a", ""));
             solicitante.getUsuario().getCbo().setCod(dados[4]);
             solicitante.getUsuario().getSetor().setNome(dados[5]);
+           
             try {
                 solicitante.getUsuario().getPerfil().setId_perfil(Integer.parseInt(dados[7]));
             } catch (NumberFormatException e) {
@@ -53,24 +54,19 @@ public class DlgCargaSolicitanteBean implements Serializable {
             }
             try {
                 solicitante.getUsuario().setAtivo(Integer.parseInt(dados[9]));
-
             } catch (NumberFormatException e) {
                 solicitante.getUsuario().setAtivo(0);//inativo
             }
             solicitante.getUsuario().setDt_cadastro(new Date());//inativo
             try {
-                
-                    
 
-                    solicitanteAux = getDao().salvar(solicitante);
-                    if (solicitanteAux == null) {
-                        solicitanteAux = solicitante;
-                        solicitanteAux.getUsuario().setSenha("Não Inserido");
-                    } else {
-                        solicitanteAux.getUsuario().setSenha("Inserido");
-                    }
-
-                
+                solicitanteAux = getDao().salvar(solicitante);
+                if (solicitanteAux == null) {
+                    solicitanteAux = solicitante;
+                    solicitanteAux.getUsuario().setSenha("Não Inserido");
+                } else {
+                    solicitanteAux.getUsuario().setSenha("Inserido");
+                }
 
                 solicitantes.add(solicitanteAux);
             } catch (ErroSistema e) {
