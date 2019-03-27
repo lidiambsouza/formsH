@@ -49,8 +49,11 @@
                     </p:selectOneMenu>  
                 </h:panelGrid>
 
-                <h:panelGrid  width="100%" style="text-align: center" >
-                                     
+                <h:panelGrid>
+                    <h:outputText value="  Nº Prontuário" style="padding-left: 10px" styleClass="labelDados" />
+                    <h:panelGrid style="padding-left: 10%">
+                        <p:inputText  style="width: 150px"  value="#{consultaLaudoBean.numProntuario}"/>
+                    </h:panelGrid>
                 </h:panelGrid>
 
                 <h:panelGrid>
