@@ -12,35 +12,26 @@
     #{consultaLaudoBean.buscarApac()}
 
     <p:fieldset id="fsMaster" legend="CONSULTAR APACS EMITIDAS – SOLICITANTE">
-        <p:fieldset >
+        <p:fieldset>
             <h:panelGrid width="100%" style="text-align: center" >
                 <h:outputLabel value="CRITÉRIOS DE SELEÇÃO"  styleClass="labelCabecalho"/>
             </h:panelGrid>
-            <h:panelGrid  columns="3" width="100%" >
+            <h:panelGrid  columns="3" width="70%">
 
                 <h:panelGrid  width="100%" style="text-align: center" >
-                    <h:panelGrid  width="50%" columns="2" style="text-align: center" >
-                        <h:panelGrid   >
-                            <h:outputLabel value="Período de Emissão"  styleClass="labelDados"/>
-                        </h:panelGrid>
-                        <h:panelGrid id="pgPeriodoTodos" columns="2" rendered="false" >
-                            <h:outputLabel value="Todos:"  styleClass="labelDados"/>
-                            <h:selectBooleanCheckbox  value="#{consultaLaudoBean.selectBooleanCheckBox_periodo}"  >
-                                <p:ajax update="dtIni,dtFim,pgTabelaApac" listener="#{consultaLaudoBean.buscarApac()}" />
-                            </h:selectBooleanCheckbox>
-                            <p:selectOneRadio value="true" rendered="true" />
-                        </h:panelGrid>
+                    <h:panelGrid>
+                        <h:outputLabel value="Período de Preenchimento"  styleClass="labelDados"/>
                     </h:panelGrid>
 
                     <h:panelGrid columns="2">
                         <h:panelGrid columns="5">
                             <h:outputLabel value="De"  styleClass="labelDados"/>
-                            <p:calendar size="11" id="dtIni" value="#{consultaLaudoBean.dtIni}" navigator="true" readonlyInput="true" locale="pt" >
-                                <p:ajax event="dateSelect"  update="dtFim,pgTabelaApac,pgPeriodoTodos" />
+                            <p:calendar size="11" id="dtIniCriacao" value="#{consultaLaudoBean.dtIniCriacao}" navigator="true" readonlyInput="true" locale="pt" >
+                                <p:ajax event="dateSelect"  update="dtFimCriacao,pgTabelaApac" />
                             </p:calendar>
                             <h:outputLabel value="a"  styleClass="labelDados"/>
-                            <p:calendar size="11" id="dtFim" value="#{consultaLaudoBean.dtFim}" navigator="true" readonlyInput="true" locale="pt" >
-                                <p:ajax event="dateSelect" update="dtIni,pgTabelaApac,pgPeriodoTodos" />
+                            <p:calendar size="11" id="dtFimCriacao" value="#{consultaLaudoBean.dtFimCriacao}" navigator="true" readonlyInput="true" locale="pt" >
+                                <p:ajax event="dateSelect" update="dtIniCriacao,pgTabelaApac" />
                             </p:calendar>
                         </h:panelGrid>
                     </h:panelGrid>
@@ -48,8 +39,7 @@
 
                 <h:panelGrid id="pgBuscaSolicitante">
                     <h:outputText  value="Solicitante" styleClass="labelDados" />
-                    <p:autoComplete  size="60" id="dd"   value="#{consultaLaudoBean.solicitante}" completeMethod="#{consultaLaudoBean.nomeSolicitantes}" >
-                    </p:autoComplete>
+                    <p:autoComplete  size="60" id="dd"   value="#{consultaLaudoBean.solicitante}" completeMethod="#{consultaLaudoBean.nomeSolicitantes}" />
                 </h:panelGrid>
 
                 <h:panelGrid>
@@ -58,42 +48,9 @@
                         <f:selectItems  value="#{consultaLaudoBean.status_item}"/>
                     </p:selectOneMenu>  
                 </h:panelGrid>
-            </h:panelGrid>
 
-            <h:panelGrid  columns="3" width="100%" >
                 <h:panelGrid  width="100%" style="text-align: center" >
-                    <h:panelGrid  width="50%" columns="2" style="text-align: center" >
-                        <h:panelGrid   >
-                            <h:outputLabel value="Período de Solicitação"  styleClass="labelDados"/>
-                        </h:panelGrid>
-                        <h:panelGrid id="pgPeriodoTodosSoli" columns="2" rendered="false" >
-                            <h:outputLabel value="Todos:"  styleClass="labelDados"/>
-                            <h:selectBooleanCheckbox  value="#{consultaLaudoBean.selectBooleanCheckBox_periodo}"  >
-                                <p:ajax update="dtIniSoli,dtFimSoli,pgTabelaApac" listener="#{consultaLaudoBean.buscarApac()}" />
-                            </h:selectBooleanCheckbox>
-                            <p:selectOneRadio value="true" rendered="true" />
-                        </h:panelGrid>
-                    </h:panelGrid>
-
-                    <h:panelGrid columns="2">
-                        <h:panelGrid columns="5">
-                            <h:outputLabel value="De"  styleClass="labelDados"/>
-                            <p:calendar size="11" id="dtIniSoli" value="#{consultaLaudoBean.dtIniSoli}" navigator="true" readonlyInput="true" locale="pt" >
-                                <p:ajax event="dateSelect"  update="dtFimSoli,pgTabelaApac,pgPeriodoTodosSoli" />
-                            </p:calendar>
-                            <h:outputLabel value="a"  styleClass="labelDados"/>
-                            <p:calendar size="11" id="dtFimSoli" value="#{consultaLaudoBean.dtFimSoli}" navigator="true" readonlyInput="true" locale="pt" >
-                                <p:ajax event="dateSelect" update="dtIniSoli,pgTabelaApac,pgPeriodoTodosSoli" />
-                            </p:calendar>
-                        </h:panelGrid>
-                    </h:panelGrid>
-                </h:panelGrid>
-
-                <h:panelGrid>
-                    <h:outputText value="  Nº Prontuário" style="padding-left: 10px" styleClass="labelDados" />
-                    <h:panelGrid style="padding-left: 10%">
-                        <p:inputText  style="width: 150px"  value="#{consultaLaudoBean.numProntuario}"/>
-                    </h:panelGrid>
+                                     
                 </h:panelGrid>
 
                 <h:panelGrid>
@@ -108,6 +65,7 @@
                 </h:panelGrid>
 
             </h:panelGrid>
+
             <br/>
             <h:panelGrid>
                 <p:commandButton value="Buscar" action="#{consultaLaudoBean.buscarApac()}" update="fsTabelaApac" />
@@ -151,16 +109,18 @@
                         <h:outputText value="#{consultaLaudoBean.mascaraCodProdedimento(formulario.p1.codigo)} #{formulario.p1.nome}"/>    
                     </p:column>
 
-                    <p:column headerText="Data de Emissão" style="text-align: center" width="80" sortBy="#{formulario.dataStringBanco()}" >
+                    <p:column headerText="Data de Preenchimento" style="text-align: center" width="80" sortBy="#{formulario.data_criacaoString()}" >
+                        <h:outputText id="oplDtCriacao" value="#{formulario.data_criacaoString()}"/>    
+                    </p:column>
+
+                    <p:column headerText="Data da Solicitação" style="text-align: center" width="80" sortBy="#{formulario.dataStringBanco()}" >
                         <h:outputText id="oplDtEmissao" value="#{formulario.dataString}"/>    
                     </p:column>
 
-                    <p:column headerText="Data da Solicitação" style="text-align: center" width="80" sortBy="#{formulario.dataStringBancoSoli()}" >
-                        <h:outputText id="oplDtSoli" value="#{formulario.dataStringSoli}"/>    
-                    </p:column>
                     <p:column headerText="Situação" style="text-align: center" width="55" sortBy="#{formulario.status.status.replace('STATUS:','') }">
                         <h:outputText id="optStatus" value="#{formulario.status.status.replace('STATUS:','') }"  />    
                     </p:column>
+
                 </p:dataTable>
             </h:panelGrid>
         </p:fieldset>

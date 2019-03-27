@@ -9,7 +9,6 @@ import hujbb.informatica.apac.entidades.Paciente;
 import hujbb.informatica.apac.entidades.Status;
 import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.util.F;
-import hujbb.informatica.apac.util.FabricaDeConexoes;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import hujbb.informatica.apac.util.relatorio.Relatorios;
 import java.io.Serializable;
@@ -20,12 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
 @ManagedBean
-@SessionScoped
-//@ViewScoped
+@ViewScoped
 public class ConsultaLaudoBean implements Serializable {
 
     //usuario
@@ -47,8 +45,8 @@ public class ConsultaLaudoBean implements Serializable {
     private ArrayList<SelectItem> status_item;
     private Date dtIni;
     private Date dtFim;
-    private Date dtIniSoli;
-    private Date dtFimSoli;
+    private Date dtIniCriacao;
+    private Date dtFimCriacao;
     private String tituloTabela;
     private String filtroSituacao;
     private String nomePaciente;
@@ -68,6 +66,8 @@ public class ConsultaLaudoBean implements Serializable {
         selectBooleanCheckBox_periodo = true;
         dtIni = new Date();
         dtFim = new Date();
+        dtIniCriacao = new Date();
+        dtFimCriacao = new Date();
         filtroSituacao = "";
         solicitante = "";
         paciente = "";
@@ -194,6 +194,7 @@ public class ConsultaLaudoBean implements Serializable {
             }
         }
 
+        /*
         //data
         if (dtIni != null && dtFim != null) {
             if (dtIni.equals(dtFim)) {
@@ -206,20 +207,20 @@ public class ConsultaLaudoBean implements Serializable {
             condicao += " AND (formulario.`data` between '1900-01-01' AND '" + F.dataStringBanco(dtFim) + " 23:59:59') ";
         } else if (dtIni != null && dtFim == null) {
             condicao += " AND (formulario.`data` between '" + F.dataStringBanco(dtIni) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
-        }
+        }*/
 
         //data solicitação
-        if (dtIniSoli != null && dtFimSoli != null) {
-            if (dtIniSoli.equals(dtFimSoli)) {
+        if (dtIniCriacao != null && dtFimCriacao != null) {
+            if (dtIniCriacao.equals(dtFimCriacao)) {
 
-                condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniSoli) + " 00:00:00' AND '" + F.dataStringBanco(dtIniSoli) + " 23:59:59') ";
+                condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniCriacao) + " 00:00:00' AND '" + F.dataStringBanco(dtIniCriacao) + " 23:59:59') ";
             } else {//datas diferentes
-                condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniSoli) + "' AND '" + F.dataStringBanco(dtFimSoli) + " 23:59:59') ";
+                condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniCriacao) + "' AND '" + F.dataStringBanco(dtFimCriacao) + " 23:59:59') ";
             }
-        } else if (dtIniSoli == null && dtFimSoli != null) {
-            condicao += " AND (formulario.`data_criacao` between '1900-01-01' AND '" + F.dataStringBanco(dtFimSoli) + " 23:59:59') ";
-        } else if (dtIniSoli != null && dtFimSoli == null) {
-            condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniSoli) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
+        } else if (dtIniCriacao == null && dtFimCriacao != null) {
+            condicao += " AND (formulario.`data_criacao` between '1900-01-01' AND '" + F.dataStringBanco(dtFimCriacao) + " 23:59:59') ";
+        } else if (dtIniCriacao != null && dtFimCriacao == null) {
+            condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniCriacao) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
         }
         
         //solicitente
@@ -240,7 +241,7 @@ public class ConsultaLaudoBean implements Serializable {
         if (!(cartSus.isEmpty() || cartSus == null)) {
             condicao += " AND (paciente.`cns` = '" + cartSus + "') ";
         }
-
+        
         setForms(new ConsultaLaudoDAO().buscarLaudos(condicao));
         //adiciona os procedimentos dos laudos
         for (int i = 0; i < getForms().size(); i++) {
@@ -501,36 +502,36 @@ public class ConsultaLaudoBean implements Serializable {
         this.forms = forms;
     }
 
-    public Date getDtIniSoli() {
-        return dtIniSoli;
+    public Date getDtIniCriacao() {
+        return dtIniCriacao;
     }
 
-    public void setDtIniSoli(Date dtIniSoli) {
+    public void setDtIniCriacao(Date dtIniCriacao) {
         selectBooleanCheckBox_periodo = false;
-        if (dtIniSoli != null && dtFimSoli != null) {
-            if (dtIniSoli.after(dtFimSoli)) {
-                dtFimSoli = dtIniSoli;
+        if (dtIniCriacao != null && dtFimCriacao != null) {
+            if (dtIniCriacao.after(dtFimCriacao)) {
+                dtFimCriacao = dtIniCriacao;
             }
         }
-        this.dtIniSoli = dtIniSoli;
+        this.dtIniCriacao = dtIniCriacao;
     }
 
-    public Date getDtFimSoli() {
-        return dtFimSoli;
+    public Date getDtFimCriacao() {
+        return dtFimCriacao;
     }
 
-    public void getDtFimSoli(Date dtFimSoli) {
-        this.dtFimSoli = dtFimSoli;
+    public void getDtFimCriacao(Date dtFimCriacao) {
+        this.dtFimCriacao = dtFimCriacao;
     }
 
-    public void setDtFimSoli(Date dtFimSoli) {
+    public void setDtFimCriacao(Date dtFimCriacao) {
         selectBooleanCheckBox_periodo = false;
-        if (dtFimSoli != null && dtIniSoli != null) {
-            if (dtFimSoli.before(dtIniSoli)) {
-                dtIniSoli = dtFimSoli;
+        if (dtFimCriacao != null && dtIniCriacao != null) {
+            if (dtFimCriacao.before(dtIniCriacao)) {
+                dtIniCriacao = dtFimCriacao;
             }
         }
-        this.dtFimSoli = dtFimSoli;
+        this.dtFimCriacao = dtFimCriacao;
     }
 
     private FormularioDAO getFormDAO() {

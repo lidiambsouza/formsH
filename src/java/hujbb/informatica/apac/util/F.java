@@ -91,7 +91,6 @@ public class F {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             return df.format(data);
         }
-
     }
 
     public static Integer parseInt(String s) {

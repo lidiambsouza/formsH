@@ -340,8 +340,9 @@ public class Formulario implements Serializable, Comparable<Formulario> {
     public String dataStringBanco() {
         return F.dataStringBanco(data);
     }
-    public String dataStringBancoSoli() {
-        return F.dataStringBanco(data_criacao);
+    
+    public String data_criacaoString() {
+        return F.dataString(data_criacao);
     }
 
 //fim controle tela

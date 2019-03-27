@@ -49,7 +49,7 @@ public class ConsultaLaudoDAO extends FormularioDAO {
                     + "     INNER JOIN `solicitante` solicitante ON formulario.`solicitante_id_solicitante` = solicitante.`id_solicitante`\n"
                     + "     INNER JOIN `status` status ON formulario.`status_id_status` = status.`id_status` " + condicao;
 
-            // System.out.println(sql);
+            System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Formulario> entidades = new ArrayList<>();
