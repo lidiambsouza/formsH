@@ -26,15 +26,15 @@ public class FabricaDeConexoes {
 //    private static final String USUARIO = "root";
 //    private static final String SENHA = "";
     
-//    private static final String URL_CONEXAO = "jdbc:mysql://haley.hujbb.br/db_formsus_t";
-//    private static final String USUARIO = "formsus";
-//    private static final String SENHA = "$fs2018&*";
+    private static final String URL_CONEXAO = "jdbc:mysql://haley.hujbb.br/db_formsus_t";
+    private static final String USUARIO = "formsus";
+    private static final String SENHA = "$fs2018&*";
     
     
 
-    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t";
-    private static final String USUARIO = "gestaoti";
-    private static final String SENHA = "@hu@2018";
+//    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t";
+//    private static final String USUARIO = "gestaoti";
+//    private static final String SENHA = "@hu@2018";
     
     
 //    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t3";
