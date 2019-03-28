@@ -36,43 +36,44 @@ public class DlgCargaSolicitanteBean implements Serializable {
         carga = carga.replace(",", ";");
         String[] linhas = carga.split("#");
         for (String s : linhas) { //for 1
+            if (!s.trim().isEmpty()) {
+                String[] dados = s.split(";");
 
-            String[] dados = s.split(";");
-            Solicitante solicitante = new Solicitante();
-            solicitante.setNome(dados[0]);
-            solicitante.getUsuario().setNome(dados[0]);
-            solicitante.getUsuario().setLogin(dados[1]);
-            solicitante.setCpf(dados[2].replace(".", "").replace("-", ""));
-            solicitante.setCns(dados[3].replace("a", ""));
-            solicitante.getUsuario().getCbo().setCod(dados[4]);
-            solicitante.getUsuario().getSetor().setNome(dados[5]);
-           
-            try {
-                solicitante.getUsuario().getPerfil().setId_perfil(Integer.parseInt(dados[7]));
-            } catch (NumberFormatException e) {
-                solicitante.getUsuario().getPerfil().setId_perfil(2);//adm financeiro
-            }
-            try {
-                solicitante.getUsuario().setAtivo(Integer.parseInt(dados[9]));
-            } catch (NumberFormatException e) {
-                solicitante.getUsuario().setAtivo(0);//inativo
-            }
-            solicitante.getUsuario().setDt_cadastro(new Date());//inativo
-            try {
+                Solicitante solicitante = new Solicitante();
+                solicitante.setNome(dados[0]);
+                solicitante.getUsuario().setNome(dados[0]);
+                solicitante.getUsuario().setLogin(dados[1]);
+                solicitante.setCpf(dados[2].replace(".", "").replace("-", ""));
+                solicitante.setCns(dados[3].replace("a", ""));
+                solicitante.getUsuario().getCbo().setCod(dados[4]);
+                solicitante.getUsuario().getSetor().setNome(dados[5]);
 
-                solicitanteAux = getDao().salvar(solicitante);
-                if (solicitanteAux == null) {
-                    solicitanteAux = solicitante;
-                    solicitanteAux.getUsuario().setSenha("Não Inserido");
-                } else {
-                    solicitanteAux.getUsuario().setSenha("Inserido");
+                try {
+                    solicitante.getUsuario().getPerfil().setId_perfil(Integer.parseInt(dados[6]));
+                } catch (NumberFormatException e) {
+                    solicitante.getUsuario().getPerfil().setId_perfil(2);//adm financeiro
                 }
+                try {
+                    solicitante.getUsuario().setAtivo(Integer.parseInt(dados[7]));
+                } catch (NumberFormatException e) {
+                    solicitante.getUsuario().setAtivo(0);//inativo
+                }
+                solicitante.getUsuario().setDt_cadastro(new Date());
+                try {
 
-                solicitantes.add(solicitanteAux);
-            } catch (ErroSistema e) {
-                F.setMsgErro(e.toString() + "solicitantebean:cargasolicitante()");
-            }
+                    solicitanteAux = getDao().salvar(solicitante);
+                    if (solicitanteAux == null) {
+                        solicitanteAux = solicitante;
+                        solicitanteAux.getUsuario().setSenha("Não Inserido");
+                    } else {
+                        solicitanteAux.getUsuario().setSenha("Inserido");
+                    }
 
+                    solicitantes.add(solicitanteAux);
+                } catch (ErroSistema e) {
+                    F.setMsgErro(e.toString() + "solicitantebean:cargasolicitante()");
+                }
+            }//fim if
         } // fim for1
 //FabricaDeConexoes.fecharConecxao();
     }

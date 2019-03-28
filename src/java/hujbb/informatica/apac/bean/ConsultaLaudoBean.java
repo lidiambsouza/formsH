@@ -56,7 +56,7 @@ public class ConsultaLaudoBean implements Serializable {
     private String paciente;
     private Usuario usuario;
 
-    Integer idSolicitanteTemp;
+    private Integer idSolicitanteTemp;
 
     private FormularioDAO formDAO;
 

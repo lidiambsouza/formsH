@@ -106,7 +106,15 @@
     </p:fieldset> 
 
     <p:dialog widgetVar="dlgCargaSolicitante" position="topo" width="700" height="500"  header="Carga de Usuários"    draggable="true" closable="true" closeOnEscape="false" resizable="false" minimizable="false">
-        <p:fieldset id="fsDataTable">
+       
+        <p:fieldset>
+            <h:panelGrid>
+                <h:outputLabel value="Inserir os usuários" styleClass="labelDados"/>
+                <p:inputTextarea id="itaCargaSolicitantes" value="#{dlgCargaSolicitanteBean.vitaDlgCarga}" style="font-size: 12px;width: 630px;height: 200px" /> 
+            </h:panelGrid>
+        </p:fieldset>
+        
+         <p:fieldset id="fsDataTable">
             <h:panelGrid>
                 <p:dataTable id="dtSolicitantes" value="#{dlgCargaSolicitanteBean.solicitantes}" style="width: 640px" var="solicitante" rows="10" paginator="true" emptyMessage="Nenhum registro inserido!">
                     <p:column headerText="Solicitantes" width="120" sortBy="#{solicitante.nome}">
@@ -122,14 +130,11 @@
             </h:panelGrid>
         </p:fieldset>
 
-        <p:fieldset>
-            <h:panelGrid>
-                <h:outputLabel value="Inserir os usuários" styleClass="labelDados"/>
-                <p:inputTextarea id="itaCargaSolicitantes" value="#{dlgCargaSolicitanteBean.vitaDlgCarga}" style="font-size: 12px;width: 630px;height: 200px" /> 
-            </h:panelGrid>
-        </p:fieldset>
-
-        <p:commandButton value="Processar" action="#{dlgCargaSolicitanteBean.cargaSolicitante(dlgCargaSolicitanteBean.vitaDlgCarga)}" update="fsDataTable" />
+        <h:panelGroup>
+            <p:commandButton value="Processar" action="#{dlgCargaSolicitanteBean.cargaSolicitante(dlgCargaSolicitanteBean.vitaDlgCarga)}" update="fsDataTable"/>
+            <p:spacer width="30"/>
+            <p:outputLabel value="0-nome 1-login 2-cpf 3-cns  4-cbo (cod) 5-setor 6-perfil (id perfil) 7-ativo (id)#" style="color: blue"/>
+        </h:panelGroup>
         <p:ajax event="close" listener="#{dlgCargaSolicitanteBean.limpDlgCargaSolicitante()}" update="dtSolicitantes,itaCargaSolicitantes" />
     </p:dialog>
 
