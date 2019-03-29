@@ -20,10 +20,9 @@
                     <h:panelGrid>
                         <h:outputLabel value="Login"/>
                         <p:inputText value="#{solicitanteBean.solicitanteCad.usuario.login}" styleClass="inputTxtLaguraPadrao" >
-                            <p:ajax event="blur" listener="#{solicitanteBean.verificarLoginAdEbserh()}" update="fsDadosPessoais"/>
                         </p:inputText> 
                     </h:panelGrid>
-                    <!--<p:commandLink value="Verificar" action="{solicitanteBean.verificarLoginAdEbserh()}" style="color: blue" update="fsCadastroUsuario" />-->
+                    <p:commandLink value="Verificar" action="#{solicitanteBean.verificarLoginAdEbserh()}" style="color: blue" update="fsDadosPessoais" />
                 </h:panelGrid>
 
                 <h:panelGrid>
@@ -106,15 +105,15 @@
     </p:fieldset> 
 
     <p:dialog widgetVar="dlgCargaSolicitante" position="topo" width="700" height="500"  header="Carga de Usuários"    draggable="true" closable="true" closeOnEscape="false" resizable="false" minimizable="false">
-       
+
         <p:fieldset>
             <h:panelGrid>
                 <h:outputLabel value="Inserir os usuários" styleClass="labelDados"/>
                 <p:inputTextarea id="itaCargaSolicitantes" value="#{dlgCargaSolicitanteBean.vitaDlgCarga}" style="font-size: 12px;width: 630px;height: 200px" /> 
             </h:panelGrid>
         </p:fieldset>
-        
-         <p:fieldset id="fsDataTable">
+
+        <p:fieldset id="fsDataTable">
             <h:panelGrid>
                 <p:dataTable id="dtSolicitantes" value="#{dlgCargaSolicitanteBean.solicitantes}" style="width: 640px" var="solicitante" rows="10" paginator="true" emptyMessage="Nenhum registro inserido!">
                     <p:column headerText="Solicitantes" width="120" sortBy="#{solicitante.nome}">
