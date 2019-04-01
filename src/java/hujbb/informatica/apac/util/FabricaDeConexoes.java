@@ -26,9 +26,9 @@ public class FabricaDeConexoes {
 //    private static final String USUARIO = "root";
 //    private static final String SENHA = "";
     
-//    private static final String URL_CONEXAO = "jdbc:mysql://haley.hujbb.br/db_formsus_p";
-//    private static final String USUARIO = "formsus";
-//    private static final String SENHA = "$fs2018&*";
+    private static final String URL_CONEXAO = "jdbc:mysql://haley.hujbb.br/db_formsus_p";
+    private static final String USUARIO = "formsus";
+    private static final String SENHA = "$fs2018&*";
     
     
 
@@ -37,9 +37,9 @@ public class FabricaDeConexoes {
 //    private static final String SENHA = "@hu@2018";
 //    
     
-    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t";
-    private static final String USUARIO = "gestaoti";
-    private static final String SENHA = "@hu@2018";
+//    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.110/db_formsus_t2";
+//    private static final String USUARIO = "gestaoti";
+//    private static final String SENHA = "@hu@2018";
 
     
 //    private static final String URL_CONEXAO = "jdbc:mysql://10.206.3.100/db_formsus_t";
@@ -59,7 +59,11 @@ public class FabricaDeConexoes {
        
         if (conexao == null) {
             try {
+              //  System.out.println("1111111111111111");
                 Class.forName("com.mysql.jdbc.Driver");
+               // System.out.println(URL_CONEXAO);
+                //System.out.println(USUARIO);
+                //System.out.println(SENHA);
                 conexao = DriverManager.getConnection(URL_CONEXAO, USUARIO, SENHA);
                 System.out.println("ABRIR**********");
             } catch (ClassNotFoundException ex) {
@@ -68,7 +72,7 @@ public class FabricaDeConexoes {
 
             } catch (SQLException ex) {
                 F.mensagem("", "Não foi possivel conectar ao banco de dados !", FacesMessage.SEVERITY_ERROR);
-               
+               // System.out.println(ex.toString()+":xxxxxxxxxxxxxxxxxx");
                 throw new ErroSistema("Não foi possivel conectar ao banco de dados", ex);
             }
         }else {//if1
@@ -78,6 +82,7 @@ public class FabricaDeConexoes {
                     conexao =  getConexao();
                 }
             } catch (SQLException ex) {
+              //  System.out.println();
                 F.setMsgErro(ex.toString()+":fabrica de conexoes getConexao()");
             }
             
