@@ -59,10 +59,7 @@ public class FabricaDeConexoes {
        
         if (conexao == null) {
             try {
-              
-                
                 Class.forName("org.mariadb.jdbc.Driver");
-               
                 conexao = DriverManager.getConnection(URL_CONEXAO, USUARIO, SENHA);
                 System.out.println("ABRIR**********");
             } catch (ClassNotFoundException ex) {

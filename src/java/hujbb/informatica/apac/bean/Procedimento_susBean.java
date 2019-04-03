@@ -211,12 +211,8 @@ public class Procedimento_susBean extends CrudBean<Procedimento_sus, Procediment
     }
 
     public void btBuscarProcedimentoDlg(String busca) throws ErroSistema {
-       
-
         setEntidade(null);
-
         getEntidades().clear();
-
         if (busca.length() > 1) {
 
             String condicao = "";

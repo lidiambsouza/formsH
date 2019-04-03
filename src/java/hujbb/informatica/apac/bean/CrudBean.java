@@ -59,14 +59,13 @@ public abstract  class CrudBean <E ,D extends CrudDAO> implements  Serializable{
     public void buscar(String condicao){
         if(!isBusca()){
             mudarParaBuscar();
-            
         }
         try {
             entidades = getDao().buscar(condicao);
             
         } catch (ErroSistema ex) {
             F.setMsgErro(ex.toString()+"CrudBean:buscar");
-            F.mensagem("Erro!",ex.toString(), FacesMessage.SEVERITY_ERROR);
+            F.mensagem("Erro! ","CrudBean:Buscar()"+ex.toString(), FacesMessage.SEVERITY_ERROR);
         }
         
     }
