@@ -404,7 +404,7 @@
                         </h:panelGrid>
                         <h:panelGrid id="pgDataSolicitante">
                             <h:outputLabel value="42 - Data da solicitação" style="width: 60px" />
-                            <p:calendar size="11" value="#{formularioBean.entidade.data}" readonlyInput="true" maxdate="#{formularioBean.gethJ()}" locale="pt" style="color: black" rendered="#{!(formularioBean.somenteLeituraPag2)}" />
+                            <p:calendar size="11" value="#{formularioBean.entidade.data}" readonlyInput="true" maxdate="#{formularioBean.gethJtil120()}" locale="pt" style="color: black" rendered="#{!(formularioBean.somenteLeituraPag2)}" />
                             <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.data) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                         </h:panelGrid>
                         <h:panelGrid>

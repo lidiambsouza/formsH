@@ -114,7 +114,7 @@ public class UsuarioDAO implements Serializable, CrudDAO<Usuario> {
                     + "     INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor`\n"
                     + "     INNER JOIN `cbo` cbo ON usuario.`cbo_id` = cbo.`id` " + condicao;
 
-           
+            //System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Usuario> entidades = new ArrayList<>();

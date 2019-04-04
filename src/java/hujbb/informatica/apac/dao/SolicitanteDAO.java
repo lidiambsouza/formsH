@@ -124,6 +124,7 @@ public class SolicitanteDAO implements Serializable, CrudDAO<Solicitante> {
                     + "     INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor`\n"
                     + "     INNER JOIN `cbo` cbo ON usuario.`cbo_id` = cbo.`id` " + condicao;
             //  F.setMsgErro(sql);
+           // System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Solicitante> entidades = new ArrayList<>();

@@ -403,7 +403,7 @@
 
                             <h:outputLabel value="42 - Data da solicitação" style="width: 60px" />
 
-                            <p:calendar id="caDtForm" size="11" value="#{formularioBean.entidade.data}"  maxdate="#{formularioBean.gethJ()}" locale="pt" disabled="#{formularioBean.somenteLeituraPag2}" >
+                            <p:calendar id="caDtForm" size="11" value="#{formularioBean.entidade.data}"  maxdate="#{formularioBean.gethJtil120()}" locale="pt" disabled="#{formularioBean.somenteLeituraPag2}" >
                                 <p:ajax event="dateSelect" update="pgcaDtForm" />
                             </p:calendar> 
                         </h:panelGrid>

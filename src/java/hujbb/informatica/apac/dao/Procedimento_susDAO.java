@@ -124,7 +124,7 @@ public class Procedimento_susDAO implements CrudDAO<Procedimento_sus>, Serializa
                     + "     INNER JOIN `proced_financiamento` proced_financiamento ON procedimento_sus.`proced_financiamento_id` = proced_financiamento.`id`\n"
                     + "     INNER JOIN `tb_modalidade` tb_modalidade ON procedimento_sus.`tb_modalidade_id` = tb_modalidade.`id` " + condicao;
             PreparedStatement ps = conexao.prepareStatement(sql);
-            System.out.println(sql);
+            //System.out.println(sql);
             ResultSet rs = ps.executeQuery();
             List<Procedimento_sus> entidades = new ArrayList<>();
             while (rs.next()) {

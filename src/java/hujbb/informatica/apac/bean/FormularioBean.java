@@ -143,6 +143,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     private Boolean IsPreenchimentoRapido;
     private Date hJ = new Date(); /// data de hoje
+    private Date hJtil120 = new Date();
 
     @PostConstruct
     private void init() {
@@ -627,10 +628,10 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     private boolean verificarCamposOnco() {
 
-        if ((getEntidade().getData().after(new Date()))) {
-            F.mensagem("", "A data da solicitação não deve ser posterior a data de hoje!", FacesMessage.SEVERITY_WARN);
-            return false;
-        }
+//        if ((getEntidade().getData().after(new Date()))) {
+//            F.mensagem("", "A data da solicitação não deve ser posterior a data de hoje!", FacesMessage.SEVERITY_WARN);
+//            return false;
+//        }
 
         if (getEntidade().getPag2().getLocal_tumor_primario().isEmpty()) {
             setRedblackcamp56("red");
@@ -1808,8 +1809,12 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     //data de hoje mais 120 dias
     public Date gethJ() {
-        hJ = F.somarDiasData(new Date(), 120);
+        //hJ = F.somarDiasData(new Date(), 120);
         return hJ;
+    }
+    public Date gethJtil120() {
+        hJtil120 = F.somarDiasData(new Date(), 120);
+        return hJtil120;
     }
 
     public void sethJ(Date hJ) {
