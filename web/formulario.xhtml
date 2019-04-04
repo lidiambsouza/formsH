@@ -985,7 +985,7 @@
                                         <p:calendar  id="cDtFim2" value="#{formularioBean.entidade.pag2.dt_fim_area_irrad2_radio}" locale="pt" size="11" rendered="#{!formularioBean.somenteLeituraPag2}" >
                                             <p:ajax event="dateSelect" listener="#{formularioBean.setRedblackcamp83('black')}" update="olDtFimAreaIrrad, pg83DataFim" />
                                         </p:calendar>
-                                        <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_ini_area_irrad2_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
+                                        <h:outputLabel   value="#{formularioBean.dataEdit(formularioBean.entidade.pag2.dt_fim_area_irrad2_radio) }"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                                         <h:panelGrid width="100%" style="text-align: right">
                                             <p:commandButton id="btLimparCid2RadioPag2" icon="ui-icon-trash" title="Remover"  action="#{formularioBean.limparCampo79(2)}" update="pg79-cid-2,itDesc2,itNci2,cDtIni2,cDtFim2" style="color: red" rendered="#{!formularioBean.somenteLeituraPag2}"/>
                                             <!--<p:commandLink id="btLimparCid2RadioPag2" value="Limpar " action="{formularioBean.limparCampo79(2)}"  update="pg79a83" style="color: blue"  rendered="{!formularioBean.somenteLeituraPag2}"/>-->
