@@ -483,7 +483,7 @@
                                 <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.local_tumor_primario.isEmpty()}"  />
                             </h:panelGrid>
                             <h:panelGrid width="100%" columns="2">
-                                <p:inputText value="#{formularioBean.entidade.pag2.local_tumor_primario}" maxlength="190" style="width: 100%" rendered="#{!formularioBean.somenteLeituraPag2}" onkeypress="if (event.keyCode === 13) {
+                                <p:inputText value="#{formularioBean.entidade.pag2.local_tumor_primario}" maxlength="170" style="width: 100%" rendered="#{!formularioBean.somenteLeituraPag2}" onkeypress="if (event.keyCode === 13) {
                                             ondblclick();
                                             return false;
                                         }">
@@ -525,7 +525,7 @@
                                 <h:outputLabel value="59 - Localização de metástase(s)"  />
 
                             </h:panelGrid>
-                            <p:inputText value="#{formularioBean.entidade.pag2.loc_meta}" maxlength="150" style="width: 75%" rendered="#{!formularioBean.somenteLeituraPag2}" />
+                            <p:inputText value="#{formularioBean.entidade.pag2.loc_meta}" maxlength="125" style="width: 75%" rendered="#{!formularioBean.somenteLeituraPag2}" />
                             <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                             <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                             <h:outputLabel   value="#{formularioBean.entidade.pag2.loc_meta}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
@@ -595,7 +595,7 @@
                                 <h:outputLabel value="*" styleClass="labelAsterisco" rendered="#{formularioBean.entidade.pag2.diag_cito_isto.isEmpty()}"  />
                             </h:panelGrid>
                             <h:panelGrid width="100%" columns="2">
-                                <p:inputText value="#{formularioBean.entidade.pag2.diag_cito_isto}" maxlength="150" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                <p:inputText value="#{formularioBean.entidade.pag2.diag_cito_isto}" maxlength="138" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
                                     <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp63('black')}" update="opl63"/>
                                 </p:inputText>
                                 <h:outputLabel   value="#{formularioBean.entidade.pag2.diag_cito_isto}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
@@ -951,12 +951,12 @@
                                             <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                                             <h:outputLabel value="#{formularioBean.entidade.pag2.cid_topografico1_radio}" styleClass="labelDados"/>
                                         </h:panelGrid>
-                                        <p:inputText id="itDesc1" value="#{formularioBean.entidade.pag2.area_irradi_descricao1_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                        <p:inputText id="itDesc1" value="#{formularioBean.entidade.pag2.area_irradi_descricao1_radio}" maxlength="140" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
                                             <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp80('black')}" update="pg80Descricao"/>
                                         </p:inputText>
                                         <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
                                         <h:outputLabel value="#{formularioBean.entidade.pag2.area_irradi_descricao1_radio}"  styleClass="labelDados" rendered="#{formularioBean.somenteLeituraPag2}" />
-                                        <p:inputText id="itNci1" value="#{formularioBean.entidade.pag2.ncampo_incer1_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                        <p:inputText id="itNci1" value="#{formularioBean.entidade.pag2.ncampo_incer1_radio}" maxlength="20" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
                                             <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp81('black')}" update="pg81NcampoInsercoes"/>
                                         </p:inputText>
                                         <h:outputLabel styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
@@ -982,11 +982,11 @@
                                             </p:commandButton>
                                             <h:outputLabel value="#{formularioBean.entidade.pag2.cid_topografico2_radio}" styleClass="labelDados"/>
                                         </h:panelGrid>
-                                        <p:inputText id="itDesc2" value="#{formularioBean.entidade.pag2.area_irradi_descricao2_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
+                                        <p:inputText id="itDesc2" value="#{formularioBean.entidade.pag2.area_irradi_descricao2_radio}" maxlength="140" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}" >
                                             <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp80('black')}" update="pg80Descricao"/>
                                         </p:inputText>
                                         <h:outputLabel value="#{formularioBean.entidade.pag2.area_irradi_descricao2_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
-                                        <p:inputText id="itNci2" value="#{formularioBean.entidade.pag2.ncampo_incer2_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:inputText id="itNci2" value="#{formularioBean.entidade.pag2.ncampo_incer2_radio}" maxlength="20" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
                                             <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp81('black')}" update="pg81NcampoInsercoes"/>
                                         </p:inputText>
                                         <h:outputLabel value="#{formularioBean.entidade.pag2.ncampo_incer2_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
@@ -1009,11 +1009,11 @@
                                             </p:commandButton>
                                             <h:outputLabel value="#{formularioBean.entidade.pag2.cid_topografico3_radio}" styleClass="labelDados" />
                                         </h:panelGrid>
-                                        <p:inputText id="itDesc3" value="#{formularioBean.entidade.pag2.area_irradi_descricao3_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:inputText id="itDesc3" value="#{formularioBean.entidade.pag2.area_irradi_descricao3_radio}" maxlength="140" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
                                             <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp80('black')}" update="pg80Descricao"/>
                                         </p:inputText>
                                         <h:outputLabel value="#{formularioBean.entidade.pag2.area_irradi_descricao3_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
-                                        <p:inputText id="itNci3" value="#{formularioBean.entidade.pag2.ncampo_incer3_radio}" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
+                                        <p:inputText id="itNci3" value="#{formularioBean.entidade.pag2.ncampo_incer3_radio}" maxlength="20" style="width: 90%" rendered="#{!formularioBean.somenteLeituraPag2}">
                                             <p:ajax event="keydown" listener="#{formularioBean.setRedblackcamp81('black')}" update="pg81NcampoInsercoes"/>
                                         </p:inputText>
                                         <h:outputLabel value="#{formularioBean.entidade.pag2.ncampo_incer3_radio}"  styleClass="labelDados"  rendered="#{formularioBean.somenteLeituraPag2}" />
