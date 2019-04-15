@@ -201,7 +201,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     public void verificaPerfil(int perfil) {
 
-        if (perfil != 1 && perfil != 2 && perfil != 3 && perfil != 4) {
+        if (perfil != 0 && perfil != 1 && perfil != 2 && perfil != 3 && perfil != 4) {
 
             F.redirecionarPagina("index.jsf");
         }
@@ -521,14 +521,14 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             F.mensagem("", "Campos em vermelho são obrigatórios!", FacesMessage.SEVERITY_WARN);
             return false;
         }
-
-        if (getEntidade().getPaciente().getNome_mae().isEmpty()) {
-            F.mensagem("", "Campos em vermelho são obrigatórios!", FacesMessage.SEVERITY_WARN);
-            return false;
-        }
-        if (getEntidade().getPaciente().getTelefone_mae().isEmpty()) {
-            F.mensagem("", "O campo(10) o n° telefone da mãe está vázio!", FacesMessage.SEVERITY_WARN);
-        }
+//
+//        if (getEntidade().getPaciente().getNome_mae().isEmpty()) {
+//            F.mensagem("", "Campos em vermelho são obrigatórios!", FacesMessage.SEVERITY_WARN);
+//            return false;
+//        }
+//        if (getEntidade().getPaciente().getTelefone_mae().isEmpty()) {
+//           // F.mensagem("", "O campo(10) o n° telefone da mãe está vázio!", FacesMessage.SEVERITY_WARN);
+//        }
 
         if (getEntidade().getPaciente().getEndereco().isEmpty()) {
             F.mensagem("", "Campos em vermelho são obrigatórios!", FacesMessage.SEVERITY_WARN);
@@ -1724,7 +1724,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
         if (n_prontuario.length() > 3) {
 
-            List<Paciente> lp = new PacienteDAO().buscarAghuBarros(" agh.aip_pacientes.prontuario = '" + n_prontuario + "' ");
+            List<Paciente> lp = new PacienteDAO().buscarAghuBarros(" p.prontuario = '" + n_prontuario + "' ");
             Paciente p = new Paciente();
             if (lp != null && lp.size() > 0) {
                 p = lp.get(0);
@@ -1772,7 +1772,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
             // getEntidade().setPaciente(new Paciente());//zera o paciente
             pacientesAghuBarros = new ArrayList<>();//zera a lista
             if (nome.length() > 2) {//if1
-                List<Paciente> paci = new PacienteDAO().buscarAghuBarros(" agh.aip_pacientes.nome ILIKE '" + nome + "%' ORDER BY agh.aip_pacientes.nome LIMIT 10");
+                List<Paciente> paci = new PacienteDAO().buscarAghuBarros(" p.nome ILIKE '" + nome + "%' ORDER BY p.nome LIMIT 10");
                 if (paci != null && paci.size() > 0) {
 
                     buscaProntuarioAghu(paci.get(0).getNum_prontuario());

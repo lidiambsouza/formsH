@@ -22,43 +22,32 @@ public class FabricaDeConexoes {
 
     private static Connection conexao;
 
-//    private static final String URL_CONEXAO = "jdbc:mariadb://localhost/db_formsus_t";
-//    private static final String USUARIO = "root";
-//    private static final String SENHA = "";
-    
-//    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/db_formsus_p";
+
+    //produção
+//    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/formsh_hujbb";
 //    private static final String USUARIO = "formsus";
 //    private static final String SENHA = "$fs2018&*";
     
-    
-    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/db_formsus_t";
+    //homologação no 100
+    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/formsh_hujbb_homologacao";
     private static final String USUARIO = "formsus";
     private static final String SENHA = "$fs2018&*";
     
     
-
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/db_formsus_t";
+    //desenvolvimento no 110
+//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
 //    private static final String USUARIO = "gestaoti";
 //    private static final String SENHA = "@hu@2018";
 //    
     
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/db_formsus_t2";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
-
-    
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.100/db_formsus_t";
-//    private static final String USUARIO = "formsus";
-//    private static final String SENHA = "$fs2018&*";
+// 
 //    
     private static Connection conexaoAghuBarros;
     private static final String URL_CONEXAO_AGHU_BARROS = "jdbc:postgresql://database.aghu.hujbb.br:6544/dbaghu";
     private static final String USUARIO_AGHU_BARROS = "ugen_integra";
     private static final String SENHA_AGHU_BARROS = "aghuintegracao";
     
-//    private static final String URL_CONEXAO_AGHU_BARROS = "jdbc:postgresql://10.206.3.112:6544/dbaghu";
-//    private static final String USUARIO_AGHU_BARROS = "ugen_integra";
-//    private static final String SENHA_AGHU_BARROS = "aghuintegracao";
+
 
     public static Connection getConexao() throws ErroSistema {
        

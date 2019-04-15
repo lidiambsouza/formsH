@@ -7,6 +7,7 @@ import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.FabricaDeConexoes;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -40,12 +41,18 @@ public class DlgBuscaPacienteBean extends CrudBean<Paciente, PacienteDAO> implem
 
             try {
                 aux = Integer.parseInt(busca);
-                condicao += "(agh.aip_pacientes.prontuario = " + aux + ")";
+                condicao += "(p.prontuario = " + aux + ") and ep.ind_padrao = 'S' ORDER BY p.nome, ep.seqp desc LIMIT 100 ";
             } catch (NumberFormatException e) {
-                condicao += "(agh.aip_pacientes.nome ILIKE '" + busca + "%') ORDER BY agh.aip_pacientes.nome LIMIT 100 ";
+                condicao += "(p.nome ILIKE '" + busca + "%') and ep.ind_padrao = 'S' ORDER BY p.nome, ep.seqp desc LIMIT 100 ";
             }
-            setEntidades(getDao().buscarAghuBarros(condicao));
-
+            getEntidades().clear();
+            List <Paciente> auxi = getDao().buscarAghuBarros(condicao);
+            for(Paciente p :auxi){
+               if(!getEntidades().contains(p)){
+                   getEntidades().add(p);
+               }
+            }
+              
         } else {
             getEntidades().clear();
         }

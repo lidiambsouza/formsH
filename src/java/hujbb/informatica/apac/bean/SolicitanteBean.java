@@ -54,7 +54,7 @@ public class SolicitanteBean extends CrudBean<Solicitante, SolicitanteDAO> {
     public void init() {
         perfis = new ArrayList<>();
         perfis.add(new SelectItem(1, "ADMINISTRATIVO"));
-        perfis.add(new SelectItem(0, "ADMINISTRATIVO FINANCEIRO"));
+        perfis.add(new SelectItem(0, "ADMINISTRADOR HOSPITALAR"));
         perfis.add(new SelectItem(2, "SOLICITANTE"));
         perfis.add(new SelectItem(3, "ADMINISTRADOR"));
         perfis.add(new SelectItem(4, "SOLICITANTE ONCOLOGICO"));

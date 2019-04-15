@@ -250,7 +250,8 @@ public class Paciente implements Serializable {
     }
 
     public String getTelefone_mae() {
-        return telefone_mae.toUpperCase();
+        
+        return (telefone_mae==null)?"":telefone_mae.toUpperCase();
     }
 
     public void setTelefone_mae(String telefone_mae) {
@@ -258,7 +259,7 @@ public class Paciente implements Serializable {
     }
 
     public String getNome_responsavel() {
-        return nome_responsavel.toUpperCase();
+        return (nome_responsavel==null)?"":nome_responsavel.toUpperCase();
     }
 
     public void setNome_responsavel(String nome_responsavel) {
@@ -266,7 +267,7 @@ public class Paciente implements Serializable {
     }
 
     public String getTelefone_responsavel() {
-        return telefone_responsavel.toUpperCase();
+        return (telefone_responsavel==null)?"":telefone_responsavel.toUpperCase();
     }
 
     public void setTelefone_responsavel(String telefone_responsavel) {
@@ -380,13 +381,14 @@ public class Paciente implements Serializable {
     }
     
     public String getMascaraTelmae() {
+        
         if (!getTelefone_mae().isEmpty()) {
-            if("0 0".equals(getTelefone_mae())){
+            //if("0 0".equals(getTelefone_mae())){
                 
-                mascaraTelmae = "";
-            }else{
+                //mascaraTelmae = "";
+            //}else{
                 mascaraTelmae=getTelefone_mae();
-            }
+            //}
         } else {
             mascaraTelmae = "";
         }
@@ -525,95 +527,13 @@ public class Paciente implements Serializable {
         if (!Objects.equals(this.nome, other.nome)) {
             return false;
         }
-        if (!Objects.equals(this.sexo, other.sexo)) {
-            return false;
-        }
-        if (!Objects.equals(this.cns, other.cns)) {
-            return false;
-        }
-        if (!Objects.equals(this.cor, other.cor)) {
-            return false;
-        }
-        if (!Objects.equals(this.etnia, other.etnia)) {
-            return false;
-        }
-        if (!Objects.equals(this.nome_mae, other.nome_mae)) {
-            return false;
-        }
-        if (!Objects.equals(this.telefone_mae, other.telefone_mae)) {
-            return false;
-        }
-        if (!Objects.equals(this.nome_responsavel, other.nome_responsavel)) {
-            return false;
-        }
-        if (!Objects.equals(this.telefone_responsavel, other.telefone_responsavel)) {
-            return false;
-        }
-        if (!Objects.equals(this.logradouro, other.logradouro)) {
-            return false;
-        }
-        if (!Objects.equals(this.num_residencia, other.num_residencia)) {
-            return false;
-        }
-        if (!Objects.equals(this.bairro, other.bairro)) {
-            return false;
-        }
-        if (!Objects.equals(this.municipio, other.municipio)) {
-            return false;
-        }
-        if (!Objects.equals(this.cod_ibge_municipio, other.cod_ibge_municipio)) {
-            return false;
-        }
-        if (!Objects.equals(this.uf, other.uf)) {
-            return false;
-        }
-        if (!Objects.equals(this.cep, other.cep)) {
-            return false;
-        }
-        if (!Objects.equals(this.mascaraCep, other.mascaraCep)) {
-            return false;
-        }
-        if (!Objects.equals(this.mascaraCns, other.mascaraCns)) {
-            return false;
-        }
-        if (!Objects.equals(this.mascaraTelmae, other.mascaraTelmae)) {
-            return false;
-        }
-        if (!Objects.equals(this.data_nascimento_s, other.data_nascimento_s)) {
-            return false;
-        }
-        if (!Objects.equals(this.endereco, other.endereco)) {
-            return false;
-        }
-        if (!Objects.equals(this.sexoM, other.sexoM)) {
-            return false;
-        }
-        if (!Objects.equals(this.sexoF, other.sexoF)) {
-            return false;
-        }
-        if (!Objects.equals(this.corPdf, other.corPdf)) {
-            return false;
-        }
-        if (!Objects.equals(this.etiniaPdf, other.etiniaPdf)) {
-            return false;
-        }
         if (!Objects.equals(this.id_paciente, other.id_paciente)) {
-            return false;
-        }
-        if (!Objects.equals(this.data_nascimento, other.data_nascimento)) {
-            return false;
-        }
-        if (!Objects.equals(this.peso, other.peso)) {
-            return false;
-        }
-        if (!Objects.equals(this.altura, other.altura)) {
-            return false;
-        }
-        if (!Objects.equals(this.data_obito, other.data_obito)) {
             return false;
         }
         return true;
     }
+
+   
 
 
 

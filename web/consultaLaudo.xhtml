@@ -11,7 +11,7 @@
     #{consultaLaudoBean.verificaPerfil(usuarioBean.usuarioLogado.perfil.id_perfil)}
     #{consultaLaudoBean.buscarApac()}
 
-    <p:fieldset id="fsMaster" legend="CONSULTAR APACS EMITIDAS – SOLICITANTE">
+    <p:fieldset id="fsMaster" legend="#{consultaLaudoBean.legend_fsMaster}">
         <p:fieldset>
             <h:panelGrid width="100%" style="text-align: center" >
                 <h:outputLabel value="CRITÉRIOS DE SELEÇÃO"  styleClass="labelCabecalho"/>
@@ -84,7 +84,7 @@
                     </f:facet>
                     <p:column id="dtBotoes" width="75" >
                         <p:commandButton  title="Visualizar" icon="ui-icon-document"  action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_buscar()}" />
-                        <p:commandButton title="Editar" icon="ui-icon-pencil" action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_editar()}" disabled="#{consultaLaudoBean.bloqueioEdicao(formulario)}" />
+                        <p:commandButton title="Editar" icon="ui-icon-pencil" rendered="#{consultaLaudoBean.logado.perfil.id_perfil!=0}" action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_editar()}" disabled="#{consultaLaudoBean.bloqueioEdicao(formulario)}" />
                         <p:commandButton title="Imprimir"  icon="ui-icon-print" disabled="#{consultaLaudoBean.bloqueioImpressao(formulario)}" action="#{consultaLaudoBean.btImprimirForm(formulario)}" ajax="false"  onclick="this.form.target = '_blank'"/>
                     </p:column>
 

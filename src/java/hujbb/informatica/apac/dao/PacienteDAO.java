@@ -29,7 +29,7 @@ public class PacienteDAO implements Serializable, CrudDAO<Paciente> {
             ps.setString(4, entidade.getCns());
             ps.setDate(5, F.sqlDate(entidade.getData_nascimento()));
             ps.setString(6, entidade.getCor());
-            ps.setString(7, entidade.getEtnia().substring(0,Math.min(149, entidade.getEtnia().length())));
+            ps.setString(7, entidade.getEtnia().substring(0, Math.min(149, entidade.getEtnia().length())));
             ps.setString(8, entidade.getNome_mae());
             ps.setString(9, entidade.getTelefone_mae());
             ps.setString(10, entidade.getNome_responsavel());
@@ -41,7 +41,7 @@ public class PacienteDAO implements Serializable, CrudDAO<Paciente> {
             ps.setString(16, entidade.getBairro());
             ps.setString(17, entidade.getMunicipio());
             ps.setString(18, entidade.getCod_ibge_municipio());
-            ps.setString(19, entidade.getUf().substring(0,Math.min(2, entidade.getUf().length())));
+            ps.setString(19, entidade.getUf().substring(0, Math.min(2, entidade.getUf().length())));
             ps.setString(20, entidade.getCep());
             ps.executeUpdate();
 
@@ -51,7 +51,7 @@ public class PacienteDAO implements Serializable, CrudDAO<Paciente> {
             }
 
         } catch (SQLException ex) {
-            
+
             F.setMsgErro("pacienteDAO 55! " + ex.toString());
 
         }
@@ -117,7 +117,6 @@ public class PacienteDAO implements Serializable, CrudDAO<Paciente> {
                 paciente.setCod_ibge_municipio(rs.getString("cod_ibge_municipio"));
                 paciente.setUf(rs.getString("uf"));
                 paciente.setCep(rs.getString("cep"));
-                
 
                 pacientes.add(paciente);
             }
@@ -134,72 +133,121 @@ public class PacienteDAO implements Serializable, CrudDAO<Paciente> {
         try {
             List<Paciente> pacientes = new ArrayList<>();
             Connection conexao = FabricaDeConexoes.getConexaoAghuBarros();
-            if(conexao != null){
-                
-            
-            String sql = " SELECT agh.aip_pacientes.codigo,\n"//1
-                    + "  agh.aip_pacientes.prontuario, \n"//2
-                    + "  agh.aip_pacientes.nro_cartao_saude, \n" //3
-                    + "  agh.aip_pacientes.nome,\n"//4
-                    + "   agh.aip_pacientes.nome_mae, \n"//5
-                    + "   agh.aip_pacientes.dt_nascimento,\n"//6
-                    + "   agh.aip_pacientes.dt_identificacao,\n"//7
-                    + "   agh.aip_pacientes.cor,"//8
-                    + " agh.aip_pacientes.sexo,\n"//9
-                    + "    agh.aip_pacientes.ddd_fone_residencial,\n"//10
-                    + "     agh.aip_pacientes.fone_residencial,\n"//11
-                    + "      agh.aip_pacientes.cpf,\n"//12
-                    + "      agh.aip_pacientes.rg,\n"//13
-                    + "      agh.aip_tipo_logradouros.descricao AS tipo_logradouro,\n"//14
-                    + "       agh.aip_logradouros.nome AS logradouro,\n"//15
-                    + "       agh.aip_enderecos_pacientes.nro_logradouro,\n"//16
-                    + "       agh.aip_bairros.descricao AS bairro,\n"//17
-                    + "       agh.aip_cidades.nome AS cidade,       \n"//18
-                    + "       agh.aip_cidades.cod_ibge,\n"//19
-                    + "       agh.aip_cidades.uf_sigla,\n"//20
-                    + "       agh.aip_enderecos_pacientes.bcl_clo_cep AS cep,\n"//21
-                    + "       agh.aip_etnias.descricao AS etinia,\n"//22
-                    + "       agh.aip_pacientes.dt_obito\n"//23
-                    + "FROM (((((agh.aip_pacientes LEFT JOIN agh.aip_enderecos_pacientes ON agh.aip_pacientes.codigo = agh.aip_enderecos_pacientes.pac_codigo) \n"
-                    + "LEFT JOIN agh.aip_bairros ON agh.aip_enderecos_pacientes.bcl_bai_codigo = agh.aip_bairros.codigo) \n"
-                    + "LEFT JOIN agh.aip_logradouros ON agh.aip_enderecos_pacientes.bcl_clo_lgr_codigo = agh.aip_logradouros.codigo) \n"
-                    + "LEFT JOIN agh.aip_cidades ON agh.aip_logradouros.cdd_codigo = agh.aip_cidades.codigo) \n"
-                    + "LEFT JOIN agh.aip_tipo_logradouros ON agh.aip_logradouros.tlg_codigo = agh.aip_tipo_logradouros.codigo) \n"
-                    + "LEFT JOIN agh.aip_etnias ON agh.aip_pacientes.etn_id = agh.aip_etnias.id  " + condicao;
+            if (conexao != null) {
 
-              //  System.out.println(sql);
-            PreparedStatement ps = conexao.prepareStatement(sql);
-            
-            ResultSet rs = ps.executeQuery();
-            
+                String sql = " select distinct\n"
+                        
+                        + "p.codigo,\n" //1
+                        + "p.prontuario,\n" //2
+                        + "p.nro_cartao_saude,\n"//3
+                        + "p.nome,\n" //4
+                        + "p.nome_mae,\n"//5
+                        + "p.dt_nascimento,\n"//6
+                        + "p.cor,\n"//7---8
+                        + "p.sexo_biologico,\n" //8----9                        
+                        + "(p.ddd_fone_residencial||' '||p.fone_residencial) as telefone_residencial,\n" //9---10e11
+                        + "(p.ddd_fone_recado ||' '||p.fone_recado) as telefone_Recado,\n"//10---
+                        + "r.nome as responsavel,\n"//11----
+                        + "(r.ddd_fone ||'-'||r.fone)as telefone_responsavel,\n"//12----
+                        + "(tpl.descricao ||' '||ls.nome) as logradouro,\n"//13-------14e15
+                        + "ep.nro_logradouro,\n"//14------16                        
+                        + "b.descricao as bairro,\n"//15---17
+                        + "c.nome as municipio,\n"//16-----18
+                        + "c.cod_ibge,\n"//17---19
+                        + "c.uf_sigla,\n"//18----20
+                        + "ep.bcl_clo_cep as cep,\n"//19---21
+                        + "e.descricao as etnia,\n" //20---22
+                        + "p.dt_obito,\n"//21---23                        
+                        + "ep.cdd_codigo,\n"//22-----                        
+                        + "ep.logradouro,\n"//23--13b----14e15
+                        + "ep.bairro,\n"//24---15b                      
+                        + "c.cep,\n" //25---19b ----21 
+                        + "ep.cep,\n"//26-----19c----21
+                        + "ep.cidade,\n"//27----16b----18
+                        + "ep.uf_sigla,\n"//28----18b----20                        
+                        + "ep.seqp\n"//29----                        
+                        + "from agh.aip_pacientes p\n"
+                        + "left join agh.aip_etnias e on p.etn_id = e.id\n"
+                        + "left join agh.agh_responsaveis r on p.codigo = r.pac_codigo\n"
+                        + "left join agh.aip_enderecos_pacientes ep on p.codigo = ep.pac_codigo\n"
+                        + "left join agh.aip_bairros_cep_logradouro bcl on ep.bcl_clo_lgr_codigo = bcl.clo_lgr_codigo and ep.bcl_bai_codigo = bcl.bai_codigo and ep.bcl_clo_cep = bcl.clo_cep\n"
+                        + "left join agh.aip_bairros b on bcl.bai_codigo = b.codigo\n"
+                        + "left join agh.aip_cep_logradouros l on bcl.clo_lgr_codigo = l.lgr_codigo\n"
+                        + "left join agh.aip_logradouros ls on l.lgr_codigo = ls.codigo\n"
+                        + "left join agh.aip_cidades c on ls.cdd_codigo = c.codigo or ep.cdd_codigo = c.codigo\n"
+                        + "left join agh.aip_tipo_logradouros tpl on ls.tlg_codigo = tpl.codigo\n"
+                        + "\n"                        
+                        + condicao;
 
-            while (rs.next()) {
-                Paciente paciente = new Paciente();
+                  //System.out.println(sql);
+                PreparedStatement ps = conexao.prepareStatement(sql);
 
-                paciente.setNum_prontuario(rs.getInt(2) + "");
-                paciente.setNome(rs.getString(4));
-                paciente.setSexo(rs.getString(9));
-                paciente.setCns(rs.getString(3));
-                paciente.setData_nascimento(rs.getDate(6));
-                paciente.setCor(rs.getString(8));
-                paciente.setEtnia(rs.getString(22));
-                paciente.setNome_mae(rs.getString(5));
-                paciente.setTelefone_mae(rs.getLong(10) + " " + rs.getLong(11) + "");
-                paciente.setNome_responsavel("");
-                paciente.setTelefone_responsavel("");
-                paciente.setPeso((float) 0);
-                paciente.setAltura((float) 0);
-                paciente.setLogradouro(rs.getString(14) + " " + rs.getString(15));
-                paciente.setNum_residencia(rs.getInt(16) + "");
-                paciente.setBairro(rs.getString(17));
-                paciente.setMunicipio(rs.getString(18));
-                paciente.setCod_ibge_municipio(rs.getInt(19) + "");
-                paciente.setUf(rs.getString(20));
-                paciente.setCep(rs.getInt(21) + "");
-                paciente.setData_obito(rs.getDate(23));
+                ResultSet rs = ps.executeQuery();
 
-                pacientes.add(paciente);
-            }
+                while (rs.next()) {
+                    Paciente paciente = new Paciente();
+
+                    paciente.setNum_prontuario(rs.getInt(2) + "");
+                    paciente.setNome(rs.getString(4));
+                    paciente.setSexo(rs.getString(8));
+                    paciente.setCns(rs.getString(3));
+                    paciente.setData_nascimento(rs.getDate(6));
+                    paciente.setCor(rs.getString(7));
+                    paciente.setEtnia(rs.getString(20));
+                    paciente.setNome_mae(rs.getString(5));
+                   
+                    paciente.setTelefone_mae(rs.getString(9));                   
+                    
+                    paciente.setNome_responsavel(rs.getString(11));
+                    
+                    paciente.setTelefone_responsavel(rs.getString(12));
+                    paciente.setPeso((float) 0);
+                    paciente.setAltura((float) 0);
+                    
+                   
+                    
+                    if(rs.getString(13)==null){
+                        paciente.setLogradouro(rs.getString(23));//ep
+                    }else{
+                        paciente.setLogradouro(rs.getString(13));//ls
+                    }
+                    
+                    paciente.setNum_residencia(rs.getInt(14) + "");
+                    if(rs.getString(15)==null){
+                        paciente.setBairro(rs.getString(24));//ep
+                    }else{
+                        paciente.setBairro(rs.getString(15));//b
+                    }
+                    
+                    if(rs.getString(16)==null){
+                        paciente.setMunicipio(rs.getString(27));//ep
+                    }else{
+                        paciente.setMunicipio(rs.getString(16));//c
+                    }
+                    
+                    paciente.setCod_ibge_municipio(rs.getInt(17) + "");
+                    
+                    if(rs.getString(18)==null){
+                        paciente.setUf(rs.getString(28));//ep
+                    }else{
+                        paciente.setUf(rs.getString(18));//c
+                    }
+                    
+                    if((rs.getInt(19)+"").isEmpty()||rs.getInt(19)==0){
+                        if((rs.getInt(25)+ "").isEmpty()||rs.getInt(25)==0){
+                            paciente.setCep(rs.getInt(26) + "");//ep
+                        }else{
+                            paciente.setCep(rs.getInt(25) + "");//c
+                        }
+                    }else{                       
+                        paciente.setCep(rs.getInt(19) + "");//ep.b
+                    }
+                    
+                    
+                    paciente.setData_obito(rs.getDate(21));
+
+                    pacientes.add(paciente);
+                }
             }
             return pacientes;
 
