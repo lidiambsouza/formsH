@@ -18,7 +18,6 @@ import hujbb.informatica.apac.entidades.Formulario;
 import hujbb.informatica.apac.entidades.Formulario_f2;
 import hujbb.informatica.apac.entidades.Formulario_has_procedimento_sus;
 import hujbb.informatica.apac.entidades.Paciente;
-import hujbb.informatica.apac.entidades.Proc_justificativa;
 import hujbb.informatica.apac.entidades.Procedimento_sus;
 import hujbb.informatica.apac.entidades.Solicitante;
 import hujbb.informatica.apac.entidades.Status;
