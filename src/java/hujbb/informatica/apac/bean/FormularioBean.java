@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -42,6 +43,7 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implements Serializable {
 
+    private Usuario logado;
     private FormularioDAO formularioDAO;
 
     private Autorizacao autorizacao;
@@ -631,7 +633,6 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 //            F.mensagem("", "A data da solicitação não deve ser posterior a data de hoje!", FacesMessage.SEVERITY_WARN);
 //            return false;
 //        }
-
         if (getEntidade().getPag2().getLocal_tumor_primario().isEmpty()) {
             setRedblackcamp56("red");
             F.mensagem("", "Campos em vermelho são obrigatórios!", FacesMessage.SEVERITY_WARN);
@@ -1106,6 +1107,26 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 //fim close dlg
     //auxiliares
     //tela formulario jsf
+    public boolean verificarApacRepetida() throws ErroSistema {
+        System.out.println("parte 1");
+        List<Formulario> l = getDao().buscar(
+                "paciente.`num_prontuario` = '" + getEntidade().getPaciente().getNum_prontuario() + "' AND "
+                + "formulario.`data` =  '" + F.dataStringBanco(new Date()) + "' AND "
+                + "status.`id_status` = '" + 3 + "' "
+        );
+        if (l != null) {
+            for (Formulario f : l) {
+                System.out.println("parte 2");
+                f.buscaProcedimentosForm();
+                if (f.getP1().getCodigo().equals(getEntidade().getP1().getCodigo())) {
+                    return true;
+                }
+            }
+        }
+        System.out.println("parte 3");
+        return false;
+    }
+
     public boolean bloqueioImpressao() {
         Formulario f = getEntidade();
 
@@ -1296,6 +1317,8 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         getEntidade().getPag2().setDt_fim_area_irrad2_radio(null);
         getEntidade().getPag2().setDt_fim_area_irrad3_radio(null);
     }
+
+    
 
     //fimauxuliares
     public void btPacienteLimpar() {
@@ -1509,23 +1532,27 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     }
 
     public void btImprimir(Usuario logado) throws ErroSistema {
-        if (getEntidade().getPag2().getFormulario_id() < 0) {//se for menor que 0 entao pag2 nao ta preenchida salvar so pag1
+        if (!verificarApacRepetida()) {
 
-            if (getEntidade().getStatus().getId_status() != 3) {
-                setEntidade(getDao().buscaId(getEntidade().getId_formulario() + ""));
-                getEntidade().buscaProcedimentosForm();
-                getEntidade().getStatus().setId_status(3);
-                getDao().atualizar(getEntidade());
-                F.mensagem("Formulário N° " + getEntidade().getMascaraId() + " finalizado com sucesso!", "", FacesMessage.SEVERITY_INFO);
+            if (getEntidade().getPag2().getFormulario_id() < 0) {//se for menor que 0 entao pag2 nao ta preenchida salvar so pag1
+
+                if (getEntidade().getStatus().getId_status() != 3) {
+                    setEntidade(getDao().buscaId(getEntidade().getId_formulario() + ""));
+                    getEntidade().buscaProcedimentosForm();
+                    getEntidade().getStatus().setId_status(3);
+                    getDao().atualizar(getEntidade());
+                    F.mensagem("Formulário N° " + getEntidade().getMascaraId() + " finalizado com sucesso!", "", FacesMessage.SEVERITY_INFO);
+
+                }
+
+                // printFolha1();
+            } else {
+                btImprimirF2(logado);
 
             }
-
-            // printFolha1();
         } else {
-            btImprimirF2(logado);
-
+            F.mensagem("", "Formulário já foi emitido com mesmo procedimento e mesmo paciente", FacesMessage.SEVERITY_WARN);
         }
-
         //FabricaDeConexoes.fecharConecxao();
     }
 
@@ -1811,6 +1838,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         //hJ = F.somarDiasData(new Date(), 120);
         return hJ;
     }
+
     public Date gethJtil120() {
         hJtil120 = F.somarDiasData(new Date(), 120);
         return hJtil120;
@@ -2775,6 +2803,19 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
 
     public void setVitBuscaProcedimento(String vitBuscaProcedimento) {
         this.vitBuscaProcedimento = vitBuscaProcedimento;
+    }
+
+    @Override
+    public Usuario getLogado() {
+        if (logado == null) {
+            logado = new Usuario();
+        }
+        return logado;
+    }
+
+    @Override
+    public void setLogado(Usuario logado) {
+        this.logado = logado;
     }
 
     @Override

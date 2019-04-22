@@ -82,10 +82,11 @@
                     <f:facet name="header">
                         <h:outputText value="#{consultaLaudoBean.tituloTabela}" />
                     </f:facet>
-                    <p:column id="dtBotoes" width="75" >
+                    <p:column id="dtBotoes" headerText="Opções" width="100">
                         <p:commandButton  title="Visualizar" icon="ui-icon-document"  action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_buscar()}" />
                         <p:commandButton title="Editar" icon="ui-icon-pencil" rendered="#{consultaLaudoBean.logado.perfil.id_perfil!=0}" action="#{templateBean.setFormularioTemp(formulario)}" actionListener="#{templateBean.formulario_editar()}" disabled="#{consultaLaudoBean.bloqueioEdicao(formulario)}" />
                         <p:commandButton title="Imprimir"  icon="ui-icon-print" disabled="#{consultaLaudoBean.bloqueioImpressao(formulario)}" action="#{consultaLaudoBean.btImprimirForm(formulario)}" ajax="false"  onclick="this.form.target = '_blank'"/>
+                        <p:commandButton title="Cancelar"  icon="ui-icon-trash" onclick="PF('dlgConfirmCancelar').show()" action="#{consultaLaudoBean.setForm_cancelamento(formulario)}" disabled="#{consultaLaudoBean.bloqueioCancelamento(formulario)}" update="@form:fsdlgConfirmCancelar"/>
                     </p:column>
 
                     <p:column  headerText="Nº Laudo" width="60" sortBy="#{formulario.id_formulario}">
@@ -128,5 +129,26 @@
             </h:panelGrid>
         </p:fieldset>
     </p:fieldset>
+
+    <p:dialog  widgetVar="dlgConfirmCancelar"   header=" Cancelar APAC" dynamic="true" draggable="true" closable="true" closeOnEscape="false" resizable="false" minimizable="false" position="center center"  >
+        <p:fieldset id="fsdlgConfirmCancelar">
+            <h:panelGrid width="100%" id="pgdlgConfirmCancelar">
+                <h:outputLabel value="Selecione o Motivo do Cancelamento" for="dlgConfirmCancelar_somCancelar" styleClass="labelDados"/>
+                <p:selectOneMenu id="dlgConfirmCancelar_somCancelar"  value="#{consultaLaudoBean.idMotivoCancelar}" style="width: 100%">
+                    <f:selectItem itemValue="0" itemLabel="Selecione."/>
+                    <f:selectItems  value="#{consultaLaudoBean.motivo_cancelamento_item}"/>
+                    <p:ajax update="pgBotoesDlgConfirmDesativar"/>
+                </p:selectOneMenu>        
+                <h:outputLabel value="Deseja realmente cancelar esta APAC?" for="iTObs" styleClass="labelDados"/>
+                <h:panelGrid id="pgBotoesDlgConfirmDesativar" columns="2">
+                    <p:commandButton value="Não" onclick="PF('dlgConfirmCancelar').hide()" />
+                    <p:commandButton value="Sim"  action="#{consultaLaudoBean.btConfirmDlgCancelarApac()}"  
+                                     update="@form:fsTabelaApac" 
+                                     disabled="#{consultaLaudoBean.idMotivoCancelar == 0}"
+                                     onclick="PF('dlgConfirmCancelar').hide()" process="@this"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:fieldset>
+    </p:dialog>    
 </ui:decorate>
 

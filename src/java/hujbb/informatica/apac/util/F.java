@@ -139,9 +139,9 @@ public class F {
 
     public static String tratarCondicaoSQL(String condicao) {
         if (condicao.isEmpty()) {
-            condicao = "WHERE 1 ";
+            condicao = " WHERE 1 ";
         } else {
-            condicao = "WHERE " + condicao.replace("WHERE", "");
+            condicao = " WHERE " + condicao.replace("WHERE", "");
         }
         return condicao;
     }

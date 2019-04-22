@@ -5,6 +5,7 @@ import hujbb.informatica.apac.dao.FormularioDAO;
 import hujbb.informatica.apac.dao.UsuarioDAO;
 import hujbb.informatica.apac.dao.PacienteDAO;
 import hujbb.informatica.apac.entidades.Formulario;
+import hujbb.informatica.apac.entidades.Motivo_Cancelamento;
 import hujbb.informatica.apac.entidades.Paciente;
 import hujbb.informatica.apac.entidades.Status;
 import hujbb.informatica.apac.entidades.Usuario;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
@@ -39,11 +41,13 @@ public class ConsultaLaudoBean implements Serializable {
 
 //controle tela
     private boolean selectBooleanCheckBox_periodo;
-    private boolean rendereDadosDaAutorizacao;    
+    private boolean rendereDadosDaAutorizacao;
     private String legend_fsMaster;
-    
-    private List<Formulario> forms;
+
+    //itens
     private ArrayList<SelectItem> status_item;
+
+    private List<Formulario> forms;
     private Date dtIni;
     private Date dtFim;
     private Date dtIniCriacao;
@@ -60,6 +64,12 @@ public class ConsultaLaudoBean implements Serializable {
     private Integer idSolicitanteTemp;
 
     private FormularioDAO formDAO;
+    private ConsultaLaudoDAO dao;
+
+    //dlg cancelamento
+    private ArrayList<SelectItem> motivo_cancelamento_item;
+    private int idMotivoCancelar;
+    private Formulario form_cancelamento;
 
     @PostConstruct
     public void init() {
@@ -76,6 +86,11 @@ public class ConsultaLaudoBean implements Serializable {
         numProntuario = "";
 
         setSolicitante(getLogado().getNome());
+        try {
+            motivo_cancelamento_item = Motivo_Cancelamento.item("");
+        } catch (ErroSistema ex) {
+            F.setMsgErro("consultaLaodoBean.init:" + ex.toString());
+        }
 
     }
 
@@ -209,7 +224,6 @@ public class ConsultaLaudoBean implements Serializable {
         } else if (dtIni != null && dtFim == null) {
             condicao += " AND (formulario.`data` between '" + F.dataStringBanco(dtIni) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
         }*/
-
         //data solicitação
         if (dtIniCriacao != null && dtFimCriacao != null) {
             if (dtIniCriacao.equals(dtFimCriacao)) {
@@ -223,7 +237,7 @@ public class ConsultaLaudoBean implements Serializable {
         } else if (dtIniCriacao != null && dtFimCriacao == null) {
             condicao += " AND (formulario.`data_criacao` between '" + F.dataStringBanco(dtIniCriacao) + "' AND '" + F.dataStringBanco(new Date()) + " 23:59:59') ";
         }
-        
+
         //solicitente
         if (!(solicitante.isEmpty() || solicitante == null)) {
             condicao += " AND (solicitante.`nome` = '" + solicitante + "') ";
@@ -242,7 +256,7 @@ public class ConsultaLaudoBean implements Serializable {
         if (!(cartSus.isEmpty() || cartSus == null)) {
             condicao += " AND (paciente.`cns` = '" + cartSus + "') ";
         }
-        
+
         setForms(new ConsultaLaudoDAO().buscarLaudos(condicao));
         //adiciona os procedimentos dos laudos
         for (int i = 0; i < getForms().size(); i++) {
@@ -253,6 +267,26 @@ public class ConsultaLaudoBean implements Serializable {
     }
 
 //botoes
+    //cancelar apacs
+    public void btConfirmDlgCancelarApac() throws ErroSistema {
+
+        if (form_cancelamento != null && !form_cancelamento.equals(new Formulario())) {
+            form_cancelamento = new FormularioDAO().buscaId(form_cancelamento.getId_formulario() + "");
+            form_cancelamento.buscaProcedimentosForm();
+            //somente o proprio solicitante pode cancelar sua apac
+            if (form_cancelamento.getSolicitante().getUsuario().getId_usuario().equals(logado.getId_usuario())) {
+                form_cancelamento.getStatus().setId_status(-9);//cancelado
+                form_cancelamento.getMotivo_cancelamento().setId(idMotivoCancelar);
+                getFormDAO().atualizar(form_cancelamento);
+                buscarApac();
+                F.mensagem("Cancelado com sucesso!", "", FacesMessage.SEVERITY_INFO);
+            }
+        }
+
+        form_cancelamento = null;
+        idMotivoCancelar = 0;
+    }
+
     public void btDlgVisualizaform() {
         F.redirecionarPagina("");
     }
@@ -288,6 +322,16 @@ public class ConsultaLaudoBean implements Serializable {
     public boolean bloqueioEdicao(Formulario f) {
         // ((dono da apac == usuario logado) e status = 2(salvo)  e (perfil 2 solicitante ou 4 oncologico) )        
         return !(((getLogado().getId_usuario() == f.getSolicitante().getUsuario().getId_usuario()) && (f.getStatus().getId_status() == 2) && (getLogado().getPerfil().getId_perfil() == 2 || getLogado().getPerfil().getId_perfil() == 4)) || (getLogado().getPerfil().getId_perfil() == 3));
+
+    }
+
+    public boolean bloqueioCancelamento(Formulario f) {
+        //((id do usuario logado igual id  do usuario do solicitante da apac)
+        if (!getLogado().getId_usuario().equals(f.getSolicitante().getUsuario().getId_usuario())) {
+            return true;
+        }
+        //se o staus do formulario nao for emitido bloqueia o cancelamento
+        return (f.getStatus().getId_status() != 3);
 
     }
 
@@ -392,7 +436,7 @@ public class ConsultaLaudoBean implements Serializable {
 
     public String getSolicitante() {
         solicitante = logado.getNome();
-        if (solicitante == null || logado.getPerfil().getId_perfil()==0) {
+        if (solicitante == null || logado.getPerfil().getId_perfil() == 0) {
             solicitante = "";
         }
         return solicitante.toUpperCase();
@@ -467,6 +511,22 @@ public class ConsultaLaudoBean implements Serializable {
         this.status_item = status_item;
     }
 
+    public ArrayList<SelectItem> getMotivo_cancelamento_item() {
+        return motivo_cancelamento_item;
+    }
+
+    public void setMotivo_cancelamento_item(ArrayList<SelectItem> motivo_cancelamento_item) {
+        this.motivo_cancelamento_item = motivo_cancelamento_item;
+    }
+
+    public int getIdMotivoCancelar() {
+        return idMotivoCancelar;
+    }
+
+    public void setIdMotivoCancelar(int idMotivoCancelar) {
+        this.idMotivoCancelar = idMotivoCancelar;
+    }
+
     public String getFiltroSituacao() {
         if (filtroSituacao == null) {
             filtroSituacao = "";
@@ -535,6 +595,14 @@ public class ConsultaLaudoBean implements Serializable {
         this.dtFimCriacao = dtFimCriacao;
     }
 
+    public Formulario getForm_cancelamento() {
+        return form_cancelamento;
+    }
+
+    public void setForm_cancelamento(Formulario form_cancelamento) {
+        this.form_cancelamento = form_cancelamento;
+    }
+
     private FormularioDAO getFormDAO() {
         if (formDAO == null) {
             formDAO = new FormularioDAO();
@@ -552,7 +620,7 @@ public class ConsultaLaudoBean implements Serializable {
     public void setLogado(Usuario logado) {
         this.logado = logado;
     }
-    
+
     public String getLegend_fsMaster() {
         switch (getLogado().getPerfil().getId_perfil()) {
             case 0:
@@ -572,4 +640,10 @@ public class ConsultaLaudoBean implements Serializable {
         this.legend_fsMaster = legend_fsMaster;
     }
 
+    public ConsultaLaudoDAO getDAO() {
+        if (dao == null) {
+            dao = new ConsultaLaudoDAO();
+        }
+        return dao;
+    }
 }

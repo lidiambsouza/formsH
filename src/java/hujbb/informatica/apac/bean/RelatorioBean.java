@@ -4,6 +4,7 @@ import hujbb.informatica.apac.dao.RelatorioDAO;
 import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.entidades.relarotios.Relatorio;
 import hujbb.informatica.apac.util.execao.ErroSistema;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -12,7 +13,7 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class RelatorioBean {
+public class RelatorioBean implements Serializable{
  
     //usuario
     private Usuario logado;

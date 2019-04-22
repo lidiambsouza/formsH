@@ -7,6 +7,7 @@ import hujbb.informatica.apac.entidades.Estabelecimento_de_saude;
 import hujbb.informatica.apac.entidades.Formulario;
 import hujbb.informatica.apac.entidades.Formulario_f2;
 import hujbb.informatica.apac.entidades.Formulario_has_procedimento_sus;
+import hujbb.informatica.apac.entidades.Motivo_Cancelamento;
 import hujbb.informatica.apac.entidades.Paciente;
 import hujbb.informatica.apac.entidades.Perfil;
 import hujbb.informatica.apac.entidades.Proc_justificativa;
@@ -46,7 +47,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
         entidade.setId_formulario(Integer.parseInt(F.anoDaData(entidade.getData()) + "" + (i)));
 
         try {
-            String sql = "INSERT INTO `formulario`( `id_formulario`, `data`, `data_criacao`, `autenticacao`,  `paciente_id_paciente`, `solicitante_id_solicitante`,`estabelecimento_de_saude_id_solicitante`,  `estabelecimento_de_saude_id_executante`, `proc_justificativa_id`, `status_id_status`, `autorizacao_id_autorizacao`) VALUES (?,?,?,?,?,?,?,-1,?,?,-1)";
+            String sql = "INSERT INTO `formulario`( `id_formulario`, `data`, `data_criacao`, `autenticacao`,  `paciente_id_paciente`, `solicitante_id_solicitante`,`estabelecimento_de_saude_id_solicitante`,  `estabelecimento_de_saude_id_executante`, `proc_justificativa_id`, `status_id_status`, `autorizacao_id_autorizacao`, `motivo_cancelamento_id`) VALUES (?,?,?,?,?,?,?,-1,?,?,-1,?)";
 
             PreparedStatement ps = conexao.prepareStatement(sql);
 
@@ -60,6 +61,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
             ps.setInt(7, entidade.getEstabelecimento_de_saude_solicitante().getId_estabelecimento_saude());
             ps.setInt(8, entidade.getProc_justificativa().getId_proc_justificativa());
             ps.setInt(9, entidade.getStatus().getId_status());
+            ps.setInt(10, entidade.getMotivo_cancelamento().getId());
 
             ps.executeUpdate();
 
@@ -86,7 +88,8 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                     + "`estabelecimento_de_saude_id_executante`=?,"
                     + "`proc_justificativa_id`=?,"
                     + "`status_id_status`=?,"
-                    + "`autorizacao_id_autorizacao`=? "
+                    + "`autorizacao_id_autorizacao`=?, "
+                    + "`motivo_cancelamento_id`=? "
                     + "WHERE `id_formulario`=?";
             PreparedStatement ps = conexao.prepareStatement(sql);
 
@@ -99,7 +102,8 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
             ps.setInt(7, entidade.getProc_justificativa().getId_proc_justificativa());
             ps.setInt(8, entidade.getStatus().getId_status());
             ps.setInt(9, entidade.getAutorizacao().getId_autorizacao());
-            ps.setInt(10, entidade.getId_formulario());
+            ps.setInt(10, entidade.getMotivo_cancelamento().getId());
+            ps.setInt(11, entidade.getId_formulario());
 
             ps.execute();
             //atualiza a folha 2
@@ -239,6 +243,8 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                     + "     autorizacao.`num_autorizacao` AS autorizacao_num_autorizacao,\n"
                     + "     autorizacao.`data_val_ini` AS autorizacao_data_val_ini,\n"
                     + "     autorizacao.`data_val_fim` AS autorizacao_data_val_fim,\n"
+                    + "     motivo_cancelamento.id AS motivo_cancelamento_id,\n"
+                    + "     motivo_cancelamento.motivo AS motivo_cancelamento_motivo,\n"
                     + "     tp_sexo.`id` AS tp_sexo_id,\n"
                     + "     tp_sexo.`sexo` AS tp_sexo_sexo,\n"
                     + "     tp_sexo_A.`id` AS tp_sexo_A_id,\n"
@@ -255,6 +261,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                     + "     INNER JOIN `estabelecimento_de_saude` estabelecimento_de_saude_A ON formulario.`estabelecimento_de_saude_id_executante` = estabelecimento_de_saude_A.`id_estabelecimento_de_saude`\n"
                     + "     INNER JOIN `status` status ON formulario.`status_id_status` = status.`id_status`\n"
                     + "     INNER JOIN `autorizacao` autorizacao ON formulario.`autorizacao_id_autorizacao` = autorizacao.`id_autorizacao`\n"
+                    + "     LEFT  JOIN `motivo_cancelamento` motivo_cancelamento ON formulario.motivo_cancelamento_id = motivo_cancelamento.id \n"
                     + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid`\n"
                     + "     INNER JOIN `cid` cid_A ON proc_justificativa.`cid_cid_secundario` = cid_A.`cid`\n"
                     + "     INNER JOIN `cid` cid_B ON proc_justificativa.`cid_cid_causas_assoc` = cid_B.`cid`\n"
@@ -264,9 +271,9 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                     + "     INNER JOIN `usuario` usuario ON solicitante.`usuario_id_usuario` = usuario.`id_usuario`\n"
                     + "     INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor`\n"
                     + "     INNER JOIN `cbo` cbo ON usuario.`cbo_id` = cbo.`id`\n"
-                    + "     INNER JOIN `perfil` perfil ON usuario.`perfil` = perfil.`id_perfil` " + condicao;
+                    + "     INNER JOIN `perfil` perfil ON usuario.`perfil` = perfil.`id_perfil`  " + condicao;
 
-            // System.out.println(sql);
+            //System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Formulario> entidades = new ArrayList<>();
@@ -382,6 +389,10 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                                 rs.getString("autorizacao_num_autorizacao"),
                                 rs.getDate("autorizacao_data_val_ini"),
                                 rs.getDate("autorizacao_data_val_fim")
+                        ),
+                        new Motivo_Cancelamento(
+                                rs.getInt("motivo_cancelamento_id"),
+                                rs.getString("motivo_cancelamento_motivo")
                         )
                 );
                 entidades.add(entidade);

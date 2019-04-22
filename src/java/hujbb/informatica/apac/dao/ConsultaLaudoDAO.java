@@ -4,6 +4,7 @@ import hujbb.informatica.apac.entidades.Autorizacao;
 import hujbb.informatica.apac.entidades.Cbo;
 import hujbb.informatica.apac.entidades.Estabelecimento_de_saude;
 import hujbb.informatica.apac.entidades.Formulario;
+import hujbb.informatica.apac.entidades.Motivo_Cancelamento;
 import hujbb.informatica.apac.entidades.Paciente;
 import hujbb.informatica.apac.entidades.Perfil;
 import hujbb.informatica.apac.entidades.Proc_justificativa;
@@ -110,7 +111,8 @@ public class ConsultaLaudoDAO extends FormularioDAO {
                                 rs.getInt("status_id_status"),
                                 rs.getString("status_status")
                         ),
-                        new Autorizacao()
+                        new Autorizacao(),
+                        new Motivo_Cancelamento()
                 );
                 entidades.add(entidade);
             }

@@ -25,6 +25,7 @@ public class Formulario implements Serializable, Comparable<Formulario> {
     private Proc_justificativa proc_justificativa = new Proc_justificativa();
     private Status status = new Status();
     private Autorizacao autorizacao = new Autorizacao();
+    private Motivo_Cancelamento motivo_cancelamento = new Motivo_Cancelamento();
 
     private Formulario_f2 pag2;
 
@@ -43,7 +44,20 @@ public class Formulario implements Serializable, Comparable<Formulario> {
     //controle tela emitidos jsf
     private boolean chekBoxEnviar;//
 
-    public Formulario(Integer id_formulario, Date data,Date data_criacao, String autenticacao, Paciente paciente, Solicitante solicitante, Estabelecimento_de_saude estabelecimento_de_saude_solicitante, Estabelecimento_de_saude estabelecimento_de_saude_executante, Proc_justificativa proc_justificativa, Status status, Autorizacao autorizacao) {
+    public Formulario(
+            Integer id_formulario,
+            Date data,
+            Date data_criacao,
+            String autenticacao, 
+            Paciente paciente, 
+            Solicitante solicitante, 
+            Estabelecimento_de_saude estabelecimento_de_saude_solicitante, 
+            Estabelecimento_de_saude estabelecimento_de_saude_executante, 
+            Proc_justificativa proc_justificativa, 
+            Status status, 
+            Autorizacao autorizacao,
+            Motivo_Cancelamento motivo_cancelamento
+    ) {
         this.id_formulario = id_formulario;
         this.data = data;
         this.data_criacao = data_criacao;
@@ -55,6 +69,7 @@ public class Formulario implements Serializable, Comparable<Formulario> {
         this.proc_justificativa = proc_justificativa;
         this.status = status;
         this.autorizacao = autorizacao;
+        this.motivo_cancelamento =  new Motivo_Cancelamento();
         pag2 = new Formulario_f2();
 
     }
@@ -220,6 +235,14 @@ public class Formulario implements Serializable, Comparable<Formulario> {
         this.autorizacao = autorizacao;
     }
 
+    public Motivo_Cancelamento getMotivo_cancelamento() {
+        return motivo_cancelamento;
+    }
+
+    public void setMotivo_cancelamento(Motivo_Cancelamento motivo_cancelamento) {
+        this.motivo_cancelamento = motivo_cancelamento;
+    }
+      
     public String getDataString() {
         if (id_formulario == -1) {
             dataString = "";
