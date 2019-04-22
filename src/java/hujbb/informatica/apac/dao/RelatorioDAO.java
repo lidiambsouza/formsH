@@ -16,26 +16,25 @@ import java.util.Map;
 public class RelatorioDAO {
 
     public List<Relatorio> quantitativoCID(String condicao) throws ErroSistema {
-        String condicao2 = " WHERE (`formulario`.`status_id_status` =  5 OR `formulario`.`status_id_status` =  -1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
         if (condicao.isEmpty()) {
-             condicao = condicao2;
-        }else{
-            condicao = condicao2 +" AND (cid.`cid` LIKE '"+condicao+"%' OR cid.`descricao` LIKE '"+condicao+"%') ";
+            condicao = condicao2;
+        } else {
+            condicao = condicao2 + " AND (cid.`cid` LIKE '" + condicao + "%' OR cid.`descricao` LIKE '" + condicao + "%') ";
         }
 
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
             String sql = "SELECT\n"
-                    + "  cid.`id_cid` as id, \n"
+                    
                     + " `formulario`.`status_id_status` AS status,\n"
                     + " cid.`cid` AS cid_cid,"
-                    + " cid.`descricao` AS cid_descricao,\n"
+                    + " cid.`nome` AS cid_descricao,\n"
                     + " COUNT(`formulario`.`status_id_status`)  AS cont\n"
                     + "FROM\n"
                     + "     `proc_justificativa` proc_justificativa INNER JOIN `formulario` formulario ON proc_justificativa.`id_proc_justificativa` = formulario.`proc_justificativa_id`\n"
-                    + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_id_principal` = cid.`id_cid` " + condicao + "  GROUP BY cid.`cid`, `formulario`.`status_id_status` \n"
+                    + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid` " + condicao + "  GROUP BY cid.`cid`, `formulario`.`status_id_status` \n"
                     + "     ";
-            
             
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -71,7 +70,7 @@ public class RelatorioDAO {
             for (Integer i : rAux.keySet()) {
                 rels.add(rAux.get(i));
             }
-            
+
             return rels;
 
         } catch (SQLException e) {
@@ -81,11 +80,11 @@ public class RelatorioDAO {
 
     public List<Relatorio> quantitativoSETOR(String condicao) throws ErroSistema {
 
-        String condicao2 = " WHERE (`formulario`.`status_id_status` =  5 OR `formulario`.`status_id_status` =  -1) ";
-       if (condicao.isEmpty()) {
-             condicao = condicao2;
-        }else{
-            condicao = condicao2 +" AND (setor.`sigla` LIKE '"+condicao+"%') ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
+        if (condicao.isEmpty()) {
+            condicao = condicao2;
+        } else {
+            condicao = condicao2 + " AND (setor.`sigla` LIKE '" + condicao + "%') ";
         }
 
         try {
@@ -100,7 +99,7 @@ public class RelatorioDAO {
                     + "     `solicitante` solicitante INNER JOIN `formulario` formulario ON solicitante.`id_solicitante` = \n"
                     + "formulario.`solicitante_id_solicitante`\n"
                     + "     INNER JOIN `usuario` usuario ON solicitante.`usuario_id_usuario` = usuario.`id_usuario`\n"
-                    + "     INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor` "+condicao+" GROUP BY   \n"
+                    + "     INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor` " + condicao + " GROUP BY   \n"
                     + "setor.`id_setor`,formulario.`status_id_status`";
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -136,7 +135,7 @@ public class RelatorioDAO {
             for (Integer i : rAux.keySet()) {
                 rels.add(rAux.get(i));
             }
-            
+
             return rels;
 
         } catch (SQLException e) {
@@ -146,11 +145,11 @@ public class RelatorioDAO {
 
     public List<Relatorio> quantitativoSOLICITANTE(String condicao) throws ErroSistema {
 
-        String condicao2 = " WHERE (`formulario`.`status_id_status` =  5 OR `formulario`.`status_id_status` =  -1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
         if (condicao.isEmpty()) {
-             condicao = condicao2;
-        }else{
-            condicao = condicao2 +" AND (solicitante.`nome` LIKE '"+condicao+"%') ";
+            condicao = condicao2;
+        } else {
+            condicao = condicao2 + " AND (solicitante.`nome` LIKE '" + condicao + "%') ";
         }
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
@@ -162,6 +161,7 @@ public class RelatorioDAO {
                     + "COUNT(`formulario`.`status_id_status`)  AS cont\n"
                     + "FROM\n"
                     + "     `solicitante` solicitante INNER JOIN `formulario` formulario ON solicitante.`id_solicitante` = formulario.`solicitante_id_solicitante`" + condicao + "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`";
+
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
@@ -178,14 +178,32 @@ public class RelatorioDAO {
                 r.setDescricao(rs.getString("solicitante_nome"));
 
                 switch (rs.getInt("formulario_status_id_status")) {
-                    case 5: {//autorizado
-                        r.setAutorizado(rs.getInt("cont"));
+
+                    case -9: {//cancelado
+                        r.setCancelado(rs.getInt("cont"));
                         break;
                     }
                     case -1: {//nao autorizado
                         r.setNaoAutorizado(rs.getInt("cont"));
                         break;
                     }
+                    case 2: {//salso
+                        r.setSalvo(rs.getInt("cont"));
+                        break;
+                    }
+                    case 3: {//emitido
+                        r.setEmitido(rs.getInt("cont"));
+                        break;
+                    }
+                    case 4: {//enviado dere
+                        r.setEnviadoDere(rs.getInt("cont"));
+                        break;
+                    }
+                    case 5: {//autorizado
+                        r.setAutorizado(rs.getInt("cont"));
+                        break;
+                    }
+
                     default: {
                         break;
                     }
@@ -196,7 +214,7 @@ public class RelatorioDAO {
             for (Integer i : rAux.keySet()) {
                 rels.add(rAux.get(i));
             }
-            
+
             return rels;
 
         } catch (SQLException e) {
@@ -206,25 +224,25 @@ public class RelatorioDAO {
 
     public List<Relatorio> quantitativopPROCEDIMENTO(String condicao) throws ErroSistema {
 
-        String condicao2 = " WHERE (`formulario`.`status_id_status` =  5 OR `formulario`.`status_id_status` =  -1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
         if (condicao.isEmpty()) {
-             condicao = condicao2;
-        }else{
-            condicao = condicao2 +" AND (procedimento_sus.`nome` LIKE '"+condicao+"%' OR procedimento_sus.`codigo`  LIKE '"+condicao+"%') ";
+            condicao = condicao2;
+        } else {
+            condicao = condicao2 + " AND (procedimento_sus.`nome` LIKE '" + condicao + "%' OR procedimento_sus.`codigo`  LIKE '" + condicao + "%') ";
         }
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
             String sql = "SELECT\n"
                     + "     formulario.`status_id_status` AS formulario_status_id_status,\n"
-                    + "     procedimento_sus.`id_procedimento_sus` AS procedimento_sus_id_procedimento_sus,\n"
+                    + "     procedimento_sus.`codigo` AS procedimento_sus_id_procedimento_sus,\n"
                     + "     procedimento_sus.`nome` AS procedimento_sus_nome,\n"
                     + "     procedimento_sus.`codigo` AS procedimento_sus_codigo,\n"
                     + "     formulario.`id_formulario` AS formulario_id_formulario,\n"
                     + "    COUNT(`formulario`.`status_id_status`)  AS cont\n"
                     + "FROM\n"
                     + "     `formulario` formulario INNER JOIN `formulario_has_procedimento_sus` formulario_has_procedimento_sus ON formulario.`id_formulario` = formulario_has_procedimento_sus.`formulario_id_formulario`\n"
-                    + "     INNER JOIN `procedimento_sus` procedimento_sus ON formulario_has_procedimento_sus.`procedimento_sus_id_procedimento_sus` = procedimento_sus.`id_procedimento_sus` " + condicao
-                    + "  GROUP BY formulario.`status_id_status`,  procedimento_sus.`id_procedimento_sus`";
+                    + "     INNER JOIN `procedimento_sus` procedimento_sus ON formulario_has_procedimento_sus.`codigo` = procedimento_sus.`codigo` " + condicao
+                    + "  GROUP BY formulario.`status_id_status`,  procedimento_sus.`codigo`";
             F.setMsgErro(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -260,7 +278,7 @@ public class RelatorioDAO {
             for (Integer i : rAux.keySet()) {
                 rels.add(rAux.get(i));
             }
-            
+
             return rels;
 
         } catch (SQLException e) {
