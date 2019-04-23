@@ -16,58 +16,75 @@ import java.util.Map;
 public class RelatorioDAO {
 
     public List<Relatorio> quantitativoCID(String condicao) throws ErroSistema {
-        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";//novo
         if (condicao.isEmpty()) {
             condicao = condicao2;
         } else {
-            condicao = condicao2 + " AND (cid.`cid` LIKE '" + condicao + "%' OR cid.`descricao` LIKE '" + condicao + "%') ";
+            condicao = condicao2 + " AND (cid.`cid` LIKE '" + condicao + "%' OR cid.`nome` LIKE '" + condicao + "%'  ) ";
         }
 
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
             String sql = "SELECT\n"
-                    
                     + " `formulario`.`status_id_status` AS status,\n"
                     + " cid.`cid` AS cid_cid,"
-                    + " cid.`nome` AS cid_descricao,\n"
+                    + " cid.`nome` AS cid_nome,\n"
                     + " COUNT(`formulario`.`status_id_status`)  AS cont\n"
                     + "FROM\n"
                     + "     `proc_justificativa` proc_justificativa INNER JOIN `formulario` formulario ON proc_justificativa.`id_proc_justificativa` = formulario.`proc_justificativa_id`\n"
-                    + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid` " + condicao + "  GROUP BY cid.`cid`, `formulario`.`status_id_status` \n"
+                    + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid` " + condicao + " "
+                    + " GROUP BY cid.`cid`, `formulario`.`status_id_status` ORDER BY cid.`cid` \n"
                     + "     ";
-            
+            System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
-            Map<Integer, Relatorio> rAux = new HashMap<Integer, Relatorio>();
+            Map<String, Relatorio> rAux = new HashMap<String, Relatorio>();
 
             while (rs.next()) {
                 Relatorio r;
-                int id = rs.getInt("id");
+                String id = rs.getString("cid_cid");
                 if (rAux.containsKey(id)) {
                     r = rAux.get(id);
                 } else {
                     r = new Relatorio();
                 }
-                r.setDescricao(rs.getString("cid_cid") + "-" + rs.getString("cid_descricao"));
+                r.setDescricao(rs.getString("cid_cid") + "-" + rs.getString("cid_nome"));
 
                 switch (rs.getInt("status")) {
-                    case 5: {//autorizado
-                        r.setAutorizado(rs.getInt("cont"));
+                     case -9: {//cancelado
+                        r.setCancelado(rs.getInt("cont"));
                         break;
                     }
                     case -1: {//nao autorizado
                         r.setNaoAutorizado(rs.getInt("cont"));
                         break;
                     }
+                    case 2: {//salso
+                        r.setSalvo(rs.getInt("cont"));
+                        break;
+                    }
+                    case 3: {//emitido
+                        r.setEmitido(rs.getInt("cont"));
+                        break;
+                    }
+                    case 4: {//enviado dere
+                        r.setEnviadoDere(rs.getInt("cont"));
+                        break;
+                    }
+                    case 5: {//autorizado
+                        r.setAutorizado(rs.getInt("cont"));
+                        break;
+                    }
+
                     default: {
                         break;
                     }
                 }
 
-                rAux.put(rs.getInt("id"), r);
+                rAux.put(rs.getString("cid_cid"), r);
             }
-            for (Integer i : rAux.keySet()) {
+            for (String i : rAux.keySet()) {
                 rels.add(rAux.get(i));
             }
 
@@ -117,14 +134,31 @@ public class RelatorioDAO {
                 r.setDescricao(rs.getString("setor_sigla"));
 
                 switch (rs.getInt("formulario_status_id_status")) {
-                    case 5: {//autorizado
-                        r.setAutorizado(rs.getInt("cont"));
+                     case -9: {//cancelado
+                        r.setCancelado(rs.getInt("cont"));
                         break;
                     }
                     case -1: {//nao autorizado
                         r.setNaoAutorizado(rs.getInt("cont"));
                         break;
                     }
+                    case 2: {//salso
+                        r.setSalvo(rs.getInt("cont"));
+                        break;
+                    }
+                    case 3: {//emitido
+                        r.setEmitido(rs.getInt("cont"));
+                        break;
+                    }
+                    case 4: {//enviado dere
+                        r.setEnviadoDere(rs.getInt("cont"));
+                        break;
+                    }
+                    case 5: {//autorizado
+                        r.setAutorizado(rs.getInt("cont"));
+                        break;
+                    }
+
                     default: {
                         break;
                     }
@@ -234,24 +268,24 @@ public class RelatorioDAO {
             Connection conexao = FabricaDeConexoes.getConexao();
             String sql = "SELECT\n"
                     + "     formulario.`status_id_status` AS formulario_status_id_status,\n"
-                    + "     procedimento_sus.`codigo` AS procedimento_sus_id_procedimento_sus,\n"
-                    + "     procedimento_sus.`nome` AS procedimento_sus_nome,\n"
                     + "     procedimento_sus.`codigo` AS procedimento_sus_codigo,\n"
+                    + "     procedimento_sus.`nome` AS procedimento_sus_nome,\n"
                     + "     formulario.`id_formulario` AS formulario_id_formulario,\n"
                     + "    COUNT(`formulario`.`status_id_status`)  AS cont\n"
                     + "FROM\n"
                     + "     `formulario` formulario INNER JOIN `formulario_has_procedimento_sus` formulario_has_procedimento_sus ON formulario.`id_formulario` = formulario_has_procedimento_sus.`formulario_id_formulario`\n"
-                    + "     INNER JOIN `procedimento_sus` procedimento_sus ON formulario_has_procedimento_sus.`codigo` = procedimento_sus.`codigo` " + condicao
-                    + "  GROUP BY formulario.`status_id_status`,  procedimento_sus.`codigo`";
-            F.setMsgErro(sql);
+                    + "     INNER JOIN `procedimento_sus` procedimento_sus ON formulario_has_procedimento_sus.`procedimento_sus_codigo` = procedimento_sus.`codigo` " + condicao
+                    + "  GROUP BY formulario.`status_id_status`,  procedimento_sus.`codigo` ORDER BY procedimento_sus.`nome` ";
+            
+             // F.setMsgErro(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
-            Map<Integer, Relatorio> rAux = new HashMap<Integer, Relatorio>();
+            Map<String, Relatorio> rAux = new HashMap<String, Relatorio>();
 
             while (rs.next()) {
                 Relatorio r;
-                int id = rs.getInt("procedimento_sus_id_procedimento_sus");
+                String id = rs.getString("procedimento_sus_codigo");
                 if (rAux.containsKey(id)) {
                     r = rAux.get(id);
                 } else {
@@ -260,30 +294,48 @@ public class RelatorioDAO {
                 r.setDescricao(rs.getString("procedimento_sus_codigo") + " - " + rs.getString("procedimento_sus_nome"));
 
                 switch (rs.getInt("formulario_status_id_status")) {
-                    case 5: {//autorizado
-                        r.setAutorizado(rs.getInt("cont"));
+                     case -9: {//cancelado
+                        r.setCancelado(rs.getInt("cont"));
                         break;
                     }
                     case -1: {//nao autorizado
                         r.setNaoAutorizado(rs.getInt("cont"));
                         break;
                     }
+                    case 2: {//salso
+                        r.setSalvo(rs.getInt("cont"));
+                        break;
+                    }
+                    case 3: {//emitido
+                        r.setEmitido(rs.getInt("cont"));
+                        break;
+                    }
+                    case 4: {//enviado dere
+                        r.setEnviadoDere(rs.getInt("cont"));
+                        break;
+                    }
+                    case 5: {//autorizado
+                        r.setAutorizado(rs.getInt("cont"));
+                        break;
+                    }
+
                     default: {
                         break;
                     }
                 }
 
-                rAux.put(rs.getInt("procedimento_sus_id_procedimento_sus"), r);
+                rAux.put(rs.getString("procedimento_sus_codigo"), r);
             }
-            for (Integer i : rAux.keySet()) {
+            for (String i : rAux.keySet()) {
                 rels.add(rAux.get(i));
             }
 
             return rels;
 
         } catch (SQLException e) {
-            throw new ErroSistema("Erro ao buscar dados do usuário", e);
+            F.setMsgErro("relatorioDAO:quantitativopPROCEDIMENTO():"+e.toString());
         }
+        return null;
     }
 
 }

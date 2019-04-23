@@ -346,7 +346,8 @@ public class Formulario implements Serializable, Comparable<Formulario> {
 
     public void buscaProcedimentosForm() throws ErroSistema {
         if (this != null) {
-            List<Formulario_has_procedimento_sus> procHasFormaList = new Formulario_has_procedimento_susDAO().buscar("WHERE `formulario_id_formulario` = " + this.getId_formulario());
+            List<Formulario_has_procedimento_sus> procHasFormaList = new Formulario_has_procedimento_susDAO().buscar(
+                    " WHERE `formulario_id_formulario` = " + this.getId_formulario() + " ORDER BY `posicao`");
             if (procHasFormaList != null) {
                 List<Procedimento_sus> procedimentos = new ArrayList<>();
                 for (Formulario_has_procedimento_sus procHasFormaList1 : procHasFormaList) {

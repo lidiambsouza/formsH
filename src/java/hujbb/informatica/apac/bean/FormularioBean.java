@@ -1111,7 +1111,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         System.out.println("parte 1");
         List<Formulario> l = getDao().buscar(
                 "paciente.`num_prontuario` = '" + getEntidade().getPaciente().getNum_prontuario() + "' AND "
-                + "formulario.`data` =  '" + F.dataStringBanco(new Date()) + "' AND "
+                + "formulario.`data` =  '" + F.dataStringBanco(getEntidade().getData()) + "' AND "
                 + "status.`id_status` = '" + 3 + "' "
         );
         if (l != null) {

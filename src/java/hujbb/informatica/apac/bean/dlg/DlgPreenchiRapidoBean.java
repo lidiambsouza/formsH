@@ -138,6 +138,9 @@ public class DlgPreenchiRapidoBean implements Serializable {
                             cidItem.add(new SelectItem(c.getCid(), c.getCid() + " - " + c.getNome()));
                         }
                     }
+                     if (!cidItem.isEmpty()) {//if 2
+                            selecionarCid((String) cidItem.get(0).getValue());
+                        }//fim if 2
                 }//fim else if0
             }//else3
         } else {

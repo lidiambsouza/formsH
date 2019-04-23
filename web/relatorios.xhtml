@@ -32,7 +32,7 @@
         </h:panelGrid>
 
         <p:fieldset id="fsQuantitativo" rendered="#{relatorioBean.valueSomTipoRel > -1}" >
-            <p:dataTable id="dt" var="r" value="#{relatorioBean.rel}">
+            <p:dataTable id="dt" var="r" value="#{relatorioBean.rel}" paginator="true" rows="10">
                 <f:facet name="header">
                     <h:outputText value="#{relatorioBean.legendaDataTable}" />
                 </f:facet>
@@ -41,31 +41,31 @@
                     <h:outputText value="#{r.descricao}"/>
                 </p:column>
 
-                <p:column headerText="Salvo" style="text-align: center">
+                <p:column headerText="Salvo" style="text-align: center" sortBy="#{r.salvo}">
                     <h:outputText value="#{r.salvo}"/>
                 </p:column>
 
-                <p:column headerText="Emitido" style="text-align: center">
+                <p:column headerText="Emitido" style="text-align: center" sortBy="#{r.emitido}" >
                     <h:outputText value="#{r.emitido}"/>
                 </p:column>
 
-                <p:column headerText="Enviado ao DERE" style="text-align: center">
+                <p:column headerText="Enviado ao DERE" style="text-align: center" sortBy="#{r.enviadoDere}">
                     <h:outputText value="#{r.enviadoDere}"/>
                 </p:column>
 
-                <p:column headerText="Cancelado" style="text-align: center">
+                <p:column headerText="Cancelado" style="text-align: center" sortBy="#{r.cancelado}">
                     <h:outputText value="#{r.cancelado}"/>
                 </p:column>
 
-                <p:column headerText="Autorizado" style="text-align: center">
+                <p:column headerText="Autorizado" style="text-align: center" sortBy="#{r.autorizado}">
                     <h:outputText value="#{r.autorizado}"/>
                 </p:column>
 
-                <p:column headerText="Não autorizado" style="text-align: center">
+                <p:column headerText="Não autorizado" style="text-align: center" sortBy="#{r.naoAutorizado}">
                     <h:outputText value="#{r.naoAutorizado}"/>    
                 </p:column>
 
-                <p:column headerText="Total" style="text-align: center">
+                <p:column headerText="Total" style="text-align: center" sortBy="#{r.total}">
                     <h:outputText value="#{r.total}"/>    
                 </p:column>
             </p:dataTable>

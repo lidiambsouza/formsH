@@ -87,7 +87,8 @@ public class Formulario_has_procedimento_susDAO implements Serializable, CrudDAO
                     + "`formulario_id_formulario`,"
                     + " `procedimento_sus_codigo`,"
                     + " `procedimento_sus_dt_competencia`,"
-                    + " `quantidade`"
+                    + " `quantidade`,"
+                    + " `posicao`"
                     + " FROM `formulario_has_procedimento_sus` " + condicao;
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -100,6 +101,7 @@ public class Formulario_has_procedimento_susDAO implements Serializable, CrudDAO
                 formulario_has_procedimento_sus.getProcedimento_sus().setCodigo(rs.getString("procedimento_sus_codigo"));
                 formulario_has_procedimento_sus.getProcedimento_sus().setDt_competencia(rs.getInt("procedimento_sus_dt_competencia"));
                 formulario_has_procedimento_sus.setQuantidade(rs.getInt("quantidade"));
+                formulario_has_procedimento_sus.setPosicao(rs.getInt("posicao"));
 
                 list.add(formulario_has_procedimento_sus);
             }
