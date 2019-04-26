@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5aacf4b3-239c-4333-82ba-08d90904296f">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="230"/>
 	<parameter name="logo" class="java.awt.Image"/>
 	<field name="estabelecimento_de_saude_solicitante.nome" class="java.lang.String"/>
 	<field name="estabelecimento_de_saude_solicitante.cnes" class="java.lang.String"/>
@@ -339,7 +339,7 @@
 				<textFieldExpression><![CDATA[$F{proc_justificativa.cid_causas_assoc.cid}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="11" y="498" width="529" height="70" forecolor="#666666" uuid="42781d6e-7e00-4d73-9f64-9a973958bbcf"/>
+				<reportElement x="11" y="498" width="529" height="70" forecolor="#000000" uuid="42781d6e-7e00-4d73-9f64-9a973958bbcf"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>

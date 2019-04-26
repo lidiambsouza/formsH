@@ -279,7 +279,8 @@ public class ConsultaLaudoBean implements Serializable {
                 form_cancelamento.getMotivo_cancelamento().setId(idMotivoCancelar);
                 getFormDAO().atualizar(form_cancelamento);
                 buscarApac();
-                F.mensagem("Cancelado com sucesso!", "", FacesMessage.SEVERITY_INFO);
+                F.mensagem("Formulário N° " + form_cancelamento.getMascaraId() + " cancelado com sucesso!", "", FacesMessage.SEVERITY_INFO);
+                //F.mensagem("Cancelado com sucesso!", "", FacesMessage.SEVERITY_INFO);
             }
         }
 
