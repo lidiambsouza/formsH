@@ -147,7 +147,7 @@ public class ConsultaLaudoBean implements Serializable {
         } else {
             try {
                 // verifica se perfil logado é solicitante ou solicitante oncologico
-                status_item = Status.item("id_status = 2 OR id_status = 3");
+                status_item = Status.item("id_status = 2 OR id_status = 3 OR id_status = -9");
 
                 ////FabricaDeConexoes.fecharConecxao();
             } catch (ErroSistema ex) {
@@ -316,12 +316,12 @@ public class ConsultaLaudoBean implements Serializable {
 // fim botoes
     public boolean bloqueioImpressao(Formulario f) {
         //((id do usuario logado != id  do usuario do solicitante da apac) ou se o status do formulario != 3(emitido) ou !(perfil 2 solicitante ou 4 oncologico)  e nao perfil 3 adm)
-        return (((getLogado().getId_usuario() != f.getSolicitante().getUsuario().getId_usuario()) || !(f.getStatus().getId_status() == 3) || !(getLogado().getPerfil().getId_perfil() == 2 || getLogado().getPerfil().getId_perfil() == 4)) && ((getLogado().getPerfil().getId_perfil() != 2 || getLogado().getPerfil().getId_perfil() != 3) && !(f.getStatus().getId_status() == 3)));
+        return !(((getLogado().getId_usuario() == f.getSolicitante().getUsuario().getId_usuario()) || (getLogado().getPerfil().getId_perfil() == 3 ) || (getLogado().getPerfil().getId_perfil() == 0)) && (f.getStatus().getId_status() == 3));
     }
 
     public boolean bloqueioEdicao(Formulario f) {
         // ((dono da apac == usuario logado) e status = 2(salvo)  e (perfil 2 solicitante ou 4 oncologico) )        
-        return !(((getLogado().getId_usuario() == f.getSolicitante().getUsuario().getId_usuario()) && (f.getStatus().getId_status() == 2) && (getLogado().getPerfil().getId_perfil() == 2 || getLogado().getPerfil().getId_perfil() == 4)) || (getLogado().getPerfil().getId_perfil() == 3));
+        return !((getLogado().getId_usuario() == f.getSolicitante().getUsuario().getId_usuario()) && (f.getStatus().getId_status() == 2)) || (f.getStatus().getId_status()==-9) ;
 
     }
 

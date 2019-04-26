@@ -21,6 +21,7 @@ import javax.naming.directory.SearchResult;
 public class FabricaDeConexoes {
 
     private static Connection conexao;
+   
 
 
     //produção
@@ -38,7 +39,7 @@ public class FabricaDeConexoes {
     private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
     private static final String USUARIO = "gestaoti";
     private static final String SENHA = "@hu@2018";
-//    
+    
     
 // 
 //    
@@ -62,7 +63,6 @@ public class FabricaDeConexoes {
 
             } catch (SQLException ex) {
                 F.mensagem("", "Não foi possivel conectar ao banco de dados !", FacesMessage.SEVERITY_ERROR);
-                System.out.println(ex.toString()+":xxxxxxxxxxxxxxxxxx");
                 throw new ErroSistema("Não foi possivel conectar ao banco de dados", ex);
             }
         }else {//if1
@@ -75,8 +75,8 @@ public class FabricaDeConexoes {
               //  System.out.println();
                 F.setMsgErro(ex.toString()+":fabrica de conexoes getConexao()");
             }
-            
         }
+        
         return conexao;
     }
 

@@ -51,7 +51,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
 
             PreparedStatement ps = conexao.prepareStatement(sql);
 
-            //trata para incluir data e hora
+            //tratar para incluir data e hora
             ps.setInt(1, entidade.getId_formulario());
             ps.setTimestamp(2, new Timestamp(entidade.getData().getTime()));
             ps.setTimestamp(3, new Timestamp(new Date().getTime()));
@@ -273,7 +273,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                     + "     INNER JOIN `cbo` cbo ON usuario.`cbo_id` = cbo.`id`\n"
                     + "     INNER JOIN `perfil` perfil ON usuario.`perfil` = perfil.`id_perfil`  " + condicao;
 
-            //System.out.println(sql);
+           
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Formulario> entidades = new ArrayList<>();

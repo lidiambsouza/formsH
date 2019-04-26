@@ -28,6 +28,7 @@ import hujbb.informatica.apac.util.execao.ErroSistema;
 import hujbb.informatica.apac.util.relatorio.Relatorios;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -1108,22 +1109,58 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     //auxiliares
     //tela formulario jsf
     public boolean verificarApacRepetida() throws ErroSistema {
-        System.out.println("parte 1");
+
         List<Formulario> l = getDao().buscar(
                 "paciente.`num_prontuario` = '" + getEntidade().getPaciente().getNum_prontuario() + "' AND "
-                + "formulario.`data` =  '" + F.dataStringBanco(getEntidade().getData()) + "' AND "
+                + "(formulario.`data` between '" + F.dataStringBanco(F.somarDiasData(getEntidade().getData(), -1)) + "' AND '" + F.dataStringBanco(F.somarDiasData(getEntidade().getData(), 1)) + "') AND "
                 + "status.`id_status` = '" + 3 + "' "
         );
         if (l != null) {
+            Calendar dataSistema =  Calendar.getInstance();
+            Calendar dataForm =  Calendar.getInstance();
+            Calendar dataFormCriacao =  Calendar.getInstance();
+            String horasatual =(dataSistema.get(Calendar.HOUR_OF_DAY)<10) ? "0"+dataSistema.get(Calendar.HOUR_OF_DAY):dataSistema.get(Calendar.HOUR_OF_DAY)+"";
+            String mintual=(dataSistema.get(Calendar.MINUTE)<10) ? "0"+dataSistema.get(Calendar.MINUTE):dataSistema.get(Calendar.MINUTE)+"";
+            String horaFomrEmitido="";
+            String minFomrEmitido="";
             for (Formulario f : l) {
-                System.out.println("parte 2");
                 f.buscaProcedimentosForm();
-                if (f.getP1().getCodigo().equals(getEntidade().getP1().getCodigo())) {
-                    return true;
+                if (f.getP1().getCodigo().equals(getEntidade().getP1().getCodigo())) {//if 1
+
+                    dataForm.setTime(f.getData());
+                    dataFormCriacao.setTime(f.getData_criacao());
+                    int diasEntre = F.diasEntre(getEntidade().getData(), f.getData()); 
+                    horaFomrEmitido=(dataFormCriacao.get(Calendar.HOUR_OF_DAY)<10) ? "0"+dataFormCriacao.get(Calendar.HOUR_OF_DAY):dataFormCriacao.get(Calendar.HOUR_OF_DAY)+"";
+                    minFomrEmitido=(dataFormCriacao.get(Calendar.MINUTE)<10) ? "0"+dataFormCriacao.get(Calendar.MINUTE):dataFormCriacao.get(Calendar.MINUTE)+"";
+                    if (diasEntre == 0) {//if 2 - mesmo dia
+                        F.mensagem("", "Já exixte formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
+                        return true;
+
+                    } else {//fim if 2 dias diferentes
+                        if(diasEntre == 1){// amanha
+                            if(Integer.parseInt(horaFomrEmitido +""+minFomrEmitido) <= Integer.parseInt(horasatual +""+mintual)){
+                                F.mensagem("", "Já exixte formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }else{// =-1 ontem
+                                                       
+                            if(Integer.parseInt(horaFomrEmitido+""+horaFomrEmitido) > Integer.parseInt(horasatual+""+mintual)){
+                                F.mensagem("", "Já exixte formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }
+                    }
+                    
+                } else {//fim if 1 - procedimentos diferentes
+                    return false;
                 }
-            }
+            }//fim for
+
         }
-        System.out.println("parte 3");
         return false;
     }
 
@@ -1317,8 +1354,6 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
         getEntidade().getPag2().setDt_fim_area_irrad2_radio(null);
         getEntidade().getPag2().setDt_fim_area_irrad3_radio(null);
     }
-
-    
 
     //fimauxuliares
     public void btPacienteLimpar() {
@@ -1550,9 +1585,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                 btImprimirF2(logado);
 
             }
-        } else {
-            F.mensagem("", "Formulário já foi emitido com mesmo procedimento e mesmo paciente", FacesMessage.SEVERITY_WARN);
-        }
+        } 
         //FabricaDeConexoes.fecharConecxao();
     }
 

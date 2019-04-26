@@ -49,7 +49,7 @@ public class Status implements Serializable {
     //itens
     public static ArrayList<SelectItem> item(String condicao) throws ErroSistema {
         if (condicao.isEmpty()) {
-            condicao = "`id_status` > -1  ORDER BY `id_status`";
+            condicao = "`id_status` > -10 ORDER BY `id_status`";
         }
         ArrayList<SelectItem> item = new ArrayList<>();
         List<Status> m = new StatusDAO().buscar(condicao);

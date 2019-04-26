@@ -35,7 +35,7 @@ public class RelatorioDAO {
                     + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid` " + condicao + " "
                     + " GROUP BY cid.`cid`, `formulario`.`status_id_status` ORDER BY cid.`cid` \n"
                     + "     ";
-            System.out.println(sql);
+//            System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
