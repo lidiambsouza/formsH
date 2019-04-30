@@ -273,7 +273,7 @@ public class FormularioDAO implements Serializable, CrudDAO<Formulario> {
                     + "     INNER JOIN `cbo` cbo ON usuario.`cbo_id` = cbo.`id`\n"
                     + "     INNER JOIN `perfil` perfil ON usuario.`perfil` = perfil.`id_perfil`  " + condicao;
 
-           
+//            System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Formulario> entidades = new ArrayList<>();
