@@ -1133,13 +1133,13 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                     horaFomrEmitido=(dataFormCriacao.get(Calendar.HOUR_OF_DAY)<10) ? "0"+dataFormCriacao.get(Calendar.HOUR_OF_DAY):dataFormCriacao.get(Calendar.HOUR_OF_DAY)+"";
                     minFomrEmitido=(dataFormCriacao.get(Calendar.MINUTE)<10) ? "0"+dataFormCriacao.get(Calendar.MINUTE):dataFormCriacao.get(Calendar.MINUTE)+"";
                     if (diasEntre == 0) {//if 2 - mesmo dia
-                        F.mensagem("", "Já exixte formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
+                        F.mensagem("", "Já existe formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
                         return true;
 
                     } else {//fim if 2 dias diferentes
                         if(diasEntre == 1){// amanha
                             if(Integer.parseInt(horaFomrEmitido +""+minFomrEmitido) <= Integer.parseInt(horasatual +""+mintual)){
-                                F.mensagem("", "Já exixte formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
+                                F.mensagem("", "Já existe formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
                                 return true;
                             }else{
                                 return false;
@@ -1147,7 +1147,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                         }else{// =-1 ontem
                                                        
                             if(Integer.parseInt(horaFomrEmitido+""+horaFomrEmitido) > Integer.parseInt(horasatual+""+mintual)){
-                                F.mensagem("", "Já exixte formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
+                                F.mensagem("", "Já existe formulario n°:"+f.getMascaraId()+" para o mesmo paciente e mesmo procedimento emitido em "+F.dataString(f.getData()), FacesMessage.SEVERITY_WARN);
                                 return true;
                             }else{
                                 return false;
