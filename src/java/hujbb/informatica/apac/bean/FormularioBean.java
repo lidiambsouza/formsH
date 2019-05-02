@@ -1567,7 +1567,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
     }
 
     public void btImprimir(Usuario logado) throws ErroSistema {
-        if (!verificarApacRepetida()) {
+//        if (!verificarApacRepetida()) {
 
             if (getEntidade().getPag2().getFormulario_id() < 0) {//se for menor que 0 entao pag2 nao ta preenchida salvar so pag1
 
@@ -1585,7 +1585,7 @@ public class FormularioBean extends CrudBean<Formulario, FormularioDAO> implemen
                 btImprimirF2(logado);
 
             }
-        } 
+//        } 
         //FabricaDeConexoes.fecharConecxao();
     }
 
