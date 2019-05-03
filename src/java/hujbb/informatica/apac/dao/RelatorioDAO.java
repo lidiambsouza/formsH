@@ -187,15 +187,20 @@ public class RelatorioDAO {
         }
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
-            String sql = "SELECT\n"
-                    + "     formulario.`status_id_status` AS formulario_status_id_status,\n"
-                    + "     solicitante.`id_solicitante` AS solicitante_id_solicitante,\n"
-                    + "     solicitante.`nome` AS solicitante_nome,\n"
-                    + "     solicitante.`cpf` AS solicitante_cpf,\n"
-                    + "COUNT(`formulario`.`status_id_status`)  AS cont\n"
-                    + "FROM\n"
-                    + "     `solicitante` solicitante INNER JOIN `formulario` formulario ON solicitante.`id_solicitante` = formulario.`solicitante_id_solicitante`" + condicao + "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`";
-
+            String sql = "SELECT\n" +
+"	 formulario.`status_id_status` AS formulario_status_id_status,\n"
+                    + "	 solicitante.`id_solicitante` AS solicitante_id_solicitante,\n"
+                    + "	 solicitante.`nome` AS solicitante_nome,\n"
+                    + "	 solicitante.`cpf` AS solicitante_cpf,\n"
+                    + "	 setor.`id_setor` AS setor_id_setor,\n"
+                    + "	 setor.`nome` AS setor_nome,\n"
+                    + "	 setor.`sigla` AS setor_sigla,\n"
+                    + "     COUNT(`formulario`.`status_id_status`)  AS cont\n"
+                    + "     FROM\n"
+                    + "	 `solicitante` solicitante INNER JOIN `formulario` formulario ON solicitante.`id_solicitante` = formulario.`solicitante_id_solicitante`\n"
+                    + "     INNER JOIN `usuario` usuario ON `solicitante`.`usuario_id_usuario` = `usuario`.`id_usuario` \n"
+                    + "	 INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor`\n"
+                    + condicao+ "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`;";
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
@@ -210,6 +215,7 @@ public class RelatorioDAO {
                     r = new Relatorio();
                 }
                 r.setDescricao(rs.getString("solicitante_nome"));
+                r.setSetor(rs.getString("setor_sigla"));
 
                 switch (rs.getInt("formulario_status_id_status")) {
 
@@ -252,8 +258,9 @@ public class RelatorioDAO {
             return rels;
 
         } catch (SQLException e) {
-            throw new ErroSistema("Erro ao buscar dados do usuário", e);
+            F.setMsgErro("RelatorioDAO:quantitativoSOLICITANTE():"+e.toString());
         }
+        return null;
     }
 
     public List<Relatorio> quantitativopPROCEDIMENTO(String condicao) throws ErroSistema {
