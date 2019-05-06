@@ -6,6 +6,7 @@ import hujbb.informatica.apac.entidades.relarotios.Relatorio;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -13,51 +14,53 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class RelatorioBean implements Serializable{
- 
+public class RelatorioBean implements Serializable {
+
     //usuario
     private Usuario logado;
-    
-    
+
     private String legendaDataTable;
     private String legendaColuna0;
     private String busca;
     private int valueSomTipoRel;
-    
+    private Date dtIni;
+    private Date dtFim;
+
     private List<Relatorio> rel;
 
     @PostConstruct
     private void init() {
         valueSomTipoRel = -1;
-        rel =  new ArrayList<>();
+        dtIni =  new Date();
+        dtFim =  new Date();
+        rel = new ArrayList<>();
     }
-    
-    public void pesquisarRel(String condicao) throws ErroSistema{
+
+    public void pesquisarRel(String condicao) throws ErroSistema {
         switch (valueSomTipoRel) {
             case 0: {
-                rel = new RelatorioDAO().quantitativoCID(condicao);
+                rel = new RelatorioDAO().quantitativoCID(condicao,dtIni,dtFim);
                 break;
             }
             case 1: {
-                rel = new RelatorioDAO().quantitativoSETOR(condicao);
+                rel = new RelatorioDAO().quantitativoSETOR(condicao,dtIni,dtFim);
                 break;
             }
             case 2: {
-                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao);
+                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim);
                 break;
             }
             case 3: {
-                rel = new RelatorioDAO().quantitativopPROCEDIMENTO(condicao);
+                rel = new RelatorioDAO().quantitativopPROCEDIMENTO(condicao,dtIni,dtFim);
                 break;
             }
-            default:{
-                rel =  new ArrayList<>();
+            default: {
+                rel = new ArrayList<>();
                 break;
             }
         }
-        
+
     }
-    
 
     public String getLegendaDataTable() {
         switch (valueSomTipoRel) {
@@ -77,8 +80,8 @@ public class RelatorioBean implements Serializable{
                 legendaDataTable = "Quantitativo por PROCEDIMENTO";
                 break;
             }
-            default:{
-                legendaDataTable ="";
+            default: {
+                legendaDataTable = "";
                 break;
             }
 
@@ -132,8 +135,8 @@ public class RelatorioBean implements Serializable{
                 legendaColuna0 = "PROCEDIMENTO";
                 break;
             }
-            default:{
-                legendaColuna0 ="";
+            default: {
+                legendaColuna0 = "";
                 break;
             }
 
@@ -146,8 +149,8 @@ public class RelatorioBean implements Serializable{
     }
 
     public Usuario getLogado() {
-        if(logado == null){
-            logado =  new Usuario();
+        if (logado == null) {
+            logado = new Usuario();
         }
         return logado;
     }
@@ -155,7 +158,31 @@ public class RelatorioBean implements Serializable{
     public void setLogado(Usuario logado) {
         this.logado = logado;
     }
-    
-    
+
+    public Date getDtIni() {
+        return dtIni;
+    }
+
+    public void setDtIni(Date dtIni) {
+        if (dtIni != null && dtFim != null) {
+            if (dtIni.after(dtFim)) {
+                dtFim = dtIni;
+            }
+        }
+        this.dtIni = dtIni;
+    }
+
+    public Date getDtFim() {
+        return dtFim;
+    }
+
+    public void setDtFim(Date dtFim) {
+        if (dtFim != null && dtIni != null) {
+            if (dtFim.before(dtIni)) {
+                dtIni = dtFim;
+            }
+        }
+        this.dtFim = dtFim;
+    }
 
 }
