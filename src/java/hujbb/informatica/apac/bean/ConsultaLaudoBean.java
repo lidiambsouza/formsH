@@ -581,11 +581,7 @@ public class ConsultaLaudoBean implements Serializable {
     public Date getDtFimCriacao() {
         return dtFimCriacao;
     }
-
-    public void getDtFimCriacao(Date dtFimCriacao) {
-        this.dtFimCriacao = dtFimCriacao;
-    }
-
+  
     public void setDtFimCriacao(Date dtFimCriacao) {
         selectBooleanCheckBox_periodo = false;
         if (dtFimCriacao != null && dtIniCriacao != null) {
