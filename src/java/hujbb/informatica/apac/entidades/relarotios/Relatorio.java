@@ -3,6 +3,7 @@ package hujbb.informatica.apac.entidades.relarotios;
 public class Relatorio {
 
     private String descricao;
+    private String setor;
     private int autorizado;
     private int naoAutorizado;
     private int salvo;
@@ -75,6 +76,13 @@ public class Relatorio {
     public void setCancelado(int cancelado) {
         this.cancelado = cancelado;
     }
-    
 
+    public String getSetor() {
+        return setor;
+    }
+
+    public void setSetor(String setor) {
+        this.setor = setor;
+    }
+    
 }
