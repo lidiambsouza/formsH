@@ -8,7 +8,7 @@
              xmlns:f="http://xmlns.jcp.org/jsf/core">
     #{relatorioBean.setLogado(usuarioBean.logado)}
     <p:fieldset id="fsMaster">
-        <h:panelGrid columns="2" width="100%" >
+        <h:panelGrid columns="3" width="80%" >
             <h:panelGrid columns="2">
                 <h3>Relatório por:</h3>
                 <p:selectOneMenu  value="#{relatorioBean.valueSomTipoRel}" onkeydown="itBuscar.value ='';" onkeyup="itBuscar.value ='';">
@@ -20,8 +20,26 @@
                     <p:ajax event="change" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsMaster"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-
+          
             <h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLabel value="Período"  styleClass="labelDados"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:panelGrid columns="5">
+                        <h:outputLabel value="De"  styleClass="labelDados"/>
+                        <p:calendar size="11" id="dtIni" value="#{relatorioBean.dtIni}" navigator="true" readonlyInput="true" locale="pt" >
+                            <p:ajax event="dateSelect" listener="#{relatorioBean.pesquisarRel(vITBusca)}"  update="dtFim,fsQuantitativo" />
+                        </p:calendar>
+                        <h:outputLabel value="a"  styleClass="labelDados"/>
+                        <p:calendar size="11" id="dtFim" value="#{relatorioBean.dtFim}" navigator="true" readonlyInput="true" locale="pt" >
+                            <p:ajax event="dateSelect" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="dtIni,fsQuantitativo" />
+                        </p:calendar>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            
+             <h:panelGrid>
                 <h:outputLabel value="Filtrar busca" style="font-weight: bold"/>
                 <p:inputText id="itBuscar"  value="#{vITBusca}" style="width: 400px" onfocus="this.value = '';" required="false">
                     <p:ajax event="keyup" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsQuantitativo"  />

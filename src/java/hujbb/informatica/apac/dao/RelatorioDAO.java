@@ -9,14 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RelatorioDAO {
 
-    public List<Relatorio> quantitativoCID(String condicao) throws ErroSistema {
-        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";//novo
+    public List<Relatorio> quantitativoCID(String condicao,Date ini,Date fim) throws ErroSistema {
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1)  AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59') ";//novo
         if (condicao.isEmpty()) {
             condicao = condicao2;
         } else {
@@ -35,7 +36,7 @@ public class RelatorioDAO {
                     + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid` " + condicao + " "
                     + " GROUP BY cid.`cid`, `formulario`.`status_id_status` ORDER BY cid.`cid` \n"
                     + "     ";
-//            System.out.println(sql);
+    //        System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
@@ -95,9 +96,9 @@ public class RelatorioDAO {
         }
     }
 
-    public List<Relatorio> quantitativoSETOR(String condicao) throws ErroSistema {
+    public List<Relatorio> quantitativoSETOR(String condicao,Date ini,Date fim) throws ErroSistema {
 
-        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1)  AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59') ";
         if (condicao.isEmpty()) {
             condicao = condicao2;
         } else {
@@ -177,9 +178,9 @@ public class RelatorioDAO {
         }
     }
 
-    public List<Relatorio> quantitativoSOLICITANTE(String condicao) throws ErroSistema {
+    public List<Relatorio> quantitativoSOLICITANTE(String condicao,Date ini,Date fim) throws ErroSistema {
 
-        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1 AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59')) ";
         if (condicao.isEmpty()) {
             condicao = condicao2;
         } else {
@@ -263,9 +264,9 @@ public class RelatorioDAO {
         return null;
     }
 
-    public List<Relatorio> quantitativopPROCEDIMENTO(String condicao) throws ErroSistema {
+    public List<Relatorio> quantitativopPROCEDIMENTO(String condicao,Date ini,Date fim) throws ErroSistema {
 
-        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1) ";
+        String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1)  AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59') ";
         if (condicao.isEmpty()) {
             condicao = condicao2;
         } else {
