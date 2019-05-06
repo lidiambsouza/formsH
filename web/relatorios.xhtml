@@ -40,7 +40,11 @@
                 <p:column headerText="#{relatorioBean.legendaColuna0}" width="50%">
                     <h:outputText value="#{r.descricao}"/>
                 </p:column>
-
+                
+                <p:column headerText="Setor" sortBy="#{r.setor}" rendered="#{relatorioBean.valueSomTipoRel == 2}">
+                    <h:outputText value="#{r.setor}"/>
+                </p:column>
+                
                 <p:column headerText="Salvo" style="text-align: center" sortBy="#{r.salvo}">
                     <h:outputText value="#{r.salvo}"/>
                 </p:column>
