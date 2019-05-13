@@ -99,21 +99,15 @@
                 <p:column headerText="Total" style="text-align: center" sortBy="#{r.total}">
                     <h:outputText value="#{r.total}"/>    
                 </p:column>
-                
-                <f:facet name="footer">
-                   NO TOTAL EXISTEM <h:outputText value="#{relatorioBean.somatorioApacSituacao()}" /> FORMULÁRIOS NESTA PESQUISA 
-                </f:facet>
+
 
             </p:dataTable>
-            
-                <h:panelGrid width="100%" style="text-align: right">
+            <h:panelGrid width="100%" style="text-align: right">
                     <h:commandLink>
                         <p:graphicImage name="/img/excel.png" title="Exportar para excel"/>
-                        <p:dataExporter type="xls" target="dt" fileName="#{relatorioBean.legendaDataTable}" />
+                        <p:dataExporter type="xls" target="dt" fileName="xxx" />
                     </h:commandLink>
-            </h:panelGrid>
-            
-            
+                </h:panelGrid>
         </p:fieldset>
 
     </p:fieldset>
