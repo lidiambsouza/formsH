@@ -36,6 +36,10 @@ public class RelatorioBean implements Serializable {
         dtFim =  new Date();
         rel = new ArrayList<>();
         filtroSituacao="";
+<<<<<<< src/java/hujbb/informatica/apac/bean/RelatorioBean.java
+        somatorioApacSituacao();
+=======
+>>>>>>> src/java/hujbb/informatica/apac/bean/RelatorioBean.java
     }
 
     public void pesquisarRel(String condicao) throws ErroSistema {
@@ -87,6 +91,7 @@ public class RelatorioBean implements Serializable {
             }
             case 2: {
                 legendaDataTable = "Quantitativo por SOLICITANTE";
+                System.out.println("Total Geral" + somatorioApacSituacao());
                 break;
             }
             case 3: {
@@ -102,12 +107,25 @@ public class RelatorioBean implements Serializable {
         return legendaDataTable;
     }
     
+<<<<<<< src/java/hujbb/informatica/apac/bean/RelatorioBean.java
+    public String somatorioApacSituacao(){
+        int cont=0;
+        for(int i = 0; i<getRel().size() ;i++ ){
+            cont+=getRel().get(i).getTotal();
+        }
+        System.out.println(""+cont);
+        return Integer.toString(cont);
+        
+        
+        
+=======
     public int somatorioApacSituacao(){
         int cont=0;
         for(int i = 0; i<getRel().size() ;i++ ){
             cont=getRel().get(i).getTotal();
         }  
         return cont;
+>>>>>>> src/java/hujbb/informatica/apac/bean/RelatorioBean.java
     }
 
     public void setLegendaDataTable(String legendaDataTable) {
