@@ -25,6 +25,7 @@ public class RelatorioBean implements Serializable {
     private int valueSomTipoRel;
     private Date dtIni;
     private Date dtFim;
+    private String filtroSituacao;
 
     private List<Relatorio> rel;
 
@@ -34,6 +35,8 @@ public class RelatorioBean implements Serializable {
         dtIni =  new Date();
         dtFim =  new Date();
         rel = new ArrayList<>();
+        filtroSituacao="";
+        somatorioApacSituacao();
     }
 
     public void pesquisarRel(String condicao) throws ErroSistema {
@@ -47,8 +50,19 @@ public class RelatorioBean implements Serializable {
                 break;
             }
             case 2: {
-                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim);
+                if(filtroSituacao.equals("")){
+                  rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,0);
+                break;  
+                }else if (filtroSituacao.equals("0")){
+                    rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,1);
+                break; 
+                }else if (filtroSituacao.equals("I")){
+                    rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,2);
+                break;}
+                else{
+                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,0);
                 break;
+                }
             }
             case 3: {
                 rel = new RelatorioDAO().quantitativopPROCEDIMENTO(condicao,dtIni,dtFim);
@@ -74,6 +88,7 @@ public class RelatorioBean implements Serializable {
             }
             case 2: {
                 legendaDataTable = "Quantitativo por SOLICITANTE";
+                System.out.println("Total Geral" + somatorioApacSituacao());
                 break;
             }
             case 3: {
@@ -87,6 +102,18 @@ public class RelatorioBean implements Serializable {
 
         }
         return legendaDataTable;
+    }
+    
+    public String somatorioApacSituacao(){
+        int cont=0;
+        for(int i = 0; i<getRel().size() ;i++ ){
+            cont+=getRel().get(i).getTotal();
+        }
+        System.out.println(""+cont);
+        return Integer.toString(cont);
+        
+        
+        
     }
 
     public void setLegendaDataTable(String legendaDataTable) {
@@ -116,7 +143,7 @@ public class RelatorioBean implements Serializable {
     public void setRel(List<Relatorio> rel) {
         this.rel = rel;
     }
-
+    
     public String getLegendaColuna0() {
         switch (valueSomTipoRel) {
             case 0: {
@@ -176,6 +203,16 @@ public class RelatorioBean implements Serializable {
         return dtFim;
     }
 
+    public String getFiltroSituacao() {
+        return filtroSituacao;
+    }
+
+    public void setFiltroSituacao(String filtroSituacao) {
+        this.filtroSituacao = filtroSituacao;
+    }
+
+    
+    
     public void setDtFim(Date dtFim) {
         if (dtFim != null && dtIni != null) {
             if (dtFim.before(dtIni)) {

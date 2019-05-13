@@ -54,7 +54,7 @@ public class Cbo implements Serializable {
         List<Cbo> m = new CboDAO().buscar(condicao);
         itens.add(new SelectItem("0", "Selecione CBO..."));
         for (int i = 0; i < m.size(); i++) {
-            itens.add(new SelectItem(m.get(i).getCod() + "", m.get(i).getNome()));
+            itens.add(new SelectItem(m.get(i).getCod() + "",m.get(i).getCod()+ "-"+ m.get(i).getNome()));
         }
        
         

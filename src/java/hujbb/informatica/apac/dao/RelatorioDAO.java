@@ -1,5 +1,7 @@
 package hujbb.informatica.apac.dao;
 
+import hujbb.informatica.apac.entidades.Setor;
+import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.entidades.relarotios.Relatorio;
 import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.FabricaDeConexoes;
@@ -16,7 +18,7 @@ import java.util.Map;
 
 public class RelatorioDAO {
 
-    public List<Relatorio> quantitativoCID(String condicao,Date ini,Date fim) throws ErroSistema {
+    public List<Relatorio> quantitativoCID(String condicao, Date ini, Date fim) throws ErroSistema {
         String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1)  AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59') ";//novo
         if (condicao.isEmpty()) {
             condicao = condicao2;
@@ -36,7 +38,7 @@ public class RelatorioDAO {
                     + "     INNER JOIN `cid` cid ON proc_justificativa.`cid_cid_principal` = cid.`cid` " + condicao + " "
                     + " GROUP BY cid.`cid`, `formulario`.`status_id_status` ORDER BY cid.`cid` \n"
                     + "     ";
-    //        System.out.println(sql);
+            //        System.out.println(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
@@ -53,7 +55,7 @@ public class RelatorioDAO {
                 r.setDescricao(rs.getString("cid_cid") + "-" + rs.getString("cid_nome"));
 
                 switch (rs.getInt("status")) {
-                     case -9: {//cancelado
+                    case -9: {//cancelado
                         r.setCancelado(rs.getInt("cont"));
                         break;
                     }
@@ -96,7 +98,7 @@ public class RelatorioDAO {
         }
     }
 
-    public List<Relatorio> quantitativoSETOR(String condicao,Date ini,Date fim) throws ErroSistema {
+    public List<Relatorio> quantitativoSETOR(String condicao, Date ini, Date fim) throws ErroSistema {
 
         String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1)  AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59') ";
         if (condicao.isEmpty()) {
@@ -135,7 +137,7 @@ public class RelatorioDAO {
                 r.setDescricao(rs.getString("setor_sigla"));
 
                 switch (rs.getInt("formulario_status_id_status")) {
-                     case -9: {//cancelado
+                    case -9: {//cancelado
                         r.setCancelado(rs.getInt("cont"));
                         break;
                     }
@@ -178,18 +180,19 @@ public class RelatorioDAO {
         }
     }
 
-    public List<Relatorio> quantitativoSOLICITANTE(String condicao,Date ini,Date fim) throws ErroSistema {
-
+    public List<Relatorio> quantitativoSOLICITANTE(String condicao, Date ini, Date fim, int filtroSituacao) throws ErroSistema {
+        String flag = "";
         String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1 AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59')) ";
         if (condicao.isEmpty()) {
             condicao = condicao2;
         } else {
+            flag = condicao;
             condicao = condicao2 + " AND (solicitante.`nome` LIKE '" + condicao + "%') ";
         }
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
-            String sql = "SELECT\n" +
-"	 formulario.`status_id_status` AS formulario_status_id_status,\n"
+            String sql = "SELECT\n"
+                    + "	 formulario.`status_id_status` AS formulario_status_id_status,\n"
                     + "	 solicitante.`id_solicitante` AS solicitante_id_solicitante,\n"
                     + "	 solicitante.`nome` AS solicitante_nome,\n"
                     + "	 solicitante.`cpf` AS solicitante_cpf,\n"
@@ -201,70 +204,110 @@ public class RelatorioDAO {
                     + "	 `solicitante` solicitante INNER JOIN `formulario` formulario ON solicitante.`id_solicitante` = formulario.`solicitante_id_solicitante`\n"
                     + "     INNER JOIN `usuario` usuario ON `solicitante`.`usuario_id_usuario` = `usuario`.`id_usuario` \n"
                     + "	 INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor`\n"
-                    + condicao+ "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`;";
+                    + condicao + "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`;";
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
             Map<Integer, Relatorio> rAux = new HashMap<Integer, Relatorio>();
+            Map<Integer, Relatorio> rAux2 = new HashMap<Integer, Relatorio>();
+            Integer k = 0;
+            if (filtroSituacao == 0 || filtroSituacao == 1) {
+                while (rs.next()) {
+                    Relatorio r;
+                    int id = rs.getInt("solicitante_id_solicitante");
+                    if (rAux.containsKey(id)) {
+                        r = rAux.get(id);
+                    } else {
+                        r = new Relatorio();
+                    }
+                    r.setDescricao(rs.getString("solicitante_nome"));
+                    r.setSetor(rs.getString("setor_sigla"));
 
-            while (rs.next()) {
-                Relatorio r;
-                int id = rs.getInt("solicitante_id_solicitante");
-                if (rAux.containsKey(id)) {
-                    r = rAux.get(id);
-                } else {
-                    r = new Relatorio();
+                    switch (rs.getInt("formulario_status_id_status")) {
+
+                        case -9: {//cancelado
+                            r.setCancelado(rs.getInt("cont"));
+                            break;
+                        }
+                        case -1: {//nao autorizado
+                            r.setNaoAutorizado(rs.getInt("cont"));
+                            break;
+                        }
+                        case 2: {//salso
+                            r.setSalvo(rs.getInt("cont"));
+                            break;
+                        }
+                        case 3: {//emitido
+                            r.setEmitido(rs.getInt("cont"));
+                            break;
+                        }
+                        case 4: {//enviado dere
+                            r.setEnviadoDere(rs.getInt("cont"));
+                            break;
+                        }
+                        case 5: {//autorizado
+                            r.setAutorizado(rs.getInt("cont"));
+                            break;
+                        }
+
+                        default: {
+                            break;
+                        }
+                    }
+                    rAux.put(rs.getInt("solicitante_id_solicitante"), r);
                 }
-                r.setDescricao(rs.getString("solicitante_nome"));
-                r.setSetor(rs.getString("setor_sigla"));
+                for (Integer i : rAux.keySet()) {
+                    rels.add(rAux.get(i));
+                    k = i;
+                    
+                }
+            }
+            if (filtroSituacao == 0 || filtroSituacao == 2) {
+                if (flag.equals("") || flag == null) {
+                    sql = "Select * from solicitante where id_solicitante not in (select solicitante_id_solicitante from formulario WHERE (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59'))";
 
-                switch (rs.getInt("formulario_status_id_status")) {
+                    ps = conexao.prepareStatement(sql);
+                    rs = ps.executeQuery();
 
-                    case -9: {//cancelado
-                        r.setCancelado(rs.getInt("cont"));
-                        break;
-                    }
-                    case -1: {//nao autorizado
-                        r.setNaoAutorizado(rs.getInt("cont"));
-                        break;
-                    }
-                    case 2: {//salso
-                        r.setSalvo(rs.getInt("cont"));
-                        break;
-                    }
-                    case 3: {//emitido
-                        r.setEmitido(rs.getInt("cont"));
-                        break;
-                    }
-                    case 4: {//enviado dere
-                        r.setEnviadoDere(rs.getInt("cont"));
-                        break;
-                    }
-                    case 5: {//autorizado
-                        r.setAutorizado(rs.getInt("cont"));
-                        break;
-                    }
+                    
+                    while (rs.next()) {
+                        Relatorio r = new Relatorio();
+                        int id = rs.getInt("id_solicitante");
+                        if (rAux2.containsKey(id)) {
+                            r = rAux2.get(id);
+                        } else {
+                            r = new Relatorio();
+                        }
+                        r.setDescricao(rs.getString("nome"));
+                        List<Usuario> usuarios = new UsuarioDAO().buscar("WHERE usuario.`id_usuario`=" + id);
+                        for (int i = 0; i < usuarios.size(); i++) {
+                            r.setSetor(usuarios.get(i).getSetor().getSigla());
+                            
+                        }
 
-                    default: {
-                        break;
+                        r.setCancelado(0);
+                        r.setNaoAutorizado(0);
+                        r.setSalvo(0);
+                        r.setEmitido(0);
+                        rAux2.put(rs.getInt("id_solicitante"), r);
+                        
+                    }
+                    for (Integer j : rAux2.keySet()) {
+                        rels.add(rAux2.get(j));
+                        
                     }
                 }
-
-                rAux.put(rs.getInt("solicitante_id_solicitante"), r);
             }
-            for (Integer i : rAux.keySet()) {
-                rels.add(rAux.get(i));
-            }
-
+            
             return rels;
 
         } catch (SQLException e) {
-            F.setMsgErro("RelatorioDAO:quantitativoSOLICITANTE():"+e.toString());
+            F.setMsgErro("RelatorioDAO:quantitativoSOLICITANTE():" + e.toString());
         }
         return null;
     }
 
-    public List<Relatorio> quantitativopPROCEDIMENTO(String condicao,Date ini,Date fim) throws ErroSistema {
+    public List<Relatorio> quantitativopPROCEDIMENTO(String condicao, Date ini, Date fim) throws ErroSistema {
 
         String condicao2 = " WHERE (`formulario`.`status_id_status` <> 1)  AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59') ";
         if (condicao.isEmpty()) {
@@ -284,8 +327,8 @@ public class RelatorioDAO {
                     + "     `formulario` formulario INNER JOIN `formulario_has_procedimento_sus` formulario_has_procedimento_sus ON formulario.`id_formulario` = formulario_has_procedimento_sus.`formulario_id_formulario`\n"
                     + "     INNER JOIN `procedimento_sus` procedimento_sus ON formulario_has_procedimento_sus.`procedimento_sus_codigo` = procedimento_sus.`codigo` " + condicao
                     + "  GROUP BY formulario.`status_id_status`,  procedimento_sus.`codigo` ORDER BY procedimento_sus.`nome` ";
-            
-             // F.setMsgErro(sql);
+
+            // F.setMsgErro(sql);
             PreparedStatement ps = conexao.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Relatorio> rels = new ArrayList<>();
@@ -302,7 +345,7 @@ public class RelatorioDAO {
                 r.setDescricao(rs.getString("procedimento_sus_codigo") + " - " + rs.getString("procedimento_sus_nome"));
 
                 switch (rs.getInt("formulario_status_id_status")) {
-                     case -9: {//cancelado
+                    case -9: {//cancelado
                         r.setCancelado(rs.getInt("cont"));
                         break;
                     }
@@ -341,7 +384,7 @@ public class RelatorioDAO {
             return rels;
 
         } catch (SQLException e) {
-            F.setMsgErro("relatorioDAO:quantitativopPROCEDIMENTO():"+e.toString());
+            F.setMsgErro("relatorioDAO:quantitativopPROCEDIMENTO():" + e.toString());
         }
         return null;
     }
