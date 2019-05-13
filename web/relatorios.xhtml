@@ -48,10 +48,11 @@
             </h:panelGrid>
 
             <h:panelGrid  columns="3" style="padding-right: 10px" rendered="#{relatorioBean.valueSomTipoRel==2}">
-                <p:selectOneRadio columns="1" layout="grid" id="somStatusRelatorio" value="#{relatorioBean.filtroSituacao}" style="width: 200px"  >
-                    <f:selectItem  itemValue="" itemLabel="Todos"/>
-                    <f:selectItem  itemValue="0" itemLabel="Producao" />
-                    <f:selectItem  itemValue="I" itemLabel="Sem Producao" />
+                <p:selectOneRadio columns="3" layout="grid" id="somStatusRelatorio" value="#{relatorioBean.filtroSituacao}" style="width: 200px"  >
+                    <f:selectItem  itemValue="0" itemLabel="Todos"/>
+                    <f:selectItem  itemValue="1" itemLabel="Producao" />
+                    <f:selectItem  itemValue="2" itemLabel="Sem Producao" />
+                    <p:ajax event="click" update="somStatusRelatorio"/>
                     <p:ajax event="change" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsQuantitativo"/>
                 </p:selectOneRadio>  
             </h:panelGrid>
