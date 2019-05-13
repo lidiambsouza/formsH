@@ -259,12 +259,8 @@ public class RelatorioDAO {
                 for (Integer i : rAux.keySet()) {
                     rels.add(rAux.get(i));
                     k = i;
-<<<<<<< src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
-                    
-=======
                     System.out.println(rAux.get(i));
                     System.out.println("@@@@@@");
->>>>>>> src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
                 }
             }
             if (filtroSituacao == 0 || filtroSituacao == 2) {
@@ -274,11 +270,7 @@ public class RelatorioDAO {
                     ps = conexao.prepareStatement(sql);
                     rs = ps.executeQuery();
 
-<<<<<<< src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
-                    
-=======
                     System.out.println("parte 1");
->>>>>>> src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
                     while (rs.next()) {
                         Relatorio r = new Relatorio();
                         int id = rs.getInt("id_solicitante");
@@ -291,11 +283,7 @@ public class RelatorioDAO {
                         List<Usuario> usuarios = new UsuarioDAO().buscar("WHERE usuario.`id_usuario`=" + id);
                         for (int i = 0; i < usuarios.size(); i++) {
                             r.setSetor(usuarios.get(i).getSetor().getSigla());
-<<<<<<< src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
-                            
-=======
                             System.out.println("parte 2");
->>>>>>> src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
                         }
 
                         r.setCancelado(0);
@@ -303,17 +291,6 @@ public class RelatorioDAO {
                         r.setSalvo(0);
                         r.setEmitido(0);
                         rAux2.put(rs.getInt("id_solicitante"), r);
-<<<<<<< src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
-                        
-                    }
-                    for (Integer j : rAux2.keySet()) {
-                        rels.add(rAux2.get(j));
-                        
-                    }
-                }
-            }
-            
-=======
                         System.out.println("parte 3");
                     }
                     for (Integer j : rAux2.keySet()) {
@@ -324,7 +301,6 @@ public class RelatorioDAO {
                 }
             }
             System.out.println("parte 5");
->>>>>>> src/java/hujbb/informatica/apac/dao/RelatorioDAO.java
             return rels;
 
         } catch (SQLException e) {
