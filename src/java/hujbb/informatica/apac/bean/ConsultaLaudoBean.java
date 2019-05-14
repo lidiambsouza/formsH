@@ -91,7 +91,6 @@ public class ConsultaLaudoBean implements Serializable {
         } catch (ErroSistema ex) {
             F.setMsgErro("consultaLaodoBean.init:" + ex.toString());
         }
-
     }
 
     //itens
@@ -146,7 +145,7 @@ public class ConsultaLaudoBean implements Serializable {
 
         } else {
             try {
-                // verifica se perfil logado é solicitante ou solicitante oncologico
+                
                 status_item = Status.item("id_status = 2 OR id_status = 3 OR id_status = -9");
 
                 ////FabricaDeConexoes.fecharConecxao();

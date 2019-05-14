@@ -3,11 +3,14 @@ package hujbb.informatica.apac.bean;
 import hujbb.informatica.apac.dao.RelatorioDAO;
 import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.entidades.relarotios.Relatorio;
+import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -25,17 +28,21 @@ public class RelatorioBean implements Serializable {
     private int valueSomTipoRel;
     private Date dtIni;
     private Date dtFim;
-    private String filtroSituacao;
+    private int filtroSituacao;
 
     private List<Relatorio> rel;
 
     @PostConstruct
     private void init() {
-        valueSomTipoRel = -1;
+        valueSomTipoRel = 2;
         dtIni =  new Date();
         dtFim =  new Date();
         rel = new ArrayList<>();
-        filtroSituacao="";
+        try {
+            pesquisarRel("");
+        } catch (ErroSistema ex) {
+            F.setMsgErro("relatorio Bean:init:"+ex.toString());
+        }
     }
 
     public void pesquisarRel(String condicao) throws ErroSistema {
@@ -49,19 +56,8 @@ public class RelatorioBean implements Serializable {
                 break;
             }
             case 2: {
-                if(filtroSituacao.equals("")){
-                  rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,0);
-                break;  
-                }else if (filtroSituacao.equals("0")){
-                    rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,1);
-                break; 
-                }else if (filtroSituacao.equals("I")){
-                    rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,2);
-                break;}
-                else{
-                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim,0);
+                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao, dtIni, dtFim, filtroSituacao);
                 break;
-                }
             }
             case 3: {
                 rel = new RelatorioDAO().quantitativopPROCEDIMENTO(condicao,dtIni,dtFim);
@@ -197,15 +193,14 @@ public class RelatorioBean implements Serializable {
         return dtFim;
     }
 
-    public String getFiltroSituacao() {
+    public int getFiltroSituacao() {
         return filtroSituacao;
     }
 
-    public void setFiltroSituacao(String filtroSituacao) {
+    public void setFiltroSituacao(int filtroSituacao) {
         this.filtroSituacao = filtroSituacao;
     }
 
-    
     
     public void setDtFim(Date dtFim) {
         if (dtFim != null && dtIni != null) {
