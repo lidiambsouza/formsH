@@ -3,11 +3,14 @@ package hujbb.informatica.apac.bean;
 import hujbb.informatica.apac.dao.RelatorioDAO;
 import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.entidades.relarotios.Relatorio;
+import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -31,10 +34,15 @@ public class RelatorioBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        valueSomTipoRel = -1;
+        valueSomTipoRel = 2;
         dtIni =  new Date();
         dtFim =  new Date();
         rel = new ArrayList<>();
+        try {
+            pesquisarRel("");
+        } catch (ErroSistema ex) {
+            F.setMsgErro("relatorio Bean:init:"+ex.toString());
+        }
     }
 
     public void pesquisarRel(String condicao) throws ErroSistema {
