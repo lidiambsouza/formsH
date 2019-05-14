@@ -138,7 +138,7 @@ public class ConsultaLaudoBean implements Serializable {
 
         if (perfil == 3) {//3 administrador
             try {
-                status_item = Status.item("");
+                status_item = Status.item("id_status = 2 OR id_status = 3 OR id_status = -9");
                 // //FabricaDeConexoes.fecharConecxao();
             } catch (ErroSistema e) {
 
