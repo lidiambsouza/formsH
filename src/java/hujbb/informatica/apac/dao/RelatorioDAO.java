@@ -198,9 +198,7 @@ public class RelatorioDAO {
 
                 condicao2 += " AND (`formulario`.`status_id_status` <> 1 AND (formulario.`data` between '" + F.dataStringBanco(ini) + " 00:00:00' AND '" + F.dataStringBanco(fim) + " 23:59:59')) ";
 
-                if (condicao.isEmpty()) {
-                    condicao = condicao2;
-                }
+               
                 try {
                     Connection conexao = FabricaDeConexoes.getConexao();
                     String sql = "SELECT\n"
@@ -216,7 +214,7 @@ public class RelatorioDAO {
                             + "	 `solicitante` solicitante INNER JOIN `formulario` formulario ON solicitante.`id_solicitante` = formulario.`solicitante_id_solicitante`\n"
                             + "     INNER JOIN `usuario` usuario ON `solicitante`.`usuario_id_usuario` = `usuario`.`id_usuario` \n"
                             + "	 INNER JOIN `setor` setor ON usuario.`setor_id_setor` = setor.`id_setor`\n"
-                            + condicao + "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`;";
+                            + condicao2 + "  GROUP BY formulario.`status_id_status`, solicitante.`id_solicitante`;";
                     
                     PreparedStatement ps = conexao.prepareStatement(sql);
                     ResultSet rs = ps.executeQuery();
