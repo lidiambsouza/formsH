@@ -100,7 +100,10 @@
                 <p:column headerText="Total" style="text-align: center" sortBy="#{r.total}">
                     <h:outputText value="#{r.total}"/>    
                 </p:column>
-
+                
+                <f:facet name="footer">
+                    NO TOTAL EXISTEM <h:outputText value="#{relatorioBean.somatorioApacSituacao()}" /> FORMULÁRIOS NESTA PESQUISA
+                </f:facet>
 
             </p:dataTable>
             <h:panelGrid width="100%" style="text-align: right">

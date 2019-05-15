@@ -101,7 +101,7 @@ public class RelatorioBean implements Serializable {
     public int somatorioApacSituacao(){
         int cont=0;
         for(int i = 0; i<getRel().size() ;i++ ){
-            cont=getRel().get(i).getTotal();
+            cont+=getRel().get(i).getTotal();
         }  
         return cont;
     }
