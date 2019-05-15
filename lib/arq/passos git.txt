@@ -1,0 +1,28 @@
+*0 acessar o diretorio do projeto local ou fazer clone do gitlab
+
+*1pull (puxar)
+git pull origin <develop>
+
+*2nova branch
+git checkout -b <nome>	//cria e muda para a nova branch
+git branch <nome da branch>  //só cria
+
+--codificar
+
+
+*3adicionar 
+git add .
+git status     - (verifica a mudança relaizada)
+
+*4commit
+git commit -m "tua msg"
+
+*5push (empurrar)
+git push origin <nome da branch>
+
+
+
+
+
+*(extras)
+git config --global --unset-all usuario

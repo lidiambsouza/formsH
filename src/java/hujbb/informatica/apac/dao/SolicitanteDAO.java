@@ -97,6 +97,7 @@ public class SolicitanteDAO implements Serializable, CrudDAO<Solicitante> {
 
     @Override
     public List<Solicitante> buscar(String condicao) throws ErroSistema {
+        condicao =  F.tratarCondicaoSQL(condicao);
         try {
             Connection conexao = FabricaDeConexoes.getConexao();
             String sql = "SELECT\n"

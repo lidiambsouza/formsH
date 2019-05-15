@@ -139,7 +139,7 @@ public class F {
     }
 
     public static String tratarCondicaoSQL(String condicao) {
-        if (condicao.isEmpty()) {
+        if (condicao ==  null || condicao.isEmpty()) {
             condicao = " WHERE 1 ";
         } else {
             condicao = " WHERE " + condicao.replace("WHERE", "");
