@@ -7,12 +7,12 @@
              xmlns:p="http://primefaces.org/ui"
              xmlns:f="http://xmlns.jcp.org/jsf/core">
     #{relatorioBean.setLogado(usuarioBean.logado)}
+
     <p:fieldset id="fsMaster">
-        <h:panelGrid columns="3" width="80%" >
-            <h:panelGrid columns="2">
-                <h3>Relatório por:</h3>
-                <p:selectOneMenu  value="#{relatorioBean.valueSomTipoRel}" onkeydown="itBuscar.value ='';" onkeyup="itBuscar.value ='';">
-                    <f:selectItem itemLabel="SELECIONE" itemValue="-1"/>
+        <h:panelGrid columns="4" width="90%" style="padding-left: 3%" columnClasses="column20,column25,column25,column25">
+            <h:panelGrid>
+                <h:outputLabel value="Consultar por:"  styleClass="labelDados"/>
+                <p:selectOneMenu  value="#{relatorioBean.valueSomTipoRel}" onkeydown="itBuscar.value = '';" onkeyup="itBuscar.value = '';" style="width: 200px">
                     <f:selectItem itemLabel="CID 10" itemValue="0"/>
                     <f:selectItem itemLabel="SETOR" itemValue="1"/>
                     <f:selectItem itemLabel="SOLICITANTE" itemValue="2"/>
@@ -20,10 +20,18 @@
                     <p:ajax event="change" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsMaster"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-          
+
+            <h:panelGrid>
+                <h:outputLabel value="Filtrar busca" style="font-weight: bold"/>
+                <p:inputText id="itBuscar"  value="#{vITBusca}" style="width: 400px" onfocus="this.value = '';" required="false">
+                    <p:ajax event="keyup" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsQuantitativo"  />
+                    <p:ajax update="itBuscar" resetValues="true"/>
+                </p:inputText>
+            </h:panelGrid>
+
             <h:panelGrid>
                 <h:panelGrid>
-                    <h:outputLabel value="Período"  styleClass="labelDados"/>
+                    <h:outputLabel value="Período de Preenchimento"  styleClass="labelDados"/>
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:panelGrid columns="5">
@@ -38,15 +46,17 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid>
-            
-             <h:panelGrid>
-                <h:outputLabel value="Filtrar busca" style="font-weight: bold"/>
-                <p:inputText id="itBuscar"  value="#{vITBusca}" style="width: 400px" onfocus="this.value = '';" required="false">
-                    <p:ajax event="keyup" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsQuantitativo"  />
-                    <p:ajax update="itBuscar" resetValues="true"/>
-                </p:inputText>
+
+            <h:panelGrid  columns="3" style="padding-right: 10px" rendered="#{relatorioBean.valueSomTipoRel==2}">
+                <p:selectOneRadio columns="3" layout="grid" id="somStatusRelatorio" value="#{relatorioBean.filtroSituacao}" style="width: 300px"  >
+                    <f:selectItem  itemValue="0" itemLabel="Todos"/>
+                    <f:selectItem  itemValue="1" itemLabel="Producao" />
+                    <f:selectItem  itemValue="2" itemLabel="Sem Producao" />
+                    <p:ajax event="click" update="somStatusRelatorio"/>
+                    <p:ajax event="change" listener="#{relatorioBean.pesquisarRel(vITBusca)}" update="fsQuantitativo"/>
+                </p:selectOneRadio>  
             </h:panelGrid>
-                        
+
         </h:panelGrid>
 
         <p:fieldset id="fsQuantitativo" rendered="#{relatorioBean.valueSomTipoRel > -1}" >
@@ -55,14 +65,14 @@
                     <h:outputText value="#{relatorioBean.legendaDataTable}" />
                 </f:facet>
 
-                <p:column headerText="#{relatorioBean.legendaColuna0}" width="50%">
+                <p:column headerText="#{relatorioBean.legendaColuna0}" width="50%" sortBy="#{r.descricao}">
                     <h:outputText value="#{r.descricao}"/>
                 </p:column>
-                
+
                 <p:column headerText="Setor" sortBy="#{r.setor}" rendered="#{relatorioBean.valueSomTipoRel == 2}">
                     <h:outputText value="#{r.setor}"/>
                 </p:column>
-                
+
                 <p:column headerText="Salvo" style="text-align: center" sortBy="#{r.salvo}">
                     <h:outputText value="#{r.salvo}"/>
                 </p:column>
@@ -90,7 +100,18 @@
                 <p:column headerText="Total" style="text-align: center" sortBy="#{r.total}">
                     <h:outputText value="#{r.total}"/>    
                 </p:column>
+                
+                <f:facet name="footer">
+                    NO TOTAL EXISTEM <h:outputText value="#{relatorioBean.somatorioApacSituacao()}" /> FORMULÁRIOS NESTA PESQUISA
+                </f:facet>
+
             </p:dataTable>
+            <h:panelGrid width="100%" style="text-align: right">
+                <h:commandLink>
+                    <p:graphicImage name="/img/excel.png" title="Exportar para excel"/>
+                    <p:dataExporter type="xls" target="dt" fileName="#{relatorioBean.legendaDataTable}" />
+                </h:commandLink>
+            </h:panelGrid>
         </p:fieldset>
 
     </p:fieldset>

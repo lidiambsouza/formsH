@@ -3,11 +3,14 @@ package hujbb.informatica.apac.bean;
 import hujbb.informatica.apac.dao.RelatorioDAO;
 import hujbb.informatica.apac.entidades.Usuario;
 import hujbb.informatica.apac.entidades.relarotios.Relatorio;
+import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -25,15 +28,21 @@ public class RelatorioBean implements Serializable {
     private int valueSomTipoRel;
     private Date dtIni;
     private Date dtFim;
+    private int filtroSituacao;
 
     private List<Relatorio> rel;
 
     @PostConstruct
     private void init() {
-        valueSomTipoRel = -1;
+        valueSomTipoRel = 2;
         dtIni =  new Date();
         dtFim =  new Date();
         rel = new ArrayList<>();
+        try {
+            pesquisarRel("");
+        } catch (ErroSistema ex) {
+            F.setMsgErro("relatorio Bean:init:"+ex.toString());
+        }
     }
 
     public void pesquisarRel(String condicao) throws ErroSistema {
@@ -47,7 +56,7 @@ public class RelatorioBean implements Serializable {
                 break;
             }
             case 2: {
-                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao,dtIni,dtFim);
+                rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao, dtIni, dtFim, filtroSituacao);
                 break;
             }
             case 3: {
@@ -88,6 +97,14 @@ public class RelatorioBean implements Serializable {
         }
         return legendaDataTable;
     }
+    
+    public int somatorioApacSituacao(){
+        int cont=0;
+        for(int i = 0; i<getRel().size() ;i++ ){
+            cont+=getRel().get(i).getTotal();
+        }  
+        return cont;
+    }
 
     public void setLegendaDataTable(String legendaDataTable) {
         this.legendaDataTable = legendaDataTable;
@@ -116,7 +133,7 @@ public class RelatorioBean implements Serializable {
     public void setRel(List<Relatorio> rel) {
         this.rel = rel;
     }
-
+    
     public String getLegendaColuna0() {
         switch (valueSomTipoRel) {
             case 0: {
@@ -176,6 +193,15 @@ public class RelatorioBean implements Serializable {
         return dtFim;
     }
 
+    public int getFiltroSituacao() {
+        return filtroSituacao;
+    }
+
+    public void setFiltroSituacao(int filtroSituacao) {
+        this.filtroSituacao = filtroSituacao;
+    }
+
+    
     public void setDtFim(Date dtFim) {
         if (dtFim != null && dtIni != null) {
             if (dtFim.before(dtIni)) {
