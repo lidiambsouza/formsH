@@ -91,7 +91,6 @@ public class ConsultaLaudoBean implements Serializable {
         } catch (ErroSistema ex) {
             F.setMsgErro("consultaLaodoBean.init:" + ex.toString());
         }
-
     }
 
     //itens
@@ -138,7 +137,7 @@ public class ConsultaLaudoBean implements Serializable {
 
         if (perfil == 3) {//3 administrador
             try {
-                status_item = Status.item("");
+                status_item = Status.item("id_status = 2 OR id_status = 3 OR id_status = -9");
                 // //FabricaDeConexoes.fecharConecxao();
             } catch (ErroSistema e) {
 
@@ -146,7 +145,7 @@ public class ConsultaLaudoBean implements Serializable {
 
         } else {
             try {
-                // verifica se perfil logado é solicitante ou solicitante oncologico
+                
                 status_item = Status.item("id_status = 2 OR id_status = 3 OR id_status = -9");
 
                 ////FabricaDeConexoes.fecharConecxao();
@@ -581,11 +580,7 @@ public class ConsultaLaudoBean implements Serializable {
     public Date getDtFimCriacao() {
         return dtFimCriacao;
     }
-
-    public void getDtFimCriacao(Date dtFimCriacao) {
-        this.dtFimCriacao = dtFimCriacao;
-    }
-
+  
     public void setDtFimCriacao(Date dtFimCriacao) {
         selectBooleanCheckBox_periodo = false;
         if (dtFimCriacao != null && dtIniCriacao != null) {

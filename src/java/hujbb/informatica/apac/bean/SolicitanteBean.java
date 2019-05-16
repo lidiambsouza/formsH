@@ -489,7 +489,7 @@ public class SolicitanteBean extends CrudBean<Solicitante, SolicitanteDAO> {
             setorItem.add(new SelectItem(-1, "SELECIONE O SETOR"));
             if (setores != null && setores.size() > 0) {
                 for (Setor setor : setores) {
-                    setorItem.add(new SelectItem(setor.getId_setor(), setor.getSigla().toUpperCase() + " - " + setor.getNome()));
+                   setorItem.add(new SelectItem(setor.getId_setor(), setor.getSigla().toUpperCase() + " - " + setor.getNome()));
                 }
             } else {
                 F.mensagem("Falha ao carregar dados dos setores do Banco de dados!", "", FacesMessage.SEVERITY_ERROR);
