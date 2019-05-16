@@ -29,31 +29,21 @@ public class FabricaDeConexoes {
 //    private static final String USUARIO = "formsus";
 //    private static final String SENHA = "$fs2018&*";
     
-<<<<<<< src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
-    //homologação no 100
-=======
-  //  homologação no 100
->>>>>>> src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
-    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/formsh_hujbb_homologacao";
-    private static final String USUARIO = "formsus";
-    private static final String SENHA = "$fs2018&*";
+
+   
     
     
-<<<<<<< src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
-    //desenvolvimento no 110
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
-    
-=======
-//    //desenvolvimento no 110
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
+//    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/formsh_hujbb_homologacao";
+//    private static final String USUARIO = "formsus";
+//    private static final String SENHA = "$fs2018&*";
 //    
->>>>>>> src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
     
-// 
+
+//    //desenvolvimento no 110
+    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
+    private static final String USUARIO = "gestaoti";
+    private static final String SENHA = "@hu@2018";
+
 //    
     private static Connection conexaoAghuBarros;
     private static final String URL_CONEXAO_AGHU_BARROS = "jdbc:postgresql://database.aghu.hujbb.br:6544/dbaghu";

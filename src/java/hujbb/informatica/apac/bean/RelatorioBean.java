@@ -7,6 +7,7 @@ import hujbb.informatica.apac.util.F;
 import hujbb.informatica.apac.util.execao.ErroSistema;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -57,6 +58,20 @@ public class RelatorioBean implements Serializable {
             }
             case 2: {
                 rel = new RelatorioDAO().quantitativoSOLICITANTE(condicao, dtIni, dtFim, filtroSituacao);
+                if(rel!=null && !rel.isEmpty()){
+                    rel.sort(new Comparator<Relatorio> () {
+                        @Override
+                        public int compare(Relatorio o1, Relatorio o2) {
+                            if(o1.getTotal()<o2.getTotal()){
+                                return 1;
+                            }else if(o1.getTotal()==o2.getTotal()){
+                                return 0;
+                            }else{
+                                return -1;
+                            }
+                        }
+                    });
+                }
                 break;
             }
             case 3: {

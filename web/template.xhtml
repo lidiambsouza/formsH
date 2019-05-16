@@ -57,8 +57,8 @@
                             <p:menuitem value="Buscar / Editar" icon="ui-icon-search" url="buscarUsuario.jsf" />                         
                         </p:submenu>
                         <p:menuitem value="Log" icon="ui-icon-clipboard" url="log.jsf" rendered="#{templateBean.rendere_log}" />                         
-                        <p:submenu label="Relatórios" icon="ui-icon-clipboard" rendered="#{templateBean.rendere_log}">
-                            <p:menuitem value="Relatórios quantitativos " icon="ui-icon-clipboard" url="relatorios.jsf" rendered="#{templateBean.rendere_log}" />                         
+                        <p:submenu label="Consultas" icon="ui-icon-clipboard" rendered="#{templateBean.rendere_log}">
+                            <p:menuitem value="Consultar quantitativos " icon="ui-icon-clipboard" url="relatorios.jsf" rendered="#{templateBean.rendere_log}" />                         
                             <p:menuitem value="Consultar APACs emitidos por período" icon="ui-icon-search" url="emitidos.jsf" rendered="#{templateBean.rendere_log}" />                         
                         </p:submenu>
                         <p:menuitem value="Sair" icon="ui-icon-arrowreturnthick-1-e"  action="#{usuarioBean.sair()}"   disabled="#{!usuarioBean.usuarioLogado.logado}"/>

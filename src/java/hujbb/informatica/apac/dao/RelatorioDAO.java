@@ -187,9 +187,9 @@ public class RelatorioDAO {
         List<Solicitante> solicitantes;
         List<Relatorio> rels = new ArrayList<>();
         if (condicao == null || condicao.isEmpty()) {
-            solicitantes = solicitanteDAO.buscar("");
+            solicitantes = solicitanteDAO.buscar("perfil.`id_perfil` = 2 OR perfil.`id_perfil` = 4");
         } else {
-            solicitantes = solicitanteDAO.buscar("solicitante.`nome` LIKE '" + condicao + "%' ORDER BY solicitante.`nome`");
+            solicitantes = solicitanteDAO.buscar("solicitante.`nome` LIKE '" + condicao + "%' AND ( perfil.`id_perfil` = 2 OR perfil.`id_perfil` = 4) ORDER BY solicitante.`nome`");
         }
 
         if (solicitantes != null || !solicitantes.isEmpty()) {

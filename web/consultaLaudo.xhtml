@@ -78,7 +78,8 @@
         <p:fieldset id="fsTabelaApac">
             <h:panelGrid id="pgTabelaApac">
                 <p:ajax event="click" update="pgTabelaApac"/>
-                <p:dataTable id="dtApac" var="formulario" value="#{consultaLaudoBean.forms}" rowIndexVar="index"   paginator="true" rows="22" emptyMessage="Nenhum registro encontrado!" >
+                <p:dataTable id="dtApac" var="formulario" value="#{consultaLaudoBean.forms}" rowIndexVar="index"   
+                             paginator="true" rows="15" emptyMessage="Nenhum registro encontrado!" >
                     <f:facet name="header">
                         <h:outputText value="#{consultaLaudoBean.tituloTabela}" />
                     </f:facet>
