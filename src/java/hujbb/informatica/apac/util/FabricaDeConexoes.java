@@ -25,40 +25,40 @@ public class FabricaDeConexoes {
 
 
     //produção
-//    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/formsh_hujbb";
-//    private static final String USUARIO = "formsus";
-//    private static final String SENHA = "$fs2018&*";
+//    private static final String URL_CONEXAO = "jdbc:mariadb://hhhhhhh/formsh_hujbb";
+//    private static final String USUARIO = "user";
+//    private static final String SENHA = "senha";
     
 <<<<<<< src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
     //homologação no 100
 =======
   //  homologação no 100
 >>>>>>> src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
-    private static final String URL_CONEXAO = "jdbc:mariadb://haley.hujbb.br/formsh_hujbb_homologacao";
-    private static final String USUARIO = "formsus";
-    private static final String SENHA = "$fs2018&*";
+    private static final String URL_CONEXAO = "jdbc:mariadb://xxxx/formsh_hujbb_homologacao";
+    private static final String USUARIO = "Algum";
+    private static final String SENHA = "senha*";
     
     
 <<<<<<< src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
     //desenvolvimento no 110
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
+//    private static final String URL_CONEXAO = "jdbc:mariadb://yyyyyy/formsh_hujbb_desenvolvimento";
+//    private static final String USUARIO = "algum";
+//    private static final String SENHA = "senha";
     
 =======
 //    //desenvolvimento no 110
-//    private static final String URL_CONEXAO = "jdbc:mariadb://10.206.3.110/formsh_hujbb_desenvolvimento";
-//    private static final String USUARIO = "gestaoti";
-//    private static final String SENHA = "@hu@2018";
+//    private static final String URL_CONEXAO = "jdbc:mariadb://zzzzzz/formsh_hujbb_desenvolvimento";
+//    private static final String USUARIO = "algum";
+//    private static final String SENHA = "senha";
 //    
 >>>>>>> src/java/hujbb/informatica/apac/util/FabricaDeConexoes.java
     
 // 
 //    
     private static Connection conexaoAghuBarros;
-    private static final String URL_CONEXAO_AGHU_BARROS = "jdbc:postgresql://database.aghu.hujbb.br:6544/dbaghu";
-    private static final String USUARIO_AGHU_BARROS = "ugen_integra";
-    private static final String SENHA_AGHU_BARROS = "aghuintegracao";
+    private static final String URL_CONEXAO_AGHU_BARROS = "jdbc:postgresql://gggggg:6544/dbALgum";
+    private static final String USUARIO_AGHU_BARROS = "user";
+    private static final String SENHA_AGHU_BARROS = "senha";
     
 
 
@@ -140,12 +140,12 @@ public class FabricaDeConexoes {
     //conexao com ad
     public static boolean conexaoLdapBarros(String login, String senha) {//
 
-        String userName = login + "@hujbb.br";
+        String userName = login + "@algum.br";
         String newPassword = senha;
         boolean retorno = false;
         Hashtable authEnv = new Hashtable();
         authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        authEnv.put(Context.PROVIDER_URL, "ldap://10.206.2.9:389");
+        authEnv.put(Context.PROVIDER_URL, "ldap://ffffff:pppp");
         authEnv.put(Context.SECURITY_AUTHENTICATION, "simple");
         authEnv.put(Context.SECURITY_PRINCIPAL, userName);
         authEnv.put(Context.SECURITY_CREDENTIALS, newPassword);
@@ -165,12 +165,12 @@ public class FabricaDeConexoes {
     //conexao com ad EBSERH
     public static boolean conexaoLdapEbserh(String login, String senha) {//
 
-        String userName = login + "@ebserhnet.ebserh.gov.br";
+        String userName = login + "@algum.ebserh.algo.br";
         String newPassword = senha;
         boolean retorno = false;
         Hashtable authEnv = new Hashtable();
         authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        authEnv.put(Context.PROVIDER_URL, "ldap://10.206.2.2:389");
+        authEnv.put(Context.PROVIDER_URL, "ldap://kkkkk:pppp");
         authEnv.put(Context.SECURITY_AUTHENTICATION, "simple");
         authEnv.put(Context.SECURITY_PRINCIPAL, userName);
         authEnv.put(Context.SECURITY_CREDENTIALS, newPassword);
@@ -189,12 +189,12 @@ public class FabricaDeConexoes {
 
     public static boolean conexaoLdapBettina(String login, String senha) {//
 
-        String userName = login + "@bettinaferro.ufpa.br";
+        String userName = login + "@balgum.ufpa.fim";
         String newPassword = senha;
         boolean retorno = false;
         Hashtable authEnv = new Hashtable();
         authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        authEnv.put(Context.PROVIDER_URL, "ldap://10.80.1.11:389");
+        authEnv.put(Context.PROVIDER_URL, "ldap://vvvvvv:pppp");
         authEnv.put(Context.SECURITY_AUTHENTICATION, "simple");
         authEnv.put(Context.SECURITY_PRINCIPAL, userName);
         authEnv.put(Context.SECURITY_CREDENTIALS, newPassword);
@@ -214,12 +214,12 @@ public class FabricaDeConexoes {
     //conexao com ad
     public static boolean LoginLdapBarros(String login) {//
 
-        String userName = login + "@hujbb.br";
+        String userName = login + "@algo.br";
         // String newPassword = senha;
         boolean retorno = false;
         Hashtable authEnv = new Hashtable();
         authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        authEnv.put(Context.PROVIDER_URL, "ldap://10.206.2.9:389");
+        authEnv.put(Context.PROVIDER_URL, "ldap://bbbbb:pppp");
         authEnv.put(Context.SECURITY_AUTHENTICATION, "simple");
         authEnv.put(Context.SECURITY_PRINCIPAL, userName);
         //  authEnv.put(Context.SECURITY_CREDENTIALS, "senhaqualquer");
@@ -239,9 +239,9 @@ public class FabricaDeConexoes {
 
     //busca os dados do usuario no ad
     public static Solicitante buscarLdap(String login, String ou) {//ou==pasta dentro do ad
-        String userName = login + "@hujbb.br";
+        String userName = login + "@algo.br";
         String senha = "******";
-        String SEARCHBASE = "ou=hujbb,dc=hujbb, dc=br";
+        String SEARCHBASE = "ou=base,dc=base, dc=algo";
         DirContext dircontext = connect();
 
         Solicitante solicitante = new Solicitante();
@@ -316,11 +316,10 @@ public class FabricaDeConexoes {
     //busca os dados do usuario no ad ebserh hujbb
     public static Solicitante buscarLdapEbserh(String login, String ou) {//ou==pasta dentro do ad
 
-        String userName = login + "@ebserhnet.ebserh.gov.br";
+        String userName = login + "@algo.ebserh.fim.br";
         String senha = "******";
-        String SEARCHBASE = "OU=Usuarios,OU=HUJBB,OU=UFPA,OU=EBSERH,DC=ebserhnet,DC=ebserh,DC=gov,DC=br";
-//        String SEARCHBASE = "OU=HUJBB,OU=UFPA,OU=EBSERH,DC=ebserhnet,DC=ebserh,DC=gov,DC=br";
-        // String SEARCHBASE = "OU=HUBFS,OU=HUJBB,OU=UFPA,OU=EBSERH,DC=ebserhnet,DC=ebserh,DC=gov,DC=br";
+        String SEARCHBASE = "OU=Usuarios,OU=base,OU=base2,OU=base3,DC=fim1,DC=fim2,DC=fim3,DC=br";
+
         DirContext dircontext = connectEbserh();
         Solicitante solicitante = new Solicitante();
         boolean encontrou = false;
@@ -392,10 +391,10 @@ public class FabricaDeConexoes {
     //busca os dados do usuario no ad ebserh hubfs
     public static Solicitante buscarLdapEbserhHubfs(String login, String ou) {//ou==pasta dentro do ad
 
-        String userName = login + "@ebserhnet.ebserh.gov.br";
+        String userName = login + "@base.fim.br";
         String senha = "******";
-        String SEARCHBASE = "OU=Usuarios,OU=HUBFS,OU=UFPA,OU=EBSERH,DC=ebserhnet,DC=ebserh,DC=gov,DC=br";
-//        String SEARCHBASE = "OU=HUBFS,OU=UFPA,OU=EBSERH,DC=ebserhnet,DC=ebserh,DC=gov,DC=br";
+        String SEARCHBASE = "OU=Usuarios,OU=base,OU=base2,OU=base3,DC=fim1,DC=fim2,DC=fim3,DC=br";
+
         DirContext dircontext = connectEbserh();
         Solicitante solicitante = new Solicitante();
         boolean encontrou = false;
@@ -472,10 +471,10 @@ public class FabricaDeConexoes {
 
     //ad hujbb
     private static DirContext connect() {
-        String USER = "sistemas@hujbb.br";
-        String PASSWD = "sgpti2017@sistemas";
+        String USER = "user@base.br";
+        String PASSWD = "senha";
         String LDAP_FACTORY = "com.sun.jndi.ldap.LdapCtxFactory";
-        String LDAP_SERVIDOR = "ldap://10.206.2.9:389";
+        String LDAP_SERVIDOR = "ldap://yyyyyyy:pppp";
         String TYPE_CONNECTION = "simple";
 
         Hashtable authEnv = new Hashtable(11);
@@ -496,10 +495,10 @@ public class FabricaDeConexoes {
 
     //ad ebserh
     private static DirContext connectEbserh() {
-        String USER = "ufpa.ldap@ebserhnet.ebserh.gov.br";
-        String PASSWD = "Z9!x@jb44ziyjyyZ";
+        String USER = "user@base.fim.br";
+        String PASSWD = "senha";
         String LDAP_FACTORY = "com.sun.jndi.ldap.LdapCtxFactory";
-        String LDAP_SERVIDOR = "ldap://10.206.2.2:389";
+        String LDAP_SERVIDOR = "ldap://xxxxxxxx:pppp";
         String TYPE_CONNECTION = "simple";
 
         Hashtable authEnv = new Hashtable(11);
